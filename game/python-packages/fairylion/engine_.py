@@ -187,14 +187,11 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
         target = board[move.to]
         self._remove_piece(piece)
 
+        target.add_pilot(piece._pilot[0])
         if target.color == 2: # ENTER EMPTY
-            old_piece = move.data
-            self._remove_piece(old_piece)
-            new_piece = self.PieceClass(old_piece.fen, color=2, pilot=piece._pilot[0], pos=move.to, engine=self)
-            new_piece.check_for_pilot()
-            self.drop(new_piece)
+            self.color = piece.color
         else:  # ENTER ALLY
-            target.add_pilot(piece._pilot[0])
+            pass
         if piece in self.CRITICAL[piece.color]: # update CRITICAL
             self.CRITICAL[piece.color].remove(piece)
             self.history[-1].critical_remove = True
@@ -205,7 +202,7 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
     def move_rescue(self, move, piece):
         infantry = move.data['r']
         # Transfer infantry pilot IDs to the rescuing piece
-        piece.add_pilot(infantry)
+        piece.add_pilot(infantry._pilot[0])
         self._remove_piece(infantry)
         if infantry in self.CRITICAL[move.piece.color]: # update CRITICAL
             self.CRITICAL[move.piece.color].remove(infantry)
@@ -217,27 +214,26 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
     def undo_enter_empty(self, move, piece, board, last_state):
         piece.pos = move.fr
         self._append_piece(piece)
-        self._remove_piece(board[move.to])
-        old_piece = move.data
-        self._append_piece(old_piece)
-        board[move.to] = old_piece
+        target = board[move.to]
+        target.color = 2
+        target._pilot.remove(piece._pilot[0])
         if last_state.critical_remove:
             self.CRITICAL[piece.color].append(piece)
         if last_state.critical_add:
-            self.CRITICAL[piece.color].remove(old_piece)
+            self.CRITICAL[piece.color].remove(target)
 
     def undo_enter_ally(self, move, piece, board, last_state):
         piece.pos = move.fr
         self._append_piece(piece)
         target = board[move.to]
-        for p in piece.pilot:
-            if p is not None and p in target.pilot:
-                target.pilot[target.pilot.index(p)] = None
+        for p in piece.pilots:
+            if p in target._pilot:
+                target._pilot[target._pilot.index(p)] = None
                 break
         if last_state.critical_remove:
             self.CRITICAL[piece.color].append(piece)
         if last_state.critical_add:
-            self.CRITICAL[piece.color].remove(piece)
+            self.CRITICAL[piece.color].remove(target)
     #
     #       INFANTERY STUFF
     #
@@ -312,10 +308,6 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
 
     def undo(self):
         last_state = self.history.pop()
-        # if 'promotion' in last_state.move.flag:
-        #     print("before undo promotion")
-        #     print(self)
-        #     print(self.PIECELIST[0])
 
         for i in last_state.remove_perms: # restore the permissions like the previous move
             self.perms.add(i)
@@ -386,13 +378,11 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
             self.board[move.to] = infantry
             self._append_piece(infantry)
             # Remove transferred pilot from the rescuing piece
-            for pilot_id in infantry.pilot:
-                if pilot_id is not None and pilot_id in piece.pilot:
-                    piece.pilot[piece.pilot.index(pilot_id)] = None
+            piece._pilot.remove(infantry._pilot[0])
             if last_state.critical_add:
                 self.CRITICAL[piece.color].remove(piece)
             if last_state.critical_remove:
-                self.CRITICAL[piece.color].add(infantry)
+                self.CRITICAL[piece.color].append(infantry)
 
         else: # for what case? # for the double_move case
             if move.capture:

@@ -62,7 +62,7 @@ init -1 python:
 
         def is_pawn_or_foot(self):
             return self.type == 'i' or self.type == '^'
-        
+
         @property
         def pilot(self):
             if len(self._pilot) == 0:
@@ -71,10 +71,6 @@ init -1 python:
                 return self._pilot[0]
             else:
                 return self._pilot
-
-        @property
-        def pilots(self): # _pilot without the None
-            return [p for p in self._pilot if p is not None]
 
         @pilot.setter
         def pilot(self, pilot):

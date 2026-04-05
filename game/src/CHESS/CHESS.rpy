@@ -152,18 +152,44 @@ init python:
     #
     #       INFANTERY STUFF
     #
-        def make_move(self, move:Move, check_legality=None):
-            # THIS IS TO MAKE RESCUE MOVES
-            if 'rescue' in move.flag:
-                for p in move.data['r'].pilot:
-                    if p is not None:
-                        move.piece.pilot[move.piece.pilot.index(None)] = p
-                        break
-            
-            if check_legality is None:
-                check_legality = self.use_engine
+        def move_enter(self, move, piece, board):
+            target = board[move.to]
+            self._remove_piece(piece)
 
-            return super().make_move(move, check_legality=check_legality)
+            target.add_pilot(piece._pilot[0])
+            if target.color == 2: # ENTER EMPTY
+                move.data = target
+                self._remove_piece(target)
+                new_piece = self.PieceClass(target.fen, color=2, pilot=piece._pilot[0], pos=move.to, engine=self)
+                new_piece.check_for_pilot()
+                self.drop(new_piece)
+            else:  # ENTER ALLY
+                pass
+            if piece in self.CRITICAL[piece.color]: # update CRITICAL
+                self.CRITICAL[piece.color].remove(piece)
+                self.history[-1].critical_remove = True
+                if target not in self.CRITICAL[piece.color]:
+                    self.CRITICAL[piece.color].append(target)
+                    self.history[-1].critical_add = True
+
+        def undo_enter_empty(self, move, piece, board, last_state):
+            piece.pos = move.fr
+            self._append_piece(piece)
+            self._remove_piece(board[move.to])
+            old_piece = move.data
+            self._append_piece(old_piece)
+            board[move.to] = old_piece
+            if last_state.critical_remove:
+                self.CRITICAL[piece.color].append(piece)
+            if last_state.critical_add:
+                self.CRITICAL[piece.color].remove(old_piece)
+
+        # def make_move(self, move:Move, check_legality=None):
+        #     # THIS IS TO MAKE RESCUE MOVES
+        #     if check_legality is None:
+        #         check_legality = self.use_engine
+
+        #     return super().make_move(move, check_legality=check_legality)
         
         def undo(self):
             # THIS IS TO UNDO RESCUE MOVES

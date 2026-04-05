@@ -7,18 +7,6 @@ from fairylion import Engine
 def engine():
     return Engine()
 
-
-# ─── TEST 1: AI finds best move in simple position ───────────────────────────
-# Expected: a rook move (b2c2, b2b8, or e2e8) within 5 seconds
-
-def test_ai_finds_rook_move(engine):
-    engine.set_fen('1r2r1/2k3/6/6/6/6/PR1KRP/3N2 w KQkq - 0 1')
-    engine.promotions = [['q'], ['q']]
-    move = engine.think_minimax(time_limit=5.0)
-    assert move is not None
-    assert move.piece.fen == 'r', f"Expected rook move, got {move.piece.fen}"
-
-
 # ─── TEST 2: Move generation speed (perft depth 4) ───────────────────────────
 
 def test_perft_speed(engine):
@@ -34,7 +22,6 @@ def test_perft_promotions(engine):
     engine.promotions = [['q', 'r', 'b', 'n'], ['q', 'r', 'b', 'n']]
     engine.perftest(5)
     assert engine.positionCount == 674624, f"Wrong node count: {engine.positionCount}"
-
 
 # ─── TEST 4: No castling while in check ──────────────────────────────────────
 

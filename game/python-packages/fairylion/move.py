@@ -203,7 +203,8 @@ def move_foot(piece, moves, offset, pos, engine):
             if flag == 'm':
                 moves.append(Move(piece, pos, sq))
             else:
-                moves.append(Move(piece, pos, sq, flag=flag, data=target))
+                moves.append(Move(piece, pos, sq, flag=flag))
+                # note, move.data is added in Chess move_enter
 
 def atk_jump(squares, offset, pos, board):
     for x in offset:

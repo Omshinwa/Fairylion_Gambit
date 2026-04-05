@@ -154,7 +154,7 @@ class EngineUtils():
         """
         @piece a string or Robot_Piece or Pilot (this creates a foot soldier)
         """
-        pos = self.TO_POS(pos)
+        pos = self.TO_POS(pos) or piece.pos
 
         if type(piece) == str:
             if color is None:
@@ -166,6 +166,7 @@ class EngineUtils():
         elif type(piece) == self.PieceClass:
             new_piece = piece
             new_piece.pos = pos
+            color = piece.color
         else:
             raise Exception(f"type not valid, piece is of type, {type(piece)}")
         
@@ -396,7 +397,7 @@ class EngineUtils():
     
     def get_pilot(self, pilot_name:str):
         for piece in self.get_pieces():
-            if pilot_name in piece.pilot:
+            if pilot_name in piece._pilot:
                 return piece
         return None
 

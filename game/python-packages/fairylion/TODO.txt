@@ -8,7 +8,8 @@ explore the balance of the UTC eval func again
 * tarot skills implemented on characters (and displayable on the battlefield ui), consumable vs trigger skills? separated top and bottom maybe
 * blur shader for bubbles
 
-* fix 'double move
+* check if my tests have been converted to python tests
+* add critical undo make test units
 
 save on the bottom left, undo should undo the death of Jagen, instead you win from draw
 

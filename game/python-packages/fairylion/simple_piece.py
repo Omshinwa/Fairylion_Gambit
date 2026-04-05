@@ -51,6 +51,29 @@ class Simple_Piece():
     #         return self.id == other.id
     #     else:
     #         return False
+    
+    @property
+    def pilot(self):
+        if len(self._pilot) == 0:
+            return None
+        elif len(self._pilot) == 1:
+            return self._pilot[0]
+        else:
+            return self._pilot
+
+    @property
+    def pilots(self): # _pilot without the None
+        return [p for p in self._pilot if p is not None]
+
+    @pilot.setter
+    def pilot(self, pilot):
+        if pilot is None:
+            self._pilot = [None for _ in self._pilot]
+        elif isinstance(pilot, list):
+            for i in range(min(len(self._pilot), len(pilot))):
+                self._pilot[i] = pilot[i]
+        else: #if we only give 1 pilot, bracket it
+            self._pilot[0] = pilot
 
     def get_move_of_instruction(self, moves, instruction, offset, engine):
         MOVE_TO_FUNCTION[instruction](self, moves, offset, self.pos, engine)
@@ -85,21 +108,6 @@ class Simple_Piece():
 
         return squares
 
-    def check_for_pilot(self):
-        """
-        if theres no pilot, or is dead, turn the piece neutral, doesnt work on opponent
-        else turn into a 0 or 1 color
-        """
-        chess = self.engine
-        if len(self._pilot) == 0 and self.color == chess.player:
-            chess._remove_piece(self)
-            self.color = 2
-            chess._append_piece(self)
-        elif self.color == 2 and len(self._pilot) > 0: # and self.type in self._pilot[0].can_drive:
-            chess._remove_piece(self)
-            self.color = chess.player
-            chess._append_piece(self)
-
     def add_pilot(self, *pilot_list):
         for pilot in pilot_list:
             if pilot is not None:
@@ -110,7 +118,7 @@ class Simple_Piece():
 
     @classmethod
     def create_promotion(cls, engine, piece, fen, pos):
-        return cls(fen, piece.color, pos, movement=fen, engine=engine, pilot_ids=piece.pilot)
+        return cls(fen, piece.color, pos, movement=fen, engine=engine, pilot=piece._pilot)
 
     def has_pilot_room(self):
         return None in self._pilot

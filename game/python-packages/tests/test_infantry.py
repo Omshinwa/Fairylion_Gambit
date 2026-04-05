@@ -31,12 +31,12 @@ def test_drop_infantry_fen_and_color(e):
 
 def test_infantry_starts_with_empty_pilot_list(e):
     infantry = e.drop('i', 'e4', 0)
-    assert infantry.pilot == []
+    assert infantry._pilot == [None]
 
 def test_infantry_pilot_list_set_correctly(e):
     infantry = e.drop('i', 'e4', 0)
     infantry.pilot = ['lelouch']
-    assert infantry.pilot == ['lelouch']
+    assert infantry._pilot == ['lelouch']
 
 def test_infantry_in_piecelist(e):
     infantry = e.drop('i', 'e4', 0)
@@ -60,8 +60,8 @@ def test_enter_ally_generates_move(e):
 def test_enter_ally_transfers_pilot_id(e):
     rook = e.drop('r', 'e4', 0)
     infantry = e.drop('i', 'e5', 0)
-    infantry.pilot = ['lelouch']
-    rook.pilot = [None, None]
+    infantry.pilot = 'lelouch'
+    rook._pilot = [None, None]
 
     move = next(m for m in infantry.moves(e) if 'enter_ally' in m.flag)
     e.make_move(move, check_legality=False)
@@ -81,7 +81,7 @@ def test_enter_ally_infantry_removed_from_board(e):
 def test_enter_ally_undo_restores_infantry(e):
     rook = e.drop('r', 'e4', 0)
     infantry = e.drop('i', 'e5', 0)
-    infantry.pilot = ['lelouch']
+    infantry.pilot = 'lelouch'
     rook.pilot = [None, None]
 
     move = next(m for m in infantry.moves(e) if 'enter_ally' in m.flag)
@@ -94,14 +94,15 @@ def test_enter_ally_undo_restores_infantry(e):
 def test_enter_ally_undo_removes_pilot_from_rook(e):
     rook = e.drop('r', 'e4', 0)
     infantry = e.drop('i', 'e5', 0)
-    infantry.pilot = ['lelouch']
+    infantry._pilot = ['lelouch']
     rook.pilot = [None, None]
 
     move = next(m for m in infantry.moves(e) if 'enter_ally' in m.flag)
     e.make_move(move, check_legality=False)
     e.undo()
 
-    assert 'lelouch' not in rook.pilot
+    assert 'lelouch' not in rook._pilot
+    assert rook.pilot == None
 
 
 # ─── ENTER EMPTY (neutral piece, color=2) ─────────────────────────────────────
@@ -115,7 +116,7 @@ def test_enter_empty_generates_move(e):
 def test_enter_empty_transfers_pilot_id(e):
     neutral = e.drop('r', 'e4', 2)
     infantry = e.drop('i', 'e5', 0)
-    infantry.pilot = ['lelouch']
+    infantry._pilot = ['lelouch']
 
     move = next(m for m in infantry.moves(e) if 'enter_empty' in m.flag)
     e.make_move(move, check_legality=False)
@@ -133,7 +134,7 @@ def test_enter_empty_undo_clears_pilot(e):
     e.undo()
 
     piece_at_e4 = e.board[e.A8_TO_POS('e4')]
-    assert piece_at_e4.pilot == []
+    assert piece_at_e4.pilot == None
 
 
 # ─── RESCUE (rook moves onto infantry square) ─────────────────────────────────
@@ -154,7 +155,7 @@ def test_rescue_transfers_pilot_to_rook(e):
     move = next(m for m in rook.moves(e) if 'rescue' in m.flag)
     e.make_move(move, check_legality=False)
 
-    assert 'lelouch' in rook.pilot
+    assert 'lelouch' in rook._pilot
 
 def test_rescue_removes_infantry(e):
     rook = e.drop('r', 'e4', 0)
@@ -178,7 +179,7 @@ def test_rescue_undo_restores_infantry(e):
     e.undo()
 
     assert infantry in e.get_pieces(0)
-    assert 'lelouch' not in rook.pilot
+    assert 'lelouch' not in rook._pilot
 
 def test_rescue_requires_empty_slot(e):
     # rook has no free pilot slots — rescue should not be generated
