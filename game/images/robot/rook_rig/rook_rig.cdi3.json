@@ -1,0 +1,56 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "Angle X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "Angle Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "Angle Z"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "Idle"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [
+		{
+			"Id": "BODY",
+			"Name": "BODY"
+		},
+		{
+			"Id": "ArtMesh4_Skinning3",
+			"Name": "Layer 32(Skinning)"
+		},
+		{
+			"Id": "ArtMesh4_Skinning2",
+			"Name": "Layer 32(Skinning)"
+		},
+		{
+			"Id": "ArtMesh4_Skinning",
+			"Name": "Layer 32(Skinning)"
+		},
+		{
+			"Id": "ArtMesh9_Skinning",
+			"Name": "ARM R(Skinning)"
+		},
+		{
+			"Id": "ArtMesh10_Skinning",
+			"Name": "LEG L(Skinning)"
+		},
+		{
+			"Id": "ArtMesh11_Skinning",
+			"Name": "FOOT R(Skinning)"
+		}
+	]
+}

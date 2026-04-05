@@ -1,0 +1,5 @@
+id;type;article;adjective;name;inhabitant;plural;desc;
+kingdom;country;the;Middle;Kingdom;Royalist;Royalists;A small peaceful country. Long ago, [name('The middle kingdom')] was part of [name('the holy empire')] but it's now looking for independence.;
+empire;country;the;Holy;Empire;Imperial;Imperials;Ultranationalist, Militarist, and Religious. [name('The holy empire')] controls the largest territory. Our story begins when they invaded [name('the middle kingdom')].;
+nation;country;the;United;Nations;Nationalist;Nationalists;A democratic agglomeration of states. [name('The united nations')] has ideals of Freedom and Economic Progress.;
+dynasty;country;the;Millenium;Dynasty;Dynast;Dynasts;[name('The millenium dynasty')] has a rich and unique history. [name('Dynasts')] are proud people, only recently did they open up to the rest of the world.;
