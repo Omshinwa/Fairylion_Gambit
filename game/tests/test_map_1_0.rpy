@@ -12,19 +12,19 @@ testsuite global:
 
     testsuite battle_maps: # 2026 fevrier 16
 
-        # testcase map_1_0:
-        #     description "Move g3 to f3 and wait for enemy reply"
+        testcase map_1_0:
+            description "Move g3 to f3 and wait for enemy reply"
 
-        #     run Jump("l_map_1_0")
-        #     skip until screen "s_start_battle"
-        #     click until eval ('battle' in g.state)
-        #     # check if the button piece_g3 exists
-        #     assert eval (renpy.get_widget("s_battlefield", "piece_g3") is not None)
-        #     click until id "piece_g3"
-        #     click id "piece_g3"
-        #     pause until id "move_f3"
-        #     click id "move_f3"
-        #     pause until eval (not chess.wait_for_enemy) timeout 10.0
+            run Jump("l_map_1_0")
+            skip until screen "s_start_battle"
+            click until eval ('battle' in g.state)
+            # check if the button piece_g3 exists
+            assert eval (renpy.get_widget("s_battlefield", "piece_g3") is not None)
+            click until id "piece_g3"
+            click id "piece_g3"
+            pause until id "move_f3"
+            click id "move_f3"
+            pause until eval (not chess.wait_for_enemy) timeout 10.0
     
     
         testcase map_0_4:

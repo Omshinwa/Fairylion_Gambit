@@ -20,6 +20,9 @@ init python:
     def format_progress(progress:int):
         return "Chapter " + str(progress//100) + "-" + str(progress%100)
 
+    def load_checkpoint():
+        renpy.load(LOCAL_CHECKPOINT_SLOT)
+
     def update_local_checkpoint_and_autosave():
         global save_name
         renpy.take_screenshot()

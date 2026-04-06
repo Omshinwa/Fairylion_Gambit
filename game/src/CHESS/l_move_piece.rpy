@@ -183,8 +183,8 @@ label l_enemy_play():
 init python:
 
     def engine_background_think(depth, multithread=False):
-        # move = engine.think(depth) # for monte carlo
-        move = engine.think_minimax(1)
+        move = engine.think(depth) # for monte carlo
+        # move = engine.think_minimax(1)
         engine.make_move(move)
         if multithread:
             renpy.invoke_in_main_thread(engine_move, move)

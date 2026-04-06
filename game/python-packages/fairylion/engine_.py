@@ -33,6 +33,9 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
         self.setup_chess(size)
         
     def setup_chess(self, size):
+        """
+        reset promotions, history, and castling perms
+        """
         self.perms = set()
         self.promotions = [[], []] # list of starting pieces that you can promote to.
         self.history = []

@@ -32,8 +32,9 @@ screen s_tutorialPause(which, unskippable=True):
 label l_tutorial_checkmate_2Q:
     scene onlayer screens
     $ chess = Chess_control((8,8))
+    $ game = Game('tutorial_checkmate_2Q')
     $ chess.set_fen('8/8/8/8/8/3k4/8/3K2QQ w - - 0 1')
-    show screen s_chessboard_viewport(chess) with dissolve
+    show screen s_battlefield(chess) with dissolve
     play audio "sound/tutorial.wav"
     show stanley at right
     stanley "It's pointless to play chess if you don't know the basics checkmates."
@@ -112,7 +113,6 @@ label l_tutorial_checkmate_2Q:
     with dissolve
     stanley "Time for practice!"
     $ chess.side = 0
-    $ game = Game('tutorial_checkmate_2Q')
     $ game.win_label = 'l_map_tutorial_checkmate_Win'
     $ game.lost_label = 'l_map_tutorial_checkmate_Lose'
     jump l_start_battle
@@ -122,7 +122,7 @@ label l_map_tutorial_checkmate_Win:
         $ persistent.tutorial_2Q = True
     elif game.level == 'tutorial_checkmate_2R':
         $ persistent.tutorial_2R = True
-        # call l_tutorial_checkmate_2R_Win
+        call l_tutorial_checkmate_2R_Win
     elif game.level == 'tutorial_checkmate_1R':
         $ persistent.tutorial_1R = True
     show black onlayer screens with transition_bars
@@ -173,7 +173,7 @@ label l_map_tutorial_checkmate_Lose:
         "This is a stalemate—a draw, as the black King can't move and is not in check."
         "When you make a move, ensure it doesn't lead to stalemate."
         "Let's undo this."
-        $ chess.undo_item()
+        call l_use_item('undo', True)
     else:
         show black onlayer screens with transition_bars
         jump start
@@ -183,7 +183,7 @@ label l_tutorial_checkmate_2R:
     scene onlayer screens
     $ chess = Chess_control((8,8))
     $ chess.set_fen('5/5/5/5/5/1k3/4R/K2R1 w - - 0 1')
-    show screen s_chessboard_viewport(chess) with dissolve
+    show screen s_battlefield(chess) with dissolve
     play audio "sound/tutorial.wav"
     show stanley at right
     show young_lelouch at left
@@ -304,7 +304,7 @@ label l_tutorial_checkmate_1R:
     scene onlayer screens
     $ chess = Chess_control((8,8))
     $ chess.set_fen('8/8/8/8/8/3k4/8/4K2R w - - 0 1')
-    show screen s_chessboard_viewport(chess) with dissolve
+    show screen s_battlefield(chess) with dissolve
     play audio "sound/tutorial.wav"
     show stanley at right
     show young_lelouch at left

@@ -211,15 +211,13 @@ init python:
                     if pilot.health == 0:
                         TEAM.append(pilot)
                     pilot.health += 1
-                    
             super().undo()
             if self.use_engine:
                 engine.copy(self)
             self.wait_for_enemy = False
-            
             game.is_over = False
             
-        def set_fen(self, fen, starting_new_game=None):
+        def set_fen(self, fen, starting_new_game=False):
             if self.use_engine:
                 engine.set_fen(fen)
             super().set_fen(fen)
