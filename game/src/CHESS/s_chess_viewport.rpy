@@ -12,7 +12,7 @@ screen s_chessboard_viewport(chess, *args, xinit=None, yinit=None, **kwargs):
         key 'viewport_wheelup' action Function(chess.ui['camera'].viewport_zoom_in)
         key 'viewport_wheeldown' action Function(chess.ui['camera'].viewport_zoom_out)
 
-    default board_size = DotDict(x = absolute(SQUARESIZE*chess.size[0]), y = absolute(SQUARESIZE*chess.size[1]))
+    $ board_size = DotDict(x = absolute(SQUARESIZE*chess.size[0]), y = absolute(SQUARESIZE*chess.size[1]))
     default do_transition = False
     viewport:
         if chess.state == "idle":
@@ -81,12 +81,6 @@ screen s_chessboard_viewport(chess, *args, xinit=None, yinit=None, **kwargs):
                         text coord_pov font "fonts/cmu_b.ttf" xanchor 0.5 size 40 yalign 1.0 xpos absolute((i+0.5)*SQUARESIZE)+50 color '#fff' outlines [(2, "#222",0,0)]
                 
                 add 'layer_chess_overlay'
-        
-            # frame:
-            #     style 'empty'
-            #     background "#0f05"
-            #     xysize (board_size.x, board_size.y)
-            #     align (0.5, 0.5)
 
 #  ██████   ██████   █████████   █████ ██████   █████  █████████    █████████  ███████████  
 # ░░██████ ██████   ███░░░░░███ ░░███ ░░██████ ░░███  ███░░░░░███  ███░░░░░███░░███░░░░░███ 

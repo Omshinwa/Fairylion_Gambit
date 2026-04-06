@@ -197,7 +197,8 @@ define 2 run_rewards = [
 
 screen s_shop_persistent():
     
-    add "#444"
+    use s_chess_dismiss()
+    add "#0004"
     use s_chessboard_viewport(chess, xinit=0.8)
 
     dismiss:

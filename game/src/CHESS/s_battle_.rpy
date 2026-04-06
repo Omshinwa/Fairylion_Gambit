@@ -6,9 +6,16 @@ screen s_battlefield(*args, **kwargs):
 
     use s_chess_dismiss()
     use s_chessboard_bg(*args, **kwargs)
-    use s_chessboard_viewport(chess)
+    if 'preparation' in g.state:
+        fixed:
+            at blur_masked(sigma=16.0, mask="prep_blur_mask")
+            xysize (config.screen_width, config.screen_height)
+            use s_chessboard_viewport(chess)
+    else:
+        use s_chessboard_viewport(chess)
     showif 'battle' in g.state or 'preparation' in g.state: #or ('cutscene' in g.state and game.is_over == "loss"):
-        use s_chessboard_overlay()
+        if not 'tutorial' in game.level:
+            use s_chessboard_overlay()
     if 'preparation' in g.state:
         use s_preparation_overlay()
 
@@ -35,6 +42,19 @@ screen s_chess_dismiss():
             if chess.bg == 'gradient':
                 matrixcolor ColorizeMatrix(prefs.style.gradient_color[1],prefs.style.gradient_color[0])
 
+    # objective    
+    if game.custom_objective:
+        frame:
+            style 'empty'
+            align (1.0,0)
+            xsize 400
+            padding 10,10
+            vbox:
+                xalign 1.0
+                spacing -120
+                text 'GOAL :\n' size 50 font "Trattatello.ttf" color "#fff" outlines [(4, "#696969",0,0)] xalign .5
+                text _(game.custom_objective) size 50 color "#fff" outlines [(4, "#696969",0,0)] font 'FONT_normal'
+   
     button: # DISMISS
         xysize (1.0, 1.0)
         if 'cutscene' in g.state or chess.ui["selected"] or chess.ui["arrows"] or chess.ui['animation_move']: # avoid doing returns for nothing
@@ -149,10 +169,10 @@ screen s_chessboard_overlay():
         showif chess.wait_for_enemy:
             text "Thinking..." xalign .5:
                 at t_dissolve
+
             # text _("{b}5:29") size 90 font "fonts/Venus+Carrare.otf" color "#000" outlines [(4, "#696969",0,4)]
             # text _("{b}4:22") size 90 font "fonts/Venus+Carrare.otf" color "#fff" outlines [(4, "#696969",0,4)] yalign 1.0
         
-
         fixed:
             #############################
             #
@@ -216,7 +236,7 @@ screen s_chessboard_overlay():
                             add 'undo icon' xysize(1.0,1.0)
                             text str(g.items['undo']) style 'style_purple_text' color COLOR_HIGHLIGHT() pos 1.0,1.0 anchor 0.5,0.5
                         
-                        text "." align (.5,.5)
+                        # text "." align (.5,.5)
                         for tarot, quantity in g.items.items():
                             if quantity > 0 and tarot != 'undo':
                                 button at t_interactive:
@@ -234,5 +254,12 @@ screen s_chessboard_overlay():
                         $ txt = "+" + txt
                     text "{i}{size=-10}[txt[0]]{/size}[txt[1:]]" xalign 0.5 yalign 0.5 font "FONT_big" size 50 color "#a2eba6" outlines [ (4, "#00a03d", 0, 2) ]
 
+
+                    button at t_interactive:
+                        xysize(90,90)
+                        align .5,1.0
+                        action NullAction()
+                        add 'options icon' xysize(1.0,1.0)
+                    
             $ old_score = chess.get_advantage()
 

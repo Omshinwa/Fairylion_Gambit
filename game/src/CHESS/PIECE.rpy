@@ -21,7 +21,7 @@ init -1 python:
             super().__init__(piece, color, pos, movement=movement, pid=pid, engine=self.engine)
             self.type = c.FEN_TO_TYPE[self.fen]
             self._pilot = [None]
-            self.pilot = pilot # Robot_Piece has a .pilot property; capacity = len(_pilot), empty slot = None
+            self.pilot = pilot # Robot_Piece has a ._pilot property; capacity = len(_pilot), empty slot = None
 
             self.range = Robot_Piece.get_range_of(self.fen, self.engine, self.color)
 
@@ -83,7 +83,7 @@ init -1 python:
             elif isinstance(pilot, _list): # else, like we give it directly a list
                 for i in range(min(len(self._pilot), len(pilot))):
                     self._pilot[i] = pilot[i]
-                    if pilot[i].id in character.__dict__:
+                    if pilot[i] and pilot[i].id in character.__dict__:
                         character.__dict__[pilot.id].char_on_battlefield = self
 
         # idk if it's useful
@@ -168,11 +168,11 @@ init -1 python:
             if theres no pilot, or is dead, turn the piece neutral, doesnt work on opponent
             else turn into a 0 or 1 color
             """
-            if len(self._pilot) == 0 and self.color == chess.player:
+            if len(self.pilots) == 0 and self.color == chess.player:
                 chess._remove_piece(self)
                 self.color = 2
                 chess._append_piece(self)
-            elif self.color == 2 and len(self._pilot) > 0 and self.type in self._pilot[0].can_drive:
+            elif self.color == 2 and len(self.pilots) and self.type in self._pilot[0].can_drive:
                 chess._remove_piece(self)
                 self.color = chess.player
                 chess._append_piece(self)

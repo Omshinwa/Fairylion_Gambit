@@ -64,6 +64,16 @@ class Simple_Piece():
     @property
     def pilots(self): # _pilot without the None
         return [p for p in self._pilot if p is not None]
+    
+    # @pilot.setter
+    # def pilots(self, pilot):
+    #     if pilot is None:
+    #         self._pilot = [None for _ in self._pilot]
+    #     elif isinstance(pilot, list):
+    #         for i in range(min(len(self._pilot), len(pilot))):
+    #             self._pilot[i] = pilot[i]
+    #     else: #if we only give 1 pilot, bracket it
+    #         self._pilot[0] = pilot
 
     @pilot.setter
     def pilot(self, pilot):

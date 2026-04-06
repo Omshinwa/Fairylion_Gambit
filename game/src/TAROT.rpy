@@ -58,13 +58,13 @@ label l_use_item(item, freeItem=False):
     if not freeItem:
         $ g.items[item] -= 1
     if item == 'undo':
-        if len(chess.history)>1:
+        if len(chess.history):
             play audio 'sound/misc/whoosh1.wav'
             $ chess.undo_item()
             hide draw onlayer screens
             hide lost onlayer screens
             with dissolve
-            if chess.side != chess.player:
+            if chess.side != chess.player and len(chess.history):
                 play audio 'sound/misc/whoosh1.wav'
                 $ chess.undo_item()
                 with dissolve

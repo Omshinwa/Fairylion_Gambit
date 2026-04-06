@@ -4,12 +4,13 @@ roguelike: RECRUIT should be on the character profile, when you click RECRUIT, f
 Pixel art for infantry
 test map 1-0 with 5 or 4 size
 explore the balance of the UTC eval func again
-* check unit tests are working
 * tarot skills implemented on characters (and displayable on the battlefield ui), consumable vs trigger skills? separated top and bottom maybe
-* blur shader for bubbles
 
-* set_fen doesnt update the board img
-* write unit tests for tutorials
+* rollback disabled during battles 
+
+* unit tests for prep phase
+
+* option button in battle (RESIGN, SAVE, LOAD, PREFS)
 
 save on the bottom left, undo should undo the death of Jagen, instead you win from draw
 

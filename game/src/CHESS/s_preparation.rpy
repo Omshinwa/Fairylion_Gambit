@@ -285,9 +285,8 @@ init python:
         if target is c.EMPTY:
             return False
 
-        for pilot in target.pilot:
-            if pilot is not None:
-                pilot.deployed = False
+        for pilot in target.pilots:
+            pilot.deployed = False
         target.pilot = None
 
         target.check_for_pilot()
@@ -322,7 +321,7 @@ init python:
                 chess.drop(new_piece, pos)
             else:
                 if type(target) == Robot_Piece:
-                    if any(p is not None for p in target.pilot):
+                    if target.pilots:
                         f_unprepare(target, True) # in the case of an infantry, it will remove the infantry
                         if chess.board[pos] == c.EMPTY:
                             chess.drop(element, pos, chess.player)

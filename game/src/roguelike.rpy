@@ -172,7 +172,7 @@ screen s_shop_coin():
     
     # THIS IS THE QUESTION MARK BUTTON
     button at t_interactive:
-        align (0.0, 1.0)
+        align (1.0, 1.0)
         if 'preparation' in g.state:
             action Call('l_tutorial', 'preparation')
         elif 'result_screen' in g.state:

@@ -37,7 +37,6 @@ init python:
             self.max_turn = 0
             self.is_over = False
 
-            
             self.puzzle = False
             self.endTurn = self.level + "_endTurn"
 
@@ -74,7 +73,6 @@ init python:
         # Usage: self.ui['animation_move'].piece
         def __init__(self, **kwargs):
             self.__dict__.update(kwargs)
-
 
 label l_after_successful_mission:
     $ g.progress += 1

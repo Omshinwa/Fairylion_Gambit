@@ -122,7 +122,7 @@ label l_map_tutorial_checkmate_Win:
         $ persistent.tutorial_2Q = True
     elif game.level == 'tutorial_checkmate_2R':
         $ persistent.tutorial_2R = True
-        call l_tutorial_checkmate_2R_Win
+        # call l_tutorial_checkmate_2R_Win
     elif game.level == 'tutorial_checkmate_1R':
         $ persistent.tutorial_1R = True
     show black onlayer screens with transition_bars
@@ -366,7 +366,7 @@ label l_tutorial_checkmate_1R:
     pause 0.5
     call l_move_piece('a4') from _call_l_move_piece_82
     $ chess.ui["arrows"] = {(51,41)}
-    stanley "Like this."
+    stanley "Like this, you would give Black the opportunity to escape."
     $ chess.undo()
     with dissolve
     $ chess.undo()

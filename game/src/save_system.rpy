@@ -20,8 +20,11 @@ init python:
     def format_progress(progress:int):
         return "Chapter " + str(progress//100) + "-" + str(progress%100)
 
-    def load_checkpoint():
-        renpy.load(LOCAL_CHECKPOINT_SLOT)
+    def game_over():
+        if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
+            renpy.load(LOCAL_CHECKPOINT_SLOT)
+        else:
+            renpy.jump('start')
 
     def update_local_checkpoint_and_autosave():
         global save_name
