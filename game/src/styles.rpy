@@ -19,10 +19,10 @@ define g.colors = {'bluesky':'#00c3ff', 'magenta':'#f64dff', 'green':"#23c634"}
 #
 ############################
 
-define pointillisme = ImageDissolve("misc/mask_pointillisme.webp", 0.5)
-define transition_bars = ImageDissolve("misc/transition_bars.webp", 2, time_warp=_warper.easein)
-define transition_bars_fast = ImageDissolve("misc/transition_bars.webp", 1)
-define transition_queen = ImageDissolve("misc/transition_queen.webp", 1)
+define pointillisme = ImageDissolve("misc/mask/mask_pointillisme.webp", 0.5)
+define transition_bars = ImageDissolve("misc/mask/transition_bars.webp", 2, time_warp=_warper.easein)
+define transition_bars_fast = ImageDissolve("misc/mask/transition_bars.webp", 1)
+define transition_queen = ImageDissolve("misc/mask/transition_queen.webp", 1)
 
 define dissolve_fast = Dissolve(0.15)
 init python:

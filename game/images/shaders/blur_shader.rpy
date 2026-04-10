@@ -10,7 +10,6 @@
 ##
 ## Transforms:
 ##   gaussian_blur(sigma)
-##   partial_blur(sigma, x1, y1, x2, y2, softness)
 ##   blur_masked(sigma, mask)
 ##
 ## sigma — blur radius in pixels (converted to log2 inside the shader)

@@ -77,9 +77,9 @@ screen s_start_battle():
         null height 20
         if game.custom_objective:
             text "Objective: " + game.custom_objective size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
-        elif chess.win_con == None:
+        elif chess.goal == None:
             text "Objective: Checkmate the KING" size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
-        elif chess.win_con == 'kill':
+        elif chess.goal == 'kill':
             text "Objective: Eliminate the enemy." size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
 
 screen s_preparation_overlay(): 
@@ -225,7 +225,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
                         elif isinstance(v_select, Robot_Piece) and v_select.fen == 'i':
-                            if v_select.pilot[0] is None or not element.type in v_select.pilot[0].can_drive:
+                            if v_select._pilot[0] is None or not element.type in v_select._pilot[0].can_drive:
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
                                     

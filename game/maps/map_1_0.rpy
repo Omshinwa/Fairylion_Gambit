@@ -8,8 +8,7 @@ label l_map_1_0:
     "DEV: c'était la dernière map à peu près scripté"
     "Merci d'avoir joué!"
     
-    "2 years later into the conflict-"
-
+    "3 years later into the conflict-"
 
     $ game = Game('l_map_1_0')
     $ chess = Chess_control((5,5), bg='desert', bg_board='sand')
@@ -61,19 +60,31 @@ label l_map_1_0:
     with dissolve
 
     $ chess = Chess_control((5,5), bg='desert', bg_board='sand')
-    $ chess.set_fen("8/8/8/8/8/8")
+    # $ chess.set_fen("8/8/8/8/8/8")
+    $ chess.set_fen("7/7/7/7/7/7")
     show screen s_battlefield(chess) with dissolve
-    $ chess.drop_with(kallen, 'h3', 0)
+    $ chess.drop_with(kallen, 'g3', 0)
     kallen "Ha... Ha..."
     kallen "They're still behind me!"
-    $ chess.ui['arrows'] = {(21,21), (31,31), (41,41), (51,51), (61,61), (71,71)}
-    $ chess_camera.center_on(41)
+    # put an arrow on every sq on the A sq
+    $ chess.ui['arrows'] = {(chess.XY_TO_POS[0][j], chess.XY_TO_POS[0][j]) for j in range(chess.size[1])}
+    $ chess_camera.center_on(chess.XY_TO_POS[0][0])
     pause
-    kallen "The mountains are over there."
     $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = False
-    kallen "If I can get there, I might just make it."
+    kallen "The mountains are over there."
+    kallen "I might just be able to hide."
     $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = True
-    # $ chess_camera.move(800, 0, 2)
+
+    $ chess_camera.center_on()
+
+    call l_move_piece('g3f3')
+    pause 0.3
+    $ chess.drop_with('n', 'g4')
+    $ chess_camera.center_on('g4')
+    soldier_kingdom "You won't get very far."
+    kallen "!"
+
+    # $ chess_camera.move(800, 0, 0.5)
     # pause 0.5
     # show lelouch zorder -1 at left
     # show nunnally at left
@@ -83,13 +94,7 @@ label l_map_1_0:
     # hide lelouch
     # hide nunnally
     # with dissolve
-    # $ chess_camera.center_on()
-    call l_move_piece('h3g3')
-    pause 0.3
-    $ chess.drop_with('b', 'h4')
-    $ chess_camera.center_on('h4')
-    soldier_kingdom "You won't get very far."
-    kallen "!"
+
     $ game.custom_objective = _("[kallen()] escapes (reaches column A).")
     jump l_start_battle
 
@@ -106,7 +111,7 @@ init python:
     def eval_map_1_0(self):
         if get(0) is None: # get(0) is get(kallen)
             return -c.MAX_SCORE
-        kallen_x = get(kallen).x
+        kallen_x = self.get(kallen).x
         if kallen_x == 0:
             return c.MAX_SCORE
         kallen_position_bonus = c.MAX_SCORE / (kallen_x + 1)
@@ -117,11 +122,12 @@ label l_map_1_0_start:
     $ chess.stalemate_flag = 2
     python:
         chess.CRITICAL[0] = [get(kallen)]
-    $ chess.win_con = eval_map_1_0
+    $ chess.goal = eval_map_1_0
     return
 
 label l_map_1_0_Lost:
     lelouch "That idiot...!"
+    return
 
 label l_map_1_0_endTurn:
     $ sq = get(kallen).pos_a8
@@ -129,12 +135,16 @@ label l_map_1_0_endTurn:
         kallen "I can't make any progress..."
         $ chess.drop_with('K', 'a5')
         $ get('K').pilot = lelouch
+        # $ chess.CRITICAL[0].remove(get('K'))
         kallen "?!"
         kallen "A Chessman KING?"
         lelouch "Let's get her out of here."
     return
 
 label l_map_1_0_Win:
+    show kallen at left
+    kallen "Good! Let's get out of here."
+    
     show lelouch at left
     show nunnally at left
     show kallen at right

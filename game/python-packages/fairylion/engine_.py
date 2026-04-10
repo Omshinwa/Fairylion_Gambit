@@ -41,6 +41,7 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
         self.history = []
         self.reset_piecelist()
         self.setup_board(size)
+        # by default, all the kings are critical pieces
 
     def reset_piecelist(self):
         self.PIECELIST = {
@@ -63,9 +64,6 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
             self.PIECELIST[2]['misc'].append(piece)
         else:
             self.PIECELIST[piece.color][c.FEN_TO_CLASS[piece.fen]].append(piece)
-            # by default, all the kings are critical pieces
-            if piece.fen == 'k':
-                self.CRITICAL[piece.color].append(piece)
 
     def remove_piece(self, piece):
         self._remove_piece(piece)

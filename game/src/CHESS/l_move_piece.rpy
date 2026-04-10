@@ -76,8 +76,8 @@ label l_death_move_piece(robot, move, time):
         renpy.pause(time)
     
     $ i = 0
-    while i < len(robot.pilot):
-        $ pilot = robot.pilot[i]
+    while i < len(robot._pilot):
+        $ pilot = robot._pilot[i]
         if pilot is not None and pilot.health == 0:
             $ pilot.die()
         $ i+=1
@@ -124,14 +124,13 @@ label l_move_piece(list_of_moves, time=None):
     if move.capture and move.capture.pilot:
         python:
             robot = move.capture
-            for pilot in robot.pilot:
-                if pilot is not None:
-                    pilot.health -= 1
+            for pilot in robot.pilots:
+                pilot.health -= 1
 
         # IF DEATH, do a dramatic animation:
         $ i = 0
-        while i < len(robot.pilot):
-            $ pilot = robot.pilot[i]
+        while i < len(robot._pilot):
+            $ pilot = robot._pilot[i]
             if pilot is not None and pilot.health == 0:
                 call l_death_move_piece(robot, move, time)
                 $ del time, piece, robot, i

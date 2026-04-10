@@ -167,11 +167,11 @@ label l_map_0_2:
 
     $ game = Game('l_map_0_2')
     $ chess = Chess_control((7,7), bg="castle_gates", bg_board='grass')
+    $ chess.player = 1
     $ chess.set_fen("1r1k1r1/1rrrrr1/7/7/7/1N1P3/2PNP2/3K3 b - - 0 1")
     $ get('k').pilot = stanley
     $ stanley.color = 1
     $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = False
-    $ chess.player = 1
     show screen s_battlefield(chess) with dissolve
     stanley "Here they are. At least this time they have a few minor pieces, and a KING leading them."
     $ f_select(get('N 2'))

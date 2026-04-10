@@ -2,7 +2,7 @@ TODO:
 
 roguelike: RECRUIT should be on the character profile, when you click RECRUIT, first show the profile, then confirm if they want to recruit or not
 Pixel art for infantry
-test map 1-0 with 5 or 4 size
+test map 1-0 with 5 or 4 size, with a knight instead of a bishop
 explore the balance of the UTC eval func again
 * tarot skills implemented on characters (and displayable on the battlefield ui), consumable vs trigger skills? separated top and bottom maybe
 
@@ -11,6 +11,8 @@ explore the balance of the UTC eval func again
 * unit tests for prep phase
 
 * option button in battle (RESIGN, SAVE, LOAD, PREFS)
+
+* convert Pilot -> simple pilot
 
 save on the bottom left, undo should undo the death of Jagen, instead you win from draw
 

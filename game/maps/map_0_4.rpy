@@ -112,12 +112,13 @@ label l_map_0_4:
     jump l_start_battle
     
 label l_map_0_4_start:
-    $ chess.win_con = 'survive'
+    $ chess.goal = 'survive'
     return
 
 label l_map_0_4_Win:
     young_suzaku "[jagen().upper()]!!!!"
     abel "Prince! Quick let's get out of here!"
+    $ g.progress = 100
     return
 
 label l_map_0_4_Lost:
@@ -221,6 +222,7 @@ label l_map_0_4_endTurn:
         stanley "........."
         jagen "What's wrong [stanley()]?"
         jagen "I'm defenseless, you can take me any time."
+        stanley "It will be a stalemate by the Geneva Conventions."
         stanley "So you're ready to throw your life away?"
         jagen "The cause is just."
         stanley "You fool."
@@ -245,6 +247,7 @@ label l_map_0_4_endTurn:
                     moves.append(move)
 
     $ g.state = {'battle'}
+    pause 1.0
     call l_engine_move(moves[0])
 
     return

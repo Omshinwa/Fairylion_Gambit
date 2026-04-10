@@ -79,6 +79,8 @@ init python:
                     if not piece.fen in {'p','i','k'}:
                         if not piece.fen in self.promotions[piece.color]:
                             self.promotions[piece.color].append(piece.fen)
+                if piece.fen == 'k' and piece not in self.CRITICAL[piece.color]:
+                    self.CRITICAL[piece.color].append(piece)
             
             if self.side == 'move_first':
                 if len(self.move_first) == 0:

@@ -56,12 +56,16 @@ init python:
             global chess
             if self.win_con:
                 return eval(self.win_con)
-            return chess.isWin()
+            else:
+                result = self.is_over()
+                return (result[0] is True and result[1] == self.player)
 
         def isLost(self):
             if self.lose_con:
                 return eval(self.lose_con)
-            return chess.is_checkmated(chess.player) or chess.is_stalemated(chess.player) or chess.is_stalemated(1-chess.player)
+            else:
+                result = self.is_over()
+                return (result[0] is True and result[1] != self.player)
 
         @property
         def turnLeft(self):
@@ -84,11 +88,12 @@ label l_after_successful_mission:
 label l_after_failed_mission:
     if renpy.has_label (game.level + "_Lost"):
         call expression game.level + "_Lost"
-    show black onlayer screens with transition_bars
-    if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
-        $ renpy.load(LOCAL_CHECKPOINT_SLOT)
-    # failed to load the checkpoint
-    jump l_map_select
+    if game.is_over == 'loss': # we can change the value of game.is_over to avoid loss
+        show black onlayer screens with transition_bars
+        if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
+            $ renpy.load(LOCAL_CHECKPOINT_SLOT)
+    "failed to load the checkpoint"
+    return
 
 label l_animation_win:
     scene onlayer screens

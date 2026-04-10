@@ -6,12 +6,17 @@ screen s_battlefield(*args, **kwargs):
 
     use s_chess_dismiss()
     use s_chessboard_bg(*args, **kwargs)
-    if 'preparation' in g.state:
-        fixed:
-            at blur_masked(sigma=16.0, mask="prep_blur_mask")
-            xysize (config.screen_width, config.screen_height)
-            use s_chessboard_viewport(chess)
-    else:
+    fixed:
+        xysize (config.screen_width, config.screen_height)
+
+        if 'preparation' in g.state:
+            at blur_masked(sigma=16.0, mask="mask_prepbox")
+        elif 'battle' in g.state or 'preparation' in g.state and not 'tutorial' in game.level: # s_chessboard_overlay is shown
+            at blur_masked(sigma=16.0, mask="mask_itembar")
+        else:
+            at blur_masked(sigma=16.0, mask="mask_sides")
+
+
         use s_chessboard_viewport(chess)
     showif 'battle' in g.state or 'preparation' in g.state: #or ('cutscene' in g.state and game.is_over == "loss"):
         if not 'tutorial' in game.level:
@@ -217,7 +222,7 @@ screen s_chessboard_overlay():
                 # grey side
                     xysize (120, 1.0)
                     if chess.bg == 'gradient':
-                        add Solid('#fff') matrixcolor ColorizeMatrix(prefs.style.gradient_color[1], prefs.style.gradient_color[0])
+                        add Solid('#fff4') matrixcolor ColorizeMatrix(prefs.style.gradient_color[1], prefs.style.gradient_color[0])
                     else:
                         add Solid('#6668')
 

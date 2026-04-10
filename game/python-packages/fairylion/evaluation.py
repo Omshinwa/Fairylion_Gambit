@@ -14,7 +14,7 @@ class Engine_eval():
         self.tables['pawn'] = []
 
         self.eval = self.eval_default
-        self._win_con = None # This is the win condition that changes the evaluation function.
+        self._goal = None # This is the goal condition that changes the evaluation function and win/loss conditions.
         # by default None: this is checkmate
         # 'kill' : eliminate all enemy units
         # 'survive' : survive a number of turns, stalemate = 999999
@@ -22,18 +22,18 @@ class Engine_eval():
 
         # stalemate flag is either:
         # 0 always draw (regular rules),
-        # 1 always win (for defense/survive)
-        # -1 always lose (for must wins)
+        # 1 always win (for defense/survive), return MAX
+        # -1 always lose (for must wins), return -MAX
         # 2 the one who gets stalemated loses
         self.stalemate_flag = 0
 
     @property
-    def win_con(self):
-        return self._win_con
+    def goal(self):
+        return self._goal
 
-    @win_con.setter
-    def win_con(self, cond):
-        self._win_con = cond
+    @goal.setter
+    def goal(self, cond):
+        self._goal = cond
         if cond == None:
             self.stalemate_flag = 0
             self.eval = self.eval_default
@@ -99,11 +99,11 @@ class Engine_eval():
         if any(element.value >= 800 for element in self.PIECELIST[1-king.color]['M']): # middle game, calculate king safety
             piece_value = self.eval_king_safety(king)
         else: #else, calculate activity?
-            if self.win_con is None:
+            if self.goal is None:
                 if king.color == 0: # count only once for both kings, we give a bonus if we trapped the opposing king
                     piece_value = self.corner_king_bonus(king) - self.distance_between_kings()
             else:
-                piece_value = 0
+                piece_value = 300
         return piece_value
         
     def eval_king_safety(self, king):
@@ -137,31 +137,31 @@ class Engine_eval():
 
     def is_stalemated(self, color):
         return self.side == color and not self.is_in_check(color) and len(self.gen_legal_moves(color))==0
-    
-    def has_no_moves(self, color):
-        return not self.is_in_check(color) and len(self.gen_legal_moves(color))==0
 
-    def isWin(self, win_con=None):
-        opp_color = 1-self.player
-        win_con = win_con or self.win_con
-
-        if win_con == None: # checkmate
-            return self.is_checkmated(opp_color)
-        elif win_con == 'kill':
-            if len(self.get_pieces(opp_color))==0:
-                return True
-        elif win_con == 'survive':
-            #       if you played more moves than turn limit.
-            # or    you won / opponent is under stalemate
-            # or    youre stalemated
-            if self.turn_limit and len(self.history) >= self.turn_limit:
-                return True
-            if self.is_stalemated(self.player):
-                return True
-            if len(self.CRITICAL[opp_color]) == 0:
-                return True
-        return False
-
+    # return { (bool) has_terminated, (int) who_won}
+    # if who_won == 0: white
+    # if who_won == 1: black
+    # if who_won == 2: draw
+    def is_over(self, color):
+        if len(self.gen_legal_moves(self.side))==0: # termination
+            if self.is_in_check(self.side): # checkmate
+                if color == 1 - self.side:
+                    return True,0
+                return True,1
+            else: # stalemate
+                if self.stalemate_flag == 0:
+                    return True,2
+                elif self.stalemate_flag == 1:
+                    return True,0
+                elif self.stalemate_flag == -1:
+                    return True,1
+                elif self.stalemate_flag == 2:
+                    return True,1-self.side
+        else:
+            position_score = self.eval(self)
+            if abs(position_score) >= c.MAX_SCORE - 99:
+                return True,position_score//abs(position_score) # get the sign
+        return False,None
 
     def calc_piece_sq_tables(self):
         """

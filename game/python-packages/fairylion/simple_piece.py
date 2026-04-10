@@ -85,6 +85,33 @@ class Simple_Piece():
         else: #if we only give 1 pilot, bracket it
             self._pilot[0] = pilot
 
+    @property
+    def x(self) -> int:
+        return self.engine.POS_TO_XY[self.pos][0]
+    @x.setter
+    def x(self, x:int):
+        self.engine.board[self.pos] = c.EMPTY
+        y = self.engine.POS_TO_XY[self.pos][1]
+        self.pos = self.engine.XY_TO_POS[x][y]
+        self.engine.board[self.pos] = self
+    @property
+    def y(self) -> int:
+        return self.engine.POS_TO_XY[self.pos][1]
+    @y.setter
+    def y(self, y:int):
+        self.engine.board[self.pos] = c.EMPTY
+        x = self.engine.POS_TO_XY[self.pos][0]
+        self.pos = self.engine.XY_TO_POS[x][y]
+        self.engine.board[self.pos] = self
+    @property
+    def pos_a8(self) -> str:
+        return self.engine.POS_TO_A8(self.pos)
+    @pos_a8.setter
+    def pos_a8(self, a8:str):
+        self.engine.board[self.pos] = c.EMPTY
+        self.pos = self.engine.A8_TO_POS(a8)
+        self.engine.board[self.pos] = self
+        
     def get_move_of_instruction(self, moves, instruction, offset, engine):
         MOVE_TO_FUNCTION[instruction](self, moves, offset, self.pos, engine)
         return 

@@ -53,8 +53,6 @@ label l_gameLoop_everyInteraction():
         $ g.state = {'cutscene'}
         call l_animation_lost
         call expression game.lost_label
-        if game.is_over == 'loss':
-            $ game_over()
     if renpy.has_label(game.endTurn): #shouldnt i call this before checking for win/loss?
         $ g.state = {'cutscene'}
         call expression game.endTurn

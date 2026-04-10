@@ -20,12 +20,6 @@ init python:
     def format_progress(progress:int):
         return "Chapter " + str(progress//100) + "-" + str(progress%100)
 
-    def game_over():
-        if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
-            renpy.load(LOCAL_CHECKPOINT_SLOT)
-        else:
-            renpy.jump('start')
-
     def update_local_checkpoint_and_autosave():
         global save_name
         renpy.take_screenshot()
@@ -62,12 +56,11 @@ init python:
             renpy.copy_save(slot_checkpoint, LOCAL_CHECKPOINT_SLOT)
         else:
             print(f"Failed to load the checkpoint related to {filename}")
-        try:
-            renpy.load(filename)
-        except Exception as e:
-            print(f"Failed to load {filename}: {e}, falling back to checkpoint")
-            if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
-                renpy.load(LOCAL_CHECKPOINT_SLOT)
+        renpy.load(filename)
+        # try:
+        # except Exception as e:
+        #     print(f"Failed to load {filename}: {e}, falling back to checkpoint")
+        #     renpy.load(LOCAL_CHECKPOINT_SLOT)
 
     def delete_slot_with_checkpoint(filename:str):
         print(f"deleting {filename}")

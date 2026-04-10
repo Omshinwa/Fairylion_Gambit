@@ -90,20 +90,20 @@ screen main_menu():
         align (1.0, 1.0)
         hbox:
             xalign 1.0
-            button at t_interactive:
+            button at t_interactive style 'sty_btn_button':
                 add "gui/main_menu/icon_itch.png" xysize(100,100)
                 action OpenURL("https://omshinwa.itch.io/fairylion")
-            button at t_interactive:
+            button at t_interactive style 'sty_btn_button':
                 add "gui/main_menu/icon_twitter.jpg"  xysize(100,100)
                 action OpenURL("https://x.com/Omshinwa")
-            button at t_interactive:
+            button at t_interactive style 'sty_btn_button':
                 add "gui/main_menu/icon_bluesky.svg"  xysize(100,100)
                 action OpenURL("https://bsky.app/profile/omshinwa.itch.io")
-            button at t_interactive:
+            button at t_interactive style 'sty_btn_button':
                 add "gui/main_menu/icon_discord.jpg"  xysize(100,100)
                 action OpenURL("https://discord.com/invite/gU8bxGC87Z")
         
-        text 'VER. [config.version]' 
+        text 'VER. [config.version]' xalign 1.0
 
 label l_switch_difficulty:
     if g.difficulty == 'easy':

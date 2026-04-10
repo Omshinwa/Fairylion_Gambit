@@ -115,8 +115,11 @@ class EngineUtils():
                     col_index += int(char)
                 else:
                     color = 0 if char.isupper() else 1
-                    self.drop(char.lower(), (col_index, len(rows)-1-row_index), color)
+                    piece = self.drop(char.lower(), (col_index, len(rows)-1-row_index), color)
                     col_index += 1
+
+                    if char.lower() == 'k': # by default kings are critical
+                        self.CRITICAL[color].append(piece)
 
         # Set up castling permissions
         castling_rights = parts[2] if len(parts) > 2 else "-"
@@ -266,7 +269,7 @@ class EngineUtils():
                 self.promotions[i].append(prom)
 
         # copy rules
-        self.win_con = chess.win_con
+        self.goal = chess.goal
         self.stalemate_flag = chess.stalemate_flag
 
         # copy pieces and board
@@ -378,8 +381,9 @@ class EngineUtils():
             if len(target.split(' ')) > 1:
                 target_index = int(target.split(' ')[1])
             i = 1
-            if len(target_fen) == 2:
+            if len(target_fen) == 2 and target_fen[0] == target_fen[1]:
                 color = 2
+                target_fen = target_fen[0]
             elif target_fen.isupper():
                 color = 0
             else:
@@ -390,9 +394,11 @@ class EngineUtils():
                         return piece
                     else:
                         i+=1
-        else:
-            raise ValueError('target should be a string like Q or id like 3')
-        
+        else: # its a pilot?
+            for piece in self.get_pieces():
+                for pilot in piece._pilot:
+                    if pilot and target == pilot:
+                        return piece
         return None
     
     def get_pilot(self, pilot_name:str):

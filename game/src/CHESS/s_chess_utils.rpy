@@ -322,6 +322,13 @@ init python:
                 return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.INDEX_TO_COLOR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
 
         else:
+            if piece._pilot[0] and piece._pilot[0].id == 'kallen':
+                # return img_square(Composite(
+                #         (SQUARESIZE, SQUARESIZE),
+                #         (0, 0), Transform("sprite kallen", zoom=3, nearest=True)), matrixcolor=IdentityMatrix())
+                return img_square(Composite(
+                        (SQUARESIZE, SQUARESIZE),
+                        (0, 0), Transform("head kallen", zoom=.2)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),
-                    (40, 40), Transform("body", zoom=2, nearest=True)), matrixcolor=IdentityMatrix()) # (20, 0), Transform(f"side {piece.pilot.id}", xysize=(0.5, 0.5), xzoom=-1))
+                    (40, 40), Transform("body", zoom=2, nearest=True)), matrixcolor=IdentityMatrix())

@@ -96,33 +96,6 @@ init -1 python:
                 return self._pilot[1]
             return None
 
-        @property
-        def x(self) -> int:
-            return self.engine.POS_TO_XY[self.pos][0]
-        @x.setter
-        def x(self, x:int):
-            chess.board[self.pos] = c.EMPTY
-            y = self.engine.POS_TO_XY[self.pos][1]
-            self.pos = self.engine.XY_TO_POS[x][y]
-            chess.board[self.pos] = self
-        @property
-        def y(self) -> int:
-            return self.engine.POS_TO_XY[self.pos][1]
-        @y.setter
-        def y(self, y:int):
-            chess.board[self.pos] = c.EMPTY
-            x = self.engine.POS_TO_XY[self.pos][0]
-            self.pos = self.engine.XY_TO_POS[x][y]
-            chess.board[self.pos] = self
-        @property
-        def pos_a8(self) -> str:
-            return self.engine.POS_TO_A8(self.pos)
-        @pos_a8.setter
-        def pos_a8(self, a8:str):
-            chess.board[self.pos] = c.EMPTY
-            self.pos = self.engine.A8_TO_POS(a8)
-            chess.board[self.pos] = self
-
         def setup_piece(self, is_promotion_or_new_piece=False):
             """
             1. Change piece model to pilot's
@@ -149,7 +122,7 @@ init -1 python:
 
             # remove 2-step by default for player
             if self.fen == 'p' and self.color == chess.player:
-                if 'double move' in self.range and not any('2-step' in p.skills['setup'] for p in self.pilots):
+                if 'double move' in self.range and self.pilots and not any('2-step' in p.skills['setup'] for p in self.pilots):
                     del self.range['double move']
             
             if Robot_Piece.get_range_of(self.fen, self.engine, self.color) == self.range: # if its a default piece
