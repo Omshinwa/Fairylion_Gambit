@@ -425,6 +425,7 @@ class TestMctsForkCritical:
         _king_w  = eng.drop('k', 'e1', 0)
         infnt_w  = eng.drop('i', 'g3', 0)
         eng.CRITICAL[0].append(infnt_w)   # infantry is also critical
+        eng.CRITICAL[0].append(_king_w)
 
         # Black
         _bishop_b = eng.drop('b', 'c5', 1)

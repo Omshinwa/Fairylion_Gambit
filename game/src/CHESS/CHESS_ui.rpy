@@ -77,7 +77,6 @@ init -1 python:
             # This is the relative position where
             # x == 0 means its centered
             return int(self.xadj.value)
-            return int(self.xadj._range/2 - self.xadj.value)
         @x.setter
         def x(self, value):
             self.xadj.value = value
@@ -87,7 +86,6 @@ init -1 python:
             # This is the relative position where
             # y == 0 means its centered
             return int(self.yadj.value)
-            return int(self.yadj._range/2 - self.yadj.value)
         @y.setter
         def y(self, value):
             self.yadj.value = value
@@ -343,3 +341,35 @@ init -1 python:
                 move = moves[0]
 
             return move;
+
+        def drop_with(self, piece, pos=None, color=None, direction=None):
+            """
+            Similar to drop, except it also plays an anim if it's from the edge of the board.
+            """
+            piece = self.drop(piece, pos, color)
+            fr = self.POS_TO_SXY(piece.pos, 0.5)
+            # we move it one square from the edge
+            if direction == 'right' or piece.x == 0:
+                fr = (fr[0]-SQUARESIZE * c.COLOR_TO_SIGN[self.player], fr[1])
+            elif direction == 'left' or piece.x == self.size[0] - 1:
+                fr = (fr[0]+SQUARESIZE * c.COLOR_TO_SIGN[self.player], fr[1])
+            elif direction == 'down' or piece.y == 0:
+                fr = (fr[0], fr[1]+SQUARESIZE * c.COLOR_TO_SIGN[self.player])
+            elif direction == 'up' or piece.y == self.size[1] - 1:
+                fr = (fr[0], fr[1]-SQUARESIZE * c.COLOR_TO_SIGN[self.player])
+            renpy.transition(dissolve, 'master')
+            f_create_animation_move(piece, fr, chess.POS_TO_SXY(piece.pos, 0.5), 0.2)
+        
+        def remove_with(self, piece, direction=None):
+            to = self.POS_TO_SXY(piece.pos, 0.5)
+            if direction == 'left' or piece.x == 0:
+                to = (to[0]-SQUARESIZE * c.COLOR_TO_SIGN[self.player], to[1])
+            elif direction == 'right' or piece.x == self.size[0] - 1:
+                to = (to[0]+SQUARESIZE * c.COLOR_TO_SIGN[self.player], to[1])
+            elif direction == 'up' or piece.y == 0:
+                to = (to[0], to[1]+SQUARESIZE * c.COLOR_TO_SIGN[self.player])
+            elif direction == 'down' or piece.y == self.size[1] - 1:
+                to = (to[0], to[1]-SQUARESIZE * c.COLOR_TO_SIGN[self.player])
+            f_create_animation_move(piece, chess.POS_TO_SXY(piece.pos, 0.5), to, 0.2)
+            self.remove_piece(piece)
+            renpy.transition(dissolve, 'master')

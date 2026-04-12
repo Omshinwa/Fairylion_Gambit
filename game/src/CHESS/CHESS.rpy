@@ -79,6 +79,7 @@ init python:
                     if not piece.fen in {'p','i','k'}:
                         if not piece.fen in self.promotions[piece.color]:
                             self.promotions[piece.color].append(piece.fen)
+                # add all the Kings to the CRITICAL
                 if piece.fen == 'k' and piece not in self.CRITICAL[piece.color]:
                     self.CRITICAL[piece.color].append(piece)
             
@@ -132,24 +133,6 @@ init python:
             
             new_piece.deployed = True
             return new_piece
-
-        def drop_with(self, piece, pos=None, color=None):
-            """
-            Similar to drop, except it also plays an anim if it's from the edge of the board.
-            """
-            piece = self.drop(piece, pos, color)
-            fr = self.POS_TO_SXY(piece.pos, 0.5)
-            # we move it one square from the edge
-            if piece.x == 0:
-                fr = (fr[0]-SQUARESIZE * c.INDEX_TO_SIGN[self.player], fr[1])
-            elif piece.x == self.size[0] - 1:
-                fr = (fr[0]+SQUARESIZE * c.INDEX_TO_SIGN[self.player], fr[1])
-            elif piece.y == 0:
-                fr = (fr[0], fr[1]+SQUARESIZE * c.INDEX_TO_SIGN[self.player])
-            elif piece.y == self.size[1] - 1:
-                fr = (fr[0], fr[1]-SQUARESIZE * c.INDEX_TO_SIGN[self.player])
-            renpy.transition(dissolve, 'master')
-            f_create_animation_move(piece, fr, chess.POS_TO_SXY(piece.pos, 0.5), 0.2)
 
     #
     #       INFANTERY STUFF
@@ -238,7 +221,7 @@ init python:
                 for piece in self.get_pieces(color):
                     if piece.fen == 'k':
                         continue
-                    value += piece.value * (c.INDEX_TO_SIGN[color])
+                    value += piece.value * (c.COLOR_TO_SIGN[color])
                     # 0 -> 1
                     # 1 -> -1
             return value

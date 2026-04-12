@@ -12,10 +12,7 @@ label l_map_0_4:
     $ jagen.health = 1
     $ young_suzaku.health = young_suzaku.max_health
     $ abel.health = abel.max_health
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
 
     show bg castle:
         xysize (1.0, 1.0)

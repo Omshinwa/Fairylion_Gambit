@@ -1,8 +1,5 @@
 label l_map_1_0:
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
     
     jagen "Test, im dead so this shouldnt display."
     "DEV: c'était la dernière map à peu près scripté"
@@ -60,7 +57,6 @@ label l_map_1_0:
     with dissolve
 
     $ chess = Chess_control((5,5), bg='desert', bg_board='sand')
-    # $ chess.set_fen("8/8/8/8/8/8")
     $ chess.set_fen("7/7/7/7/7/7")
     show screen s_battlefield(chess) with dissolve
     $ chess.drop_with(kallen, 'g3', 0)
@@ -114,8 +110,8 @@ init python:
         kallen_x = self.get(kallen).x
         if kallen_x == 0:
             return c.MAX_SCORE
-        kallen_position_bonus = c.MAX_SCORE / (kallen_x + 1)
-        return self.eval_default()/10 + kallen_position_bonus
+        kallen_position_bonus = (6 - kallen_x) * 100
+        return self.eval_default() + kallen_position_bonus
 
 label l_map_1_0_start:
     $ game.win_con = 'get(kallen) and get(kallen).x == 0' # on first rank
@@ -131,21 +127,72 @@ label l_map_1_0_Lost:
 
 label l_map_1_0_endTurn:
     $ sq = get(kallen).pos_a8
-    if len(chess.history) > 13 and not_done('1', 'onceEveryFight'):
+    if len(chess.history) > 8 and not_done('1', 'onceEveryFight'):
         kallen "I can't make any progress..."
         $ chess.drop_with('K', 'a5')
         $ get('K').pilot = lelouch
-        # $ chess.CRITICAL[0].remove(get('K'))
+        $ chess.CRITICAL[0].append(get('K'))
         kallen "?!"
         kallen "A Chessman KING?"
         lelouch "Let's get her out of here."
     return
 
 label l_map_1_0_Win:
-    show kallen at left
-    kallen "Good! Let's get out of here."
-    
-    show lelouch at left
-    show nunnally at left
+    $ chess.remove_with(get(kallen), direction='left')
+    $ chess.remove_with(get(lelouch), direction='left')
+    pause 1
+    # soldier_kingdom "They're out of reach. I better report back."
+    # if get('n'):
+    #     $ chess.remove_with(get('n'), direction='right')
+    # pause .5
+
+    # move kallen 1 toward lelouch
+
+    show black with dissolve
+    $ chess.set_fen("7/7/7/7/7/7")
+    $ chess.drop('K', 'c3', 0)
+    $ get('K').pilot = lelouch
+    $ chess.drop(kallen, 'e3', 0)
+    hide black with dissolve
+
     show kallen at right
-    kallen "Who are you?"
+    kallen "..."
+    kallen "Thank you, but who are you?"
+
+    kallen "Only royalty and high ranking officers are allowed to pilot a Chessman KING."
+    kallen "Prince...?"
+    $ get('K').pilot = None
+    $ chess.drop_with(lelouch, 'd3', direction='right')
+    show lelouch at left
+    pause 1
+    kallen "No... Who are you?"
+    lelouch "Don't you hate feeling powerless?"
+    kallen "?!"
+    kallen "What are you talking about?! Who are you!"
+    lelouch "Do you want to beat [name('The Holy Empire')]?"
+    kallen "?!"
+    lelouch "Follow me."
+    hide lelouch
+    hide kallen with moveoutleft
+
+    show black with dissolve
+    $ chess.set_fen("7/7/7/7/7/7")
+    $ chess.drop('R', 'd5', 2)
+    $ chess.drop(lelouch, 'c2', 2)
+    $ chess.drop(kallen, 'd4', 0)
+    hide black with dissolve
+
+    $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = False
+    pause .5
+    show kallen at right
+
+    kallen "This... how did you get it?"
+    show lelouch at left
+    lelouch "Can you pilot the ROOK?"
+    kallen "Yes.. I've done it once."
+    lelouch "That's when you got your nickname, the Lion."
+    kallen "What do you want from me?"
+    lelouch "Take it. I need you to pilot it to defeat [name('The Holy Empire')]."
+    kallen "Defeat... [name('the Holy Empire')]..."
+
+    call l_black_scene_change

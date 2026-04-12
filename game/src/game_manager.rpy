@@ -57,14 +57,14 @@ init python:
             if self.win_con:
                 return eval(self.win_con)
             else:
-                result = self.is_over()
+                result = chess.result()
                 return (result[0] is True and result[1] == self.player)
 
         def isLost(self):
             if self.lose_con:
                 return eval(self.lose_con)
             else:
-                result = self.is_over()
+                result = chess.result()
                 return (result[0] is True and result[1] != self.player)
 
         @property

@@ -20,10 +20,7 @@ label l_intro:
     jump l_map_select
 
 label l_map_0_0:
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
     show bg desert:
         xysize (1.0, 1.0)
     with dissolve
@@ -109,10 +106,7 @@ label l_map_0_0_Lost:
 # ###       ### ###     ### ###  
 
 label l_map_0_1:
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
 
     $ game = Game('l_map_0_1')
     $ chess = Chess_control((7,7), bg="desert", bg_board="sand")
@@ -151,10 +145,7 @@ label l_map_0_1_Win:
 
 
 label l_map_0_2:
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
     show bg castle_gates:
         xysize (1.0, 1.0)
     show stanley at left

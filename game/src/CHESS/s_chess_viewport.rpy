@@ -225,11 +225,11 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             if len(chess.history) == 0 and chess.move_first and piece.pilot and any(pilot is not None and 'initiative' in pilot.skills['setup'] for pilot in piece._pilot):
                                 at t_highlight
 
+                        # temp, we display the eyes of the infantry
                         if piece.fen == 'i' or ('preparation' in g.state and piece.pilot):
                             for pilot in piece._pilot:
-                                if pilot is not None:
+                                if pilot is not None and pilot != kallen:
                                     add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
-                                # add pilot.img_side() xysize (0.5,0.5) align (1.0,1.0)
                     
                         if show_debug_menu:
                             if type(piece) == Robot_Piece:

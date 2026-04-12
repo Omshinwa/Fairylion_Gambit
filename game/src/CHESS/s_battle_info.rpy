@@ -199,7 +199,7 @@ screen s_battlefield_robot(piece, scale=1):
                             add f"icon {piece.fen}" nearest True xysize (1.0,1.0)
                         else:
                             if piece.color != 2:
-                                add f"[c.INDEX_TO_COLOR[piece.color]] {c.FEN_TO_PIECE[piece.fen]} merida" xysize (1.0,1.0)
+                                add f"[c.COLOR_TO_STR[piece.color]] {c.FEN_TO_PIECE[piece.fen]} merida" xysize (1.0,1.0)
                             else:
                                 add f"white {c.FEN_TO_PIECE[piece.fen]} merida" xysize (1.0,1.0)
 

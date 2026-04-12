@@ -145,7 +145,7 @@ label l_move_piece(list_of_moves, time=None):
 init python:
     # Play a move animation, it has to finish at the end
     def f_create_animation_move(piece, fr, to, time, capture=None, *, mute=False):
-        chess.ui['animation_move'] = DotDict(piece=piece, fr=fr, to=to, time=time, capture=move.capture)
+        chess.ui['animation_move'] = DotDict(piece=piece, fr=fr, to=to, time=time, capture=capture)
         if (not mute):
             f_play_move_piece_sound(piece, move)
         chess.state = "move"

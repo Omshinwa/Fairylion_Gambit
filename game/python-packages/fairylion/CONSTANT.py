@@ -1,12 +1,11 @@
 OFFBOARD = False
 EMPTY = 1
 
-INDEX_TO_SIGN = {0:1, 1:-1, 2:0}
-SIGN_TO_INDEX = {1:0, -1:1}
-
 MAX_SCORE = 999999
 
-INDEX_TO_COLOR = {0:'white', 1:'black', 2:'grey'}
+COLOR_TO_SIGN = {0:1, 1:-1, 2:0}
+SIGN_TO_COLOR = {1:0, -1:1}
+COLOR_TO_STR = {0:'white', 1:'black', 2:'grey'}
 
 FEN_TO_VALUE = {'p':100, 'n':300, 'b':300, 'r':500, 'q':900, 'k':9900, 'g':300, 'c':300, 'i':20}
 PIECE_TO_FEN = { 'pawn':'p', 'knight':'n', 'bishop':'b',

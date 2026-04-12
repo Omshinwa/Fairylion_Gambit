@@ -136,7 +136,7 @@ def move_line_jump(piece, moves, offset, pos, engine):
 def move_double_move(piece, moves, offset, pos, engine):
     board = engine.board
     
-    color = c.INDEX_TO_SIGN[piece.color]     
+    color = c.COLOR_TO_SIGN[piece.color]     
     # pawn double move
     if (engine.POS_TO_XY[pos][1] <= 1) if color == 1 else (engine.POS_TO_XY[pos][1] >= engine.size[1] - 2):
         sq1 = pos+engine.up*color

@@ -76,7 +76,7 @@ class Engine_eval():
                     piece_value = piece.value + self.tables[table_2_look][len(self.board)-1-piece.pos] * coefficient
             else:
                 piece_value = piece.value
-        piece_value *= c.INDEX_TO_SIGN[piece.color]
+        piece_value *= c.COLOR_TO_SIGN[piece.color]
         return piece_value
         
     def eval_loop_piecelist(self, eval_single_piece:callable, *, set_debug_value = False):
@@ -100,10 +100,12 @@ class Engine_eval():
             piece_value = self.eval_king_safety(king)
         else: #else, calculate activity?
             if self.goal is None:
-                if king.color == 0: # count only once for both kings, we give a bonus if we trapped the opposing king
-                    piece_value = self.corner_king_bonus(king) - self.distance_between_kings()
+                if not self.PIECELIST[1-king.color]['K']: # if theres no opposing king
+                    return c.COLOR_TO_SIGN[king.color] * 300
+                # if king.color == 0: # count only once for both kings, we give a bonus if we trapped the opposing king
+                piece_value = self.corner_king_bonus(king) - self.distance_between_kings()
             else:
-                piece_value = 300
+                return c.COLOR_TO_SIGN[king.color] * 300
         return piece_value
         
     def eval_king_safety(self, king):
@@ -142,12 +144,10 @@ class Engine_eval():
     # if who_won == 0: white
     # if who_won == 1: black
     # if who_won == 2: draw
-    def is_over(self, color):
+    def result(self):
         if len(self.gen_legal_moves(self.side))==0: # termination
             if self.is_in_check(self.side): # checkmate
-                if color == 1 - self.side:
-                    return True,0
-                return True,1
+                return True,1-self.side
             else: # stalemate
                 if self.stalemate_flag == 0:
                     return True,2
@@ -160,7 +160,9 @@ class Engine_eval():
         else:
             position_score = self.eval(self)
             if abs(position_score) >= c.MAX_SCORE - 99:
-                return True,position_score//abs(position_score) # get the sign
+                if position_score > 0:
+                    return True,0
+                return True,1
         return False,None
 
     def calc_piece_sq_tables(self):

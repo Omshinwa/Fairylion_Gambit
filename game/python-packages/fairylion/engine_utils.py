@@ -349,7 +349,7 @@ class EngineUtils():
                     return False
         return True
         
-    def is_unsync(self):
+    def is_sync(self):
         # check if the number of pieces is the same on PIECELIST and .board
         pieces = 0
         for sq in self.board:
@@ -357,15 +357,11 @@ class EngineUtils():
                 pieces += 1
         return len(self.get_pieces()) != pieces
     
-    def is_unsync_deep(self): # check if the pieces are the same
+    def is_sync_deep(self): # check if the pieces are the same
         for piece in self.get_pieces():
             if self.board[piece.pos] != piece:
                 return f"{piece} is misplaced"
-            
-        if self.is_unsync():
-            return False
-        else:
-            return f"There's some extra pieces"
+        return self.is_sync()
 
     
     # to find a NEUTRAL piece, write the letter twice ie QQ for a grey queen

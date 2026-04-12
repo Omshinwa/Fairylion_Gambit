@@ -196,7 +196,7 @@ screen s_pilot_side_img_in_cockpit(who, pilot, robot):
                 align .5,.5
                 style 'empty'
                 add 'inside_cockpit' xysize (380,380)
-                $ img_pilot = Crop((pilot.img_side_xy[0]+60, pilot.img_side_xy[1]+110, 250, 250), pilot.id, xysize=(1.0, 1.0), xzoom=c.INDEX_TO_SIGN[robot.color]*-1, align=(.5,.5))
+                $ img_pilot = Crop((pilot.img_side_xy[0]+60, pilot.img_side_xy[1]+110, 250, 250), pilot.id, xysize=(1.0, 1.0), xzoom=c.COLOR_TO_SIGN[robot.color]*-1, align=(.5,.5))
                 add img_pilot:
                     matrixcolor BrightnessMatrix(-1) blur 10
                 add img_pilot blend 'add':

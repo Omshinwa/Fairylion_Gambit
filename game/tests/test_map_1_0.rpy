@@ -18,12 +18,12 @@ testsuite map_1_0:
             run Jump("l_map_1_0")
             skip until screen "s_start_battle"
             click until eval ('battle' in g.state)
-            # check if the button piece_g3 exists
-            assert eval (renpy.get_widget("s_battlefield", "piece_g3") is not None)
-            click until id "piece_g3"
-            click id "piece_g3"
-            pause until id "move_f3"
-            click id "move_f3"
+            # check if the button piece_f3 exists
+            assert eval (renpy.get_widget("s_battlefield", "piece_f3") is not None)
+            click until id "piece_f3"
+            click id "piece_f3"
+            pause until id "move_f4"
+            click id "move_f4"
             pause until eval (not chess.wait_for_enemy) timeout 10.0
     
     

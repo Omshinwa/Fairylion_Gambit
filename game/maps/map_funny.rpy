@@ -2,10 +2,7 @@
 
 label map_mrs_obama:
 
-    show black onlayer screens
-    with transition_bars
-    scene onlayer screens
-    scene
+    call l_black_scene_change
     show bg castle:
         xysize (1.0, 1.0)
     show corner_shadow

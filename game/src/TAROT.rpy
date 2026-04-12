@@ -42,7 +42,7 @@ init python:
 
     def show_s_tarot(tarot, piece_target:Robot_Piece=None):
         if piece_target:
-            chess_camera.center_on(piece_to_center.pos)
+            chess_camera.center_on(piece_target.pos)
         else:
             pilot = get(kallen) or get('Q')
             if pilot:

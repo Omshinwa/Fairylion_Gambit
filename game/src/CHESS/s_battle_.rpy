@@ -48,7 +48,7 @@ screen s_chess_dismiss():
                 matrixcolor ColorizeMatrix(prefs.style.gradient_color[1],prefs.style.gradient_color[0])
 
     # objective    
-    if game.custom_objective:
+    if game.custom_objective and 'battle' in g.state:
         frame:
             style 'empty'
             align (1.0,0)
@@ -254,7 +254,7 @@ screen s_chessboard_overlay():
                                     for i in range(quantity):
                                         add 'tarot [tarot]' yalign .5 xalign .6 ysize 90 fit 'scale-down' rotate -70 transform_anchor True offset (-i*5, -i*5)
 
-                    $ txt = str(int(chess.get_advantage()/100) * c.INDEX_TO_SIGN[chess.player]) 
+                    $ txt = str(int(chess.get_advantage()/100) * c.COLOR_TO_SIGN[chess.player]) 
                     if chess.get_advantage()>0:
                         $ txt = "+" + txt
                     text "{i}{size=-10}[txt[0]]{/size}[txt[1:]]" xalign 0.5 yalign 0.5 font "FONT_big" size 50 color "#a2eba6" outlines [ (4, "#00a03d", 0, 2) ]

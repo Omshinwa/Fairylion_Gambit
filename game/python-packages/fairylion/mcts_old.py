@@ -220,7 +220,7 @@ class MonteCarloSearchMixin:
                         elif self.stalemate_flag == -1:
                             position_score = -c.MAX_SCORE
                         elif self.stalemate_flag == 2: #whoever gets stalemated loses
-                            position_score = -c.MAX_SCORE * c.INDEX_TO_SIGN[self.side]
+                            position_score = -c.MAX_SCORE * c.COLOR_TO_SIGN[self.side]
                 else:
                     position_score = state.eval(state)
                     if abs(position_score) >= c.MAX_SCORE - 99:

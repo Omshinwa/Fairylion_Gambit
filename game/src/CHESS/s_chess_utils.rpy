@@ -319,7 +319,7 @@ init python:
                 else:
                     return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=ColorizeMatrix("#01d", "#dcfffe"))
             else:
-                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.INDEX_TO_COLOR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
+                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.COLOR_TO_STR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
 
         else:
             if piece._pilot[0] and piece._pilot[0].id == 'kallen':
@@ -328,7 +328,8 @@ init python:
                 #         (0, 0), Transform("sprite kallen", zoom=3, nearest=True)), matrixcolor=IdentityMatrix())
                 return img_square(Composite(
                         (SQUARESIZE, SQUARESIZE),
-                        (0, 0), Transform("head kallen", zoom=.2)), matrixcolor=IdentityMatrix())
+                        (10, 10), Transform("body kallen", zoom=.2),
+                        (35, -5), Transform("head kallen", zoom=.18)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),
                     (40, 40), Transform("body", zoom=2, nearest=True)), matrixcolor=IdentityMatrix())
