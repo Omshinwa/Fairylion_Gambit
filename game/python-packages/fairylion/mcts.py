@@ -72,16 +72,14 @@ class MCTSNode:
         """
         best_score = float('-inf')
         best_child = None
-        
         for child in self.children:
             uct_score = child.utc()
 
             if uct_score > best_score:
                 best_score = uct_score
                 best_child = child
-            # elif uct_score == best_score and random.random()<1.0/len(self.children):
-            #     best_child = child
-                
+
+        # best_child = random.choice(self.children)
         return best_child
 
     def expand_initial(self, state):
@@ -164,7 +162,7 @@ class MonteCarloSearchMixin:
             if root.solved:
                 print(f"Solved the whole tree after {_} iterations")
                 break
-            elif _&256 == 0 and time_limit and time.time() - start_time > time_limit and _ > 0:
+            elif time_limit and _&256 == 0 and time.time() - start_time > time_limit and _ > 0:
                 print(f"iterations: {_}, time: {COLOR_GREEN}{time.time()-start_time:.2f}{COLOR_RESET}")
                 break
             node = root

@@ -285,7 +285,7 @@ class EngineUtils():
             for category in chess.PIECELIST[color]:
                 for piece in chess.PIECELIST[color][category]:
                     new_piece = Simple_Piece(piece.fen, piece.color, piece.pos, range=piece.range,
-                                             movement=piece.movement, pid=piece.pid, engine=self, pilot=piece._pilot)
+                                             movement=piece.movement, pid=piece.pid, engine=self, pilot=[p.id if p is not None else None for p in piece._pilot])
                     self.board[piece.pos] = new_piece
                     
                     # Manually append to avoid unwanted side-effects from _append_piece

@@ -32,6 +32,13 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
         
         self.setup_chess(size)
         
+    def __getitem__(self, key): # convenient getter, SLOW dont use in critical sections
+        key = self.TO_POS(key)
+        return self.board[key]
+    def __setitem__(self, key, value):
+        key = self.TO_POS(key)
+        self.board[key] = value
+
     def setup_chess(self, size):
         """
         reset promotions, history, and castling perms
@@ -184,6 +191,7 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
                 return 'enter_empty'
         return False
     
+    # note: engine doesnt create move.data with a separate piece, chess do
     def move_enter(self, move, piece, board):
         target = board[move.to]
         self._remove_piece(piece)
@@ -393,6 +401,11 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
                 board[move.to] = c.EMPTY
 
         self.side = 1-self.side
+
+
+    # we only add it in the case where 'promote_q' is in the skills
+    def should_add_queen_to_promotions(self, piece):
+        return True
 
     def gen_moves(self, side: int = None) -> list:
         """

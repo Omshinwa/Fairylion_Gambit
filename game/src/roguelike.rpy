@@ -331,7 +331,6 @@ label l_result_screen:
 
     hide screen s_recruit
     hide screen s_in_between_rounds
-    with transition_bars
 
     python:
         TEAM = [pilot for pilot in TEAM if pilot.health]

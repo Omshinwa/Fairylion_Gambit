@@ -42,3 +42,29 @@ testsuite map_1_0:
             pause until id "move_f5"
             click id "move_f5"
             pause until eval (not chess.wait_for_enemy) timeout 10.0
+
+
+        testcase map_1_0_bis:
+            description "Move d4 infantry: click/unclick, then e4 > e5 > d5 to enter rook (win)"
+
+            run Jump("l_map_1_0_bis")
+            skip until screen "s_start_battle"
+            click until eval ('battle' in g.state)
+            # click d4 to select, then click again to deselect
+            click until id "piece_d4"
+            click id "piece_d4"
+            # move to e4
+            pause until id "move_e4"
+            click id "move_e4"
+            pause until eval (not chess.wait_for_enemy) timeout 10.0
+            # move to e5
+            click until id "piece_e4"
+            click id "piece_e4"
+            pause until id "move_e5"
+            click id "move_e5"
+            pause until eval (not chess.wait_for_enemy) timeout 10.0
+            # move to d5, entering the rook (win)
+            click until id "piece_e5"
+            click id "piece_e5"
+            pause until id "move_d5"
+            click id "move_d5"

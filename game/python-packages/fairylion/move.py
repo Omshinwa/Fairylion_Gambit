@@ -49,7 +49,7 @@ def move_jump_no_cap(piece, moves, offset, pos, engine):
                 if piece.fen == 'p' and engine.POS_TO_XY[sq][1] == (1-piece.color) * (engine.size[1]-1):
                     for possible_promotion in engine.promotions[piece.color]:
                         moves.append(Move(piece, pos, sq, data={'p':return_piece_promotion(engine,piece,possible_promotion,sq)}, flag='promotion'))
-                    if should_add_queen_to_promotions(engine, piece):
+                    if engine.should_add_queen_to_promotions(piece):
                         moves.append(Move(piece, pos, sq, data={'p':return_piece_promotion(engine,piece,'q',sq)}, flag='promotion'))
                     elif len(engine.promotions[piece.color]) == 0:
                             moves.append(Move(piece, pos, sq, data={'p':return_piece_promotion(engine,piece,'p',sq)}, flag='promotion'))
@@ -57,14 +57,6 @@ def move_jump_no_cap(piece, moves, offset, pos, engine):
                     moves.append(Move(piece, pos, sq))
             elif flag == 'r':
                 moves.append(Move(piece, pos, sq, data={'r':target}, flag='rescue'))
-
-# handling special cases like 'promote_q' or no promotion at all:
-
-# we only add it in the case where 'promote_q' is in the skills
-def should_add_queen_to_promotions(engine, piece):
-    if piece.pilot and 'promote_q' in piece._pilot[0].skills['once']:
-        return True
-    return False
 
 def return_piece_promotion(engine, piece, possible_promotion, pos):
     # Q: why do we create a new piece in the move, instead of creating it when doing the move?

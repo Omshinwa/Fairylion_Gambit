@@ -167,7 +167,7 @@ init python:
 default persistent.cpu_strength = 3000
 
 label l_enemy_play():
-    if chess.side == 1-chess.player and chess.use_engine and not renpy.in_rollback(): #and not show_debug_menu 
+    if chess.side == 1-chess.player and chess.use_engine and not renpy.in_rollback() and not chess.wait_for_enemy: #and not show_debug_menu 
         $ chess.wait_for_enemy = True
 
         if not chess.eq_board(engine):
@@ -180,7 +180,6 @@ label l_enemy_play():
     return
 
 init python:
-
     def engine_background_think(depth, multithread=False):
         move = engine.think(depth) # for monte carlo
         # move = engine.think_minimax(1)

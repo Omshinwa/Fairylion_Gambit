@@ -73,14 +73,14 @@ screen s_start_battle():
         action Hide(None, Dissolve(.2)),Function(remove_blur_master), Return()
     vbox:
         align 0.5,0.4
-        add 'i_start'
+        # add 'i_start'
         null height 20
         if game.custom_objective:
-            text "Objective: " + game.custom_objective size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
+            text "Objective:\n\n" + game.custom_objective size 100 style 'style_3d_txt' xalign 0.5 xsize 1000
         elif chess.goal == None:
-            text "Objective: Checkmate the KING" size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
+            text "Objective:\n\n Checkmate the KING" size 100 style 'style_3d_txt' xalign 0.5 xsize 1000
         elif chess.goal == 'kill':
-            text "Objective: Eliminate the enemy." size 50 style 'style_3d_txt' xalign 0.5 xsize 1000
+            text "Objective:\n\n Eliminate the enemy." size 100 style 'style_3d_txt' xalign 0.5 xsize 1000
 
 screen s_preparation_overlay(): 
     use s_inventories()
@@ -403,7 +403,7 @@ init python:
         selected = chess.ui['selected']
         piece = drag.drag_name
         if selected and selected.deployed:
-            if isinstance(piece, Pilot) and not any(p is not None for p in selected.pilot) and chess.prep_can_drop_here(piece, selected.pos):
+            if isinstance(piece, Pilot) and not selected.pilots and chess.prep_can_drop_here(piece, selected.pos):
                 IF_ACTIVATED = True
                 f_prep_drop_piece(piece, selected.pos)
                 renpy.restart_interaction()

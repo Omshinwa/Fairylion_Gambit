@@ -228,8 +228,6 @@ transform t_emphazise_text:
     ease .5  xzoom 1
 
 
-
-
 #       ::: :::::::::  :::::::::: ::::::::  :::::::::  :::    ::: ::::::::::: ::::::::::: 
 #      :+:  :+:    :+: :+:       :+:    :+: :+:    :+: :+:    :+:     :+:         :+:     
 #     +:+   +:+    +:+ +:+       +:+        +:+    +:+ +:+    +:+     +:+         +:+     
@@ -253,49 +251,69 @@ screen s_recruit(recruitable_pilots):
         else:
             spacing 60
         for pilot in recruitable_pilots:
-            vbox:
-                xsize 300
-                button at t_interactive:
-                    action Call('l_character_info', pilot)
-                    ysize 240
-                    vbox:
-                        text pilot.name.upper() style 'style_big_white_text' color g.colors['green']
-                        add pilot.img_side_eyes() xysize(300,100)
-
-                        fixed:
-                            xalign 0.5
-                            ypos 5
-                            xysize(300,140)
-                            vbox:
-                                text _("HEALTH: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
-                                text _("EXP: [pilot.xp]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
-                button at t_interactive:
-                    if show_debug_menu:
-                        add "#000"
-                    xysize 300,120
-                    sensitive g.money >= pilot.price and not pilot in TEAM
-                    action Call('l_recruit',pilot)
-                    hbox:
+            button at t_interactive:
+                action Show('s_recruit_character_info', Dissolve(.2), pilot)
+                sensitive g.money >= pilot.price and not pilot in TEAM
+                vbox:
+                    xsize 300
+                    button:
+                        ysize 240
                         vbox:
-                            spacing -10
-                            text _("RECRUIT") style 'style_3d_big_txt' size 45
-                            text _("> cost:") style 'style_3d_big_txt'
-                        text _("[pilot.price]") style 'style_3d_big_txt' yalign 0.5 size 120:
-                            at transform:
-                                rotate 15 transform_anchor True anchor (0.3,0.65)
+                            text pilot.name.upper() style 'style_big_white_text' color g.colors['green']
+                            add pilot.img_side_eyes() xysize(300,100)
+
+                            fixed:
+                                xalign 0.5
+                                ypos 5
+                                xysize(300,140)
+                                vbox:
+                                    text _("HEALTH: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
+                                    text _("EXP: [pilot.xp]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
+                    button:
+                        if show_debug_menu:
+                            add "#000"
+                        xysize 300,120
+                        # action Call('l_recruit',pilot)
+                        hbox:
+                            vbox:
+                                spacing -10
+                                text _("RECRUIT") style 'style_3d_big_txt' size 45
+                                text _("> cost:") style 'style_3d_big_txt'
+                            text _("[pilot.price]") style 'style_3d_big_txt' yalign 0.5 size 120:
+                                at transform:
+                                    rotate 15 transform_anchor True anchor (0.3,0.65)
     
     button at t_interactive:
         action Call('l_close_recruit')
         align(0.5,0.9)
         text _("> SKIP")  style 'style_3d_big_txt' size 80
 
+
+
+#       ::: :::::::::  :::::::::: ::::::::  :::::::::  :::    ::: ::::::::::: ::::::::::: 
+#      :+:  :+:    :+: :+:       :+:    :+: :+:    :+: :+:    :+:     :+:         :+:     
+#     +:+   +:+    +:+ +:+       +:+        +:+    +:+ +:+    +:+     +:+         +:+     
+#    +#+    +#++:++#:  +#++:++#  +#+        +#++:++#:  +#+    +:+     +#+         +#+     
+#   +#+     +#+    +#+ +#+       +#+        +#+    +#+ +#+    +#+     +#+         +#+     
+#  #+#      #+#    #+# #+#       #+#    #+# #+#    #+# #+#    #+#     #+#         #+#     
+# ###       ###    ### ########## ########  ###    ###  ########  ###########     ###     
+
+# inspect pilot before deciding recruit or not
+screen s_recruit_character_info(pilot):
+    use s_character_info(pilot)
+    dismiss:
+        action Confirm(_("Recruit?"), Call('l_recruit', pilot), [Hide('s_recruit_character_info', Dissolve(.2)),Call('l_close_pop_up')])
+
 label l_recruit(pilot):
+    hide screen s_recruit_character_info
+    $ remove_blur_master()
     if pilot:
         $ g.money -= pilot.price
         "[pilot.name] joins your team!"
-    if pilot:
         $ TEAM.append(pilot)
     hide screen s_recruit
+    hide screen s_in_between_rounds
+    with transition_bars
     return
 
 label l_close_recruit():

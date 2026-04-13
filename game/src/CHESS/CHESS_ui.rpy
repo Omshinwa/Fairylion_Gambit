@@ -298,6 +298,9 @@ init -1 python:
             if isinstance(element, Robot_Piece):
                 # if it's an infantry, can go anywhere
                 if element.fen == 'i':
+                    # only if it cannot drive a pawn, cannot go to rank 1
+                    if '^' not in element._pilot[0].can_drive and self.POS_TO_XY_POV(pos)[1] == 1:
+                        return False
                     if req_true:
                         return True
                     return self.prep_can_drop_here(target, element.pos, True)

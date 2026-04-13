@@ -141,7 +141,6 @@ init python:
             target = board[move.to]
             self._remove_piece(piece)
 
-            target.add_pilot(piece._pilot[0])
             if target.color == 2: # ENTER EMPTY
                 move.data = target
                 self._remove_piece(target)
@@ -149,7 +148,7 @@ init python:
                 new_piece.check_for_pilot()
                 self.drop(new_piece)
             else:  # ENTER ALLY
-                pass
+                target.add_pilot(piece._pilot[0])
             if piece in self.CRITICAL[piece.color]: # update CRITICAL
                 self.CRITICAL[piece.color].remove(piece)
                 self.history[-1].critical_remove = True
@@ -168,6 +167,7 @@ init python:
                 self.CRITICAL[piece.color].append(piece)
             if last_state.critical_add:
                 self.CRITICAL[piece.color].remove(old_piece)
+            
 
         # def make_move(self, move:Move, check_legality=None):
         #     # THIS IS TO MAKE RESCUE MOVES
@@ -176,15 +176,15 @@ init python:
 
         #     return super().make_move(move, check_legality=check_legality)
         
-        def undo(self):
-            # THIS IS TO UNDO RESCUE MOVES
-            move = self.history[-1].move
-            if 'rescue' in move.flag:
-                for p in move.data['r'].pilot:
-                    if p is not None and p in move.piece.pilot:
-                        move.piece.pilot[move.piece.pilot.index(p)] = None
-                        break
-            super().undo()
+        # def undo(self):
+        #     # THIS IS TO UNDO RESCUE MOVES
+        #     move = self.history[-1].move
+        #     if 'rescue' in move.flag:
+        #         for p in move.data['r'].pilot:
+        #             if p is not None and p in move.piece.pilot:
+        #                 move.piece.pilot[move.piece.pilot.index(p)] = None
+        #                 break
+        #     super().undo()
 
         def undo_item(self): # why not just undo(); because it's used to check legal moves etc
             # restore player health
@@ -201,7 +201,16 @@ init python:
                 engine.copy(self)
             self.wait_for_enemy = False
             game.is_over = False
-            
+        
+
+        # handling special cases like 'promote_q' or no promotion at all:
+
+        # we only add it in the case where 'promote_q' is in the skills
+        def should_add_queen_to_promotions(self, piece):
+            if piece.pilots and 'promote_q' in piece._pilot[0].skills['once']:
+                return True
+            return False
+
         def set_fen(self, fen, starting_new_game=False):
             if self.use_engine:
                 engine.set_fen(fen)

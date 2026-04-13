@@ -170,6 +170,10 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             action Function(f_dismiss), Return()
                         else:
                             action Function(f_dismiss)
+                    
+                        if 'battle' in g.state:
+                            if (chess[pos] in chess.CRITICAL[0] and chess.is_sq_atk(pos, 1)) or (chess[pos] in chess.CRITICAL[1] and chess.is_sq_atk(pos, 0)):
+                                add "#f005" at t_flashing
 
         ##########################
         #     draggroup
@@ -213,9 +217,6 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                     alternate If(tooltip or chess.state == "drawing", Function(f_set_arrow, tooltip), Function(draw_arrow, tooltip))
 
                     fixed: # SPRITE
-                        showif 'battle' in g.state and piece in chess.CRITICAL[piece.color] and chess.is_sq_atk(piece.pos, 1-piece.color):
-                            add "#f005" at t_flashing
-                        
                         add img_piece(piece):
                             if chess.bg_board is None:
                                 matrixcolor ColorizeMatrix(color_black, color_white)

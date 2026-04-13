@@ -328,8 +328,8 @@ init python:
                 #         (0, 0), Transform("sprite kallen", zoom=3, nearest=True)), matrixcolor=IdentityMatrix())
                 return img_square(Composite(
                         (SQUARESIZE, SQUARESIZE),
-                        (10, 10), Transform("body kallen", zoom=.2),
-                        (35, -5), Transform("head kallen", zoom=.18)), matrixcolor=IdentityMatrix())
+                        (14, 13), Transform("body kallen", zoom=.18),
+                        (27, -10), Transform("head kallen", zoom=.18)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),
                     (40, 40), Transform("body", zoom=2, nearest=True)), matrixcolor=IdentityMatrix())
