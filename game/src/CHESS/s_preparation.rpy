@@ -126,18 +126,20 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
         $ v_select = chess.ui['selected'] or chess.ui['inspected']
             
     if pilot_or_robot == 'pilot':
+        
         button at t_interactive:
-            # add "#0f0"
-            style 'empty'
-            pos (offset[0]+50, offset[1])
-            xsize 350
-            ysize 80
             action Function(Pilot.sort, TEAM)
+            style_prefix 'sty_btn'
+            xysize(INFOBOX_WIDTH-50,110)
+            anchor(0, 0)
+            pos (190, 0)
+
             hbox:
-                ypos PREP_X_MARGIN*2
+                ypos PREP_X_MARGIN*2 - 40
                 $ inventory = TEAM 
-                text _("RESERVE") xalign 0.5 style 'style_purple_text' color COLOR_HIGHLIGHT() size 50
-                text _("sort:\n[Pilot.sort_method]") style 'style_purple_text' color COLOR_HIGHLIGHT() text_align 0 ypos -10 size 30
+                text _("Reserve") xalign 0.5 size 50
+                text _("sort:\n[Pilot.sort_method]") text_align 0 yoffset -4 size 30
+
     else:
         $ inventory = ROBOTS
         fixed:
@@ -172,7 +174,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     xpos i%PER_ROW*100 + offset[0] + PREP_X_MARGIN
 
                 if pilot_or_robot == 'pilot':
-                    ypos 50+20+offset[1] + 100*int(i/PER_ROW) +PREP_X_MARGIN
+                    ypos 75+20+offset[1] + 100*int(i/PER_ROW) +PREP_X_MARGIN
                     if type(v_select) == Robot_Piece:
                         if not v_select.fen in {'i', 'p'}:
                             if not v_select.type in element.can_drive:
@@ -198,10 +200,15 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                                     at transform:
                                         matrixcolor ColorizeMatrix("#000","#999")
 
-                        add element.img_side() xysize (1.0,1.0):
-                            if element.health == 1:
-                                at t_low_health
-                        if Pilot.sort_method == 'default' or Pilot.sort_method == 'STA' or Pilot.sort_method == 'valuable':
+                        if element.id == 'kallen':
+                            add "head kallen" xysize (1.0,1.0):
+                                if element.health == 1:
+                                    at t_low_health
+                        else:
+                            add element.img_side() xysize (1.0,1.0):
+                                if element.health == 1:
+                                    at t_low_health
+                        if Pilot.sort_method == 'default' or Pilot.sort_method == 'HP' or Pilot.sort_method == 'value':
                             if element.health == 1:
                                 text "{b}[element.health]{size=-10}/[element.max_health]" style "big_numbers" color '#d30000' outlines [ (4, "#f00", 0, 0) ]
                             elif element.health == element.max_health:
@@ -247,20 +254,25 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                 for pos, move in chess.ui['moves'].items():
                     $ x = chess.POS_TO_SXY(pos)[0]
                     $ y = chess.POS_TO_SXY(pos)[1]
+                    $ _zoom = chess_camera.zoom
+                    $ _boc = chess_camera.board_offset_center()
+                    $ _drag_x = _boc[0] + 960 + (x - SQUARESIZE * chess.size[0] / 2.0) * _zoom
+                    $ _drag_y = _boc[1] + 540 + (y - SQUARESIZE * chess.size[1] / 2.0) * _zoom
+                    $ _sq_size = SQUARESIZE * _zoom
                     drag:
-                        style 'empty'
-                        drag_name pos
-                        xysize(absolute(SQUARESIZE), absolute(SQUARESIZE))
-                        pos (absolute(x + chess_camera.board_offset()[0]), absolute(y + chess_camera.board_offset()[1]))
                         draggable False
                         droppable True
+                        style 'empty'
+                        drag_name pos
+                        xysize(absolute(_sq_size), absolute(_sq_size))
+                        pos (absolute(_drag_x), absolute(_drag_y))
                         hovered NullAction()
                         if move is None:
                             droppable False
                             if chess.board[pos] is c.EMPTY:
-                                idle_child Transform("skin/square/square default movePiece.webp", matrixcolor=SaturationMatrix(0))
+                                idle_child Transform("skin/square/square default movePiece.webp", matrixcolor=SaturationMatrix(0), zoom=_zoom)
                             else:
-                                idle_child Transform("skin/square/square default eatPiece.webp", matrixcolor=SaturationMatrix(0))
+                                idle_child Transform("skin/square/square default eatPiece.webp", matrixcolor=SaturationMatrix(0), zoom=_zoom)
                         else:
                             clicked f_click_on_move_sq
                             # prevent player from moving enemy pieces
@@ -268,11 +280,12 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                                 droppable False
 
                             if chess.board[pos] is c.EMPTY:
-                                idle_child "skin/square/square default movePiece.webp"
+                                idle_child Transform("skin/square/square default movePiece.webp", zoom=_zoom)
                             else:
-                                idle_child "skin/square/square default eatPiece.webp"
-                            selected_idle_child "square default highlight"
-                            hover_child "square default highlight"
+                                idle_child Transform("skin/square/square default eatPiece.webp", zoom=_zoom)
+                            selected_idle_child Transform("square default highlight", zoom=_zoom)
+                            hover_child Transform("square default highlight", zoom=_zoom)
+
 
 init python:
     def f_unprepare_all():

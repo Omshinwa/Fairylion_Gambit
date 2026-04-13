@@ -115,6 +115,7 @@ init python:
         return self.eval_default() + kallen_position_bonus
 
 label l_map_1_0_start:
+    call l_tutorial('story_stranded')
     # $ game.win_con = 'get(kallen) and get(kallen).x == 0' # on first rank
     $ chess.stalemate_flag = 2
     python:
@@ -212,6 +213,7 @@ label l_map_1_0_bis:
     jump l_start_battle
 
 label l_map_1_0_bis_start:
+    call l_tutorial('story_enter')
     $ game.win_con = "get('R') and kallen in get('R')._pilot"
     return
 

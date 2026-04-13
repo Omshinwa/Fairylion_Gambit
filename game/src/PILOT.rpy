@@ -135,12 +135,12 @@ init -2 python:
         @staticmethod
         def sort(TEAM, mode=None):
             if mode is None:
-                CycleVariable('Pilot.sort_method', [_("default"), _("STA"), _("EXP"), _("valuable")])()
+                CycleVariable('Pilot.sort_method', [_("default"), _("HP"), _("EXP"), _("value")])()
             else:
                 Pilot.sort_method = mode
             if Pilot.sort_method == 'default':
                 TEAM.sort(key=lambda element: element.default_sort)
-            elif Pilot.sort_method == 'STA':
+            elif Pilot.sort_method == 'HP':
                 TEAM.sort(key=lambda element: (         # False (0) for non-generic, True (1) for generic
                     element.health != element.max_health,     # False (0) for max health, True (1) otherwise
                     -element.health,                           # Sort by health in descending order
@@ -151,7 +151,7 @@ init -2 python:
                     len(element.skills['can_learn'])==0,
                     -element.xp                           # Sort by health in descending order
                 ))
-            elif Pilot.sort_method == 'valuable':
+            elif Pilot.sort_method == 'value':
                 TEAM.sort(key=lambda element: (             # False (0) for non-generic, True (1) for generic
                     -element.price_euristic()                          # Sort by health in descending order
                 ))

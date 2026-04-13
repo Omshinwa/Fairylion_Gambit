@@ -18,11 +18,11 @@ screen s_battlefield(*args, **kwargs):
 
 
         use s_chessboard_viewport(chess)
+    if 'preparation' in g.state:
+        use s_preparation_overlay()
     showif 'battle' in g.state or 'preparation' in g.state: #or ('cutscene' in g.state and game.is_over == "loss"):
         if not 'tutorial' in game.level:
             use s_chessboard_overlay()
-    if 'preparation' in g.state:
-        use s_preparation_overlay()
 
     if renpy.get_mode() == 'pause' or renpy.get_mode() == 'say' or game.is_over:
         button: # DISMISS

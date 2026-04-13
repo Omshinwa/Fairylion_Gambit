@@ -30,10 +30,7 @@ screen s_chessboard_viewport(chess, *args, xinit=None, yinit=None, **kwargs):
             frame:
                 align (0.5, 0.5)
                 style 'empty'
-                if 'preparation' in g.state:
-                    at transform:
-                        zoom 1.0 ypos 0.5
-                elif renpy.get_screen('say'):
+                if renpy.get_screen('say'):
                     $ do_transition = True
                     $ chess.ui['camera'].center_if_changed()
                     at transform:
@@ -226,11 +223,16 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             if len(chess.history) == 0 and chess.move_first and piece.pilot and any(pilot is not None and 'initiative' in pilot.skills['setup'] for pilot in piece._pilot):
                                 at t_highlight
 
-                        # temp, we display the eyes of the infantry
-                        if piece.fen == 'i' or ('preparation' in g.state and piece.pilot):
-                            for pilot in piece._pilot:
-                                if pilot is not None and pilot != kallen:
-                                    add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
+                        # display the pilot in prep
+                        if 'preparation' in g.state and piece.pilots:
+                            $ pilot = piece.pilots[0]
+                            add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
+
+                        # temp, display the pilot for infantry
+                        elif piece.fen == 'i':
+                            $ pilot = piece.pilots[0]
+                            if pilot != kallen:
+                                add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
                     
                         if show_debug_menu:
                             if type(piece) == Robot_Piece:

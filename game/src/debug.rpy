@@ -49,8 +49,6 @@ style style_debug_text:
 default show_debug_menu = False
 
 init python:
-    import subprocess
-
     def f_debug_menu():
         global show_debug_menu, chess
         show_debug_menu = 1 - show_debug_menu
@@ -60,23 +58,26 @@ init python:
         chess.eval_default(set_debug_value = True)
 
     def f_get_return_stack_info():
+        import os
         result = []
-        for label in renpy.get_return_stack():
+        for entry in renpy.get_return_stack():
             try:
-                node = renpy.game.script.namemap.get(label)
-                if node:
-                    result.append((label, node.filename, node.linenumber))
+                if isinstance(entry, tuple):
+                    filename, _serial, linenumber = entry
+                    label = "{}:{}".format(os.path.basename(filename), linenumber)
+                    result.append((label, filename, linenumber))
                 else:
-                    result.append((label, None, None))
-            except Exception:
-                result.append((label, None, None))
+                    node = renpy.game.script.namemap.get(entry)
+                    if node:
+                        result.append((str(entry), node.filename, node.linenumber))
+                    else:
+                        result.append((str(entry), None, None))
+            except Exception as e:
+                result.append((str(entry), None, None))
         return result
 
     def f_open_in_vscode(filename, linenumber):
-        try:
-            subprocess.Popen(['code', '--goto', '{}:{}'.format(filename, linenumber)])
-        except Exception as e:
-            renpy.notify(str(e))
+        renpy.launch_editor(filename, linenumber)
 
 screen s_debug(offset=(0,0)):
     # sensitive True
@@ -87,15 +88,14 @@ screen s_debug(offset=(0,0)):
     if show_debug_menu:
         frame:
             xalign 1.0 yalign 0.0
-            background "#0008"
+            background "#000a"
             padding (8, 8)
             vbox:
-                spacing 2
-                text "return stack:" size 18 color "#0FF"
+                text "return stack:" size 20 color "#0FF"
                 for label, filename, linenumber in f_get_return_stack_info():
                     if filename:
                         textbutton label:
-                            text_size 16
+                            text_size 25
                             text_color "#8FF"
                             text_hover_color "#FFF"
                             background None

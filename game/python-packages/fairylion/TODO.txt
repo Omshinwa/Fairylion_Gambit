@@ -1,14 +1,10 @@
 TODO:
 
-roguelike: RECRUIT should be on the character profile, when you click RECRUIT, first show the profile, then confirm if they want to recruit or not
-Pixel art for infantry
-
 * tarot skills implemented on characters (and displayable on the battlefield ui), consumable vs trigger skills? separated top and bottom maybe
 
 * rollback disabled during battles
 
 * unit tests for prep phase
-* unit tests for map 1 0 bis, check that you can click and unclick and move kallen in the rook
 
 * option button in battle (RESIGN, SAVE, LOAD, PREFS)
 
