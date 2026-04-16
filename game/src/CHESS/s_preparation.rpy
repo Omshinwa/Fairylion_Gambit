@@ -39,7 +39,7 @@ label l_start_battle():
         if chess.get_pieces(2):
             "The [c.FEN_TO_PIECE[chess.get_pieces(2)[0].fen].capitalize()] on [chess.POS_TO_A8(chess.get_pieces(2)[0].pos).upper()] doesn't have any pilot. You won't be able to move it. Double click to store it."
             menu:
-                "Deploy anyway?"
+                "Start Deployement anyway?"
                 "Yes":
                     pass
                 "No":

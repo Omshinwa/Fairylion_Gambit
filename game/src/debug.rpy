@@ -52,9 +52,9 @@ init python:
     def f_debug_menu():
         global show_debug_menu, chess
         show_debug_menu = 1 - show_debug_menu
-        g.items['undo'] = 10
-        g.items['empress'] = 2
-        g.items['fool'] = 3
+        g.items['undo'] = 3
+        g.items['empress'] = 0
+        g.items['fool'] = 0
         chess.eval_default(set_debug_value = True)
 
     def f_get_return_stack_info():

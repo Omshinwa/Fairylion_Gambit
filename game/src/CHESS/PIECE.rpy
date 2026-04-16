@@ -84,7 +84,7 @@ init -1 python:
                 for i in range(min(len(self._pilot), len(pilot))):
                     self._pilot[i] = pilot[i]
                     if pilot[i] and pilot[i].id in character.__dict__:
-                        character.__dict__[pilot.id].char_on_battlefield = self
+                        character.__dict__[pilot[i].id].char_on_battlefield = self
 
         # idk if it's useful
         # would replaces len(self._pilot), check_for_pilot would also turn the piece neutral

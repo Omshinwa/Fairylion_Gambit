@@ -36,3 +36,20 @@ label example_battle():
     pause 1.0
     move kallen 1 toward lelouch
     return
+
+label pidg_pretty_screenshot:
+    $ chess = Chess_control((6,6), bg="castle_gates", bg_board='grass')
+    $ chess.set_fen('1bnkq1/2pp2/6/6/1P2PP/G1NK1C')
+    $ get('G').pilot = cc
+    $ get('C').pilot = china
+    $ china.health = 1
+    $ get('N').pilot = kaworu
+    $ kaworu.xp = 6
+    $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = False
+    show cc at left
+    $ g.state = {'battle'}
+    $ f_inspect(get('G'))
+    cc "I refuse to kill anyone."
+    return
+
+    

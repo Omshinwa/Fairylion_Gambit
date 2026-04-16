@@ -229,9 +229,9 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
 
                         # temp, display the pilot for infantry
-                        elif piece.fen == 'i':
+                        elif piece.fen == 'i' and piece.pilots:
                             $ pilot = piece.pilots[0]
-                            if pilot != kallen:
+                            if pilot.id not in {'kallen', 'lelouch'}:
                                 add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
                     
                         if show_debug_menu:
@@ -256,6 +256,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                     $ x = chess.POS_TO_SXY(pos)[0]
                     $ y = chess.POS_TO_SXY(pos)[1]
                     drag:
+                        tooltip pos
                         id ("move_%s" % chess.POS_TO_A8(pos))
                         drag_name pos
                         xysize(SQUARESIZE, SQUARESIZE)
@@ -263,6 +264,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                         draggable False
                         droppable True
                         hovered NullAction()
+                        # alternate If(chess.state == "drawing", Function(f_set_arrow, pos), Function(draw_arrow, pos))
 
                         if move is None: # this means it's an illegal move
                             droppable False

@@ -73,10 +73,6 @@ init -1 python:
         stage_insert_char(tag, index, zorder)
             
     def custom_hide(tag, *args, **kwargs):
-        for arg in args:
-            print("arg:" + arg)
-        for arg in kwargs:
-            print("karg:" + arg)
         renpy.hide(tag, *args, **kwargs)
 
         if type(tag) == tuple: # hide img, img becomes a tuple usually

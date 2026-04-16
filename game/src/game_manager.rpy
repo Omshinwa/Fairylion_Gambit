@@ -30,7 +30,7 @@ init python:
                 self.needOnlyOneWin = kwargs["needOnlyOneWin"]
             else:
                 self.needOnlyOneWin = True
-            self.player = chess.player # by default we play from White's perspective
+            # self.player = chess.player # by default we play from White's perspective
             self.level = level or ("l_map_" + str(g.progress//100) + "_" + str(g.progress%100))
             self.win_con = None # checkmate / survive / else
             self.lose_con = None # Game has additional possible loss conditions, win conditions are on the chess
@@ -58,14 +58,14 @@ init python:
                 return eval(self.win_con)
             else:
                 result = chess.result()
-                return (result[0] is True and result[1] == self.player)
+                return (result[0] is True and result[1] == chess.player)
 
         def isLost(self):
             if self.lose_con:
                 return eval(self.lose_con)
             else:
                 result = chess.result()
-                return (result[0] is True and result[1] != self.player)
+                return (result[0] is True and result[1] != chess.player)
 
         @property
         def turnLeft(self):

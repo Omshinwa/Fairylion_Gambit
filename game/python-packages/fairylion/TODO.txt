@@ -4,6 +4,9 @@ TODO:
 
 * rollback disabled during battles
 
+* in prep mode, when right clicking on a piece we selected, it doesnt draw an arrow, it opens the menu.
+* arrows in general are broken, battle vs prep
+
 * unit tests for prep phase
 
 * option button in battle (RESIGN, SAVE, LOAD, PREFS)
@@ -11,7 +14,3 @@ TODO:
 save on the bottom left, undo should undo the death of Jagen, instead you win from draw
 
 > in battle, when you click and drag directly to your square, you only need to snap, no need to move?
-
-> allow zoom/dezoom in prep mode
-> PREVENT CLICKING on a reserve when you already have a piece selected (it should just select the new reserve)
-so we never allow click on board -> click on reserve as a viable way to deploy pieces

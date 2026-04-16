@@ -46,7 +46,7 @@ screen s_character_info(pilot):
             grid 2 3:
                 yspacing -20
                 xspacing 80
-                text _("STAMINA:") style 'style_3d_big_txt' align 1.0,0.5
+                text _("HEALTH:") style 'style_3d_big_txt' align 1.0,0.5
                 hbox: #HEARTS
                     xsize 200
                     for heart in pilot._heart_display():

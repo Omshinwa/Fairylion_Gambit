@@ -302,7 +302,7 @@ screen s_recruit(recruitable_pilots):
 screen s_recruit_character_info(pilot):
     use s_character_info(pilot)
     dismiss:
-        action Confirm(_("Recruit?"), Call('l_recruit', pilot), [Hide('s_recruit_character_info', Dissolve(.2)),Call('l_close_pop_up')])
+        action Confirm(_(f"Recruit? Cost {pilot.price}, currently {g.money}"), Call('l_recruit', pilot), [Hide('s_recruit_character_info', Dissolve(.2)),Call('l_close_pop_up')])
 
 label l_recruit(pilot):
     hide screen s_recruit_character_info

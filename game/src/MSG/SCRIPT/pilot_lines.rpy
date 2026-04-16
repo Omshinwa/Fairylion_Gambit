@@ -82,7 +82,7 @@ label l_pilot_death(pilot):
         # impossible to undo, or add it to the
         if chess.state == 'start' or 'preparation' in g.state:
             for piece in chess.get_pieces():
-                if pilot in piece.pilot:
+                if pilot in piece._pilot:
                     piece.pilot[piece.pilot.index(pilot)] = None
                     piece.check_for_pilot()
                     break

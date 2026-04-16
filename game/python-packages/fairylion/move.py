@@ -1,4 +1,5 @@
 import fairylion.CONSTANT as c
+# from fairylion.engine_ import Engine
 
 def move_jump(piece, moves, offset, pos, engine):
     board = engine.board
@@ -75,7 +76,7 @@ def move_jump_cap_only(piece, moves, offset, pos, engine):
             if piece.fen == 'p' and engine.POS_TO_XY[sq][1] == (1-piece.color) * (engine.size[1]-1): # promotion?
                 for possible_promotion in engine.promotions[piece.color]:
                     moves.append(Move(piece, pos, sq, capture=target, data={'p':return_piece_promotion(engine,piece,possible_promotion,sq)}, flag='promotion'))
-                if should_add_queen_to_promotions(engine, piece):
+                if engine.should_add_queen_to_promotions(piece):
                     moves.append(Move(piece, pos, sq, capture=target, data={'p':return_piece_promotion(engine,piece,'q',sq)}, flag='promotion'))
                 elif len(engine.promotions[piece.color]) == 0:
                     moves.append(Move(piece, pos, sq, capture=target, data={'p':return_piece_promotion(engine,piece,'p',sq)}, flag='promotion'))

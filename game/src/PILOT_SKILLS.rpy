@@ -86,6 +86,9 @@ init -2 python:
                 text = " "
             renpy.play('sound/misc/xp.wav', channel='sound')
             renpy.say('[pilot] died', text)
+            renpy.hide_screen('s_character_info')
+            renpy.with_statement(Dissolve(.2))
+            renpy.jump('l_close_pop_up')
 
         @staticmethod
         def mercenary_minor(pilot, *args):

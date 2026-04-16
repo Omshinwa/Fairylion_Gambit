@@ -58,16 +58,17 @@ default IF_ACTIVATED = False
 
 init python:
     def f_set_arrow(pos):
-        if GetTooltip():
-            if (chess.ui["drawing"], GetTooltip()) in chess.ui["arrows"]:
-                chess.ui["arrows"].remove((chess.ui["drawing"], GetTooltip()))
+        if chess.ui["drawing"] and pos is not None:
+            if (chess.ui["drawing"], pos) in chess.ui["arrows"]:
+                chess.ui["arrows"].remove((chess.ui["drawing"], pos))
             else:
-                chess.ui["arrows"].add((chess.ui["drawing"], GetTooltip()))
+                chess.ui["arrows"].add((chess.ui["drawing"], pos))
         chess.ui["drawing"] = None
         chess.state = "idle"
         return
 
     def draw_arrow(pos):
+        print("DRAW ARROW")
         if pos == None:
             return
         chess.state = "drawing"
@@ -322,14 +323,11 @@ init python:
                 return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.COLOR_TO_STR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
 
         else:
-            if piece._pilot[0] and piece._pilot[0].id == 'kallen':
-                # return img_square(Composite(
-                #         (SQUARESIZE, SQUARESIZE),
-                #         (0, 0), Transform("sprite kallen", zoom=3, nearest=True)), matrixcolor=IdentityMatrix())
+            if piece._pilot[0] and piece._pilot[0].id in {'kallen', 'lelouch'} :
                 return img_square(Composite(
                         (SQUARESIZE, SQUARESIZE),
-                        (14, 13), Transform("body kallen", zoom=.18),
-                        (27, -10), Transform("head kallen", zoom=.18)), matrixcolor=IdentityMatrix())
+                        (14, 13), Transform(f'body kallen', zoom=.18),
+                        (25, -12), Transform(f'head {piece._pilot[0].id}', zoom=.18)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),
-                    (40, 40), Transform("body", zoom=2, nearest=True)), matrixcolor=IdentityMatrix())
+                    (40, 40), Transform('body', zoom=2, nearest=True)), matrixcolor=IdentityMatrix())

@@ -48,7 +48,7 @@ screen s_chess_dismiss():
                 matrixcolor ColorizeMatrix(prefs.style.gradient_color[1],prefs.style.gradient_color[0])
 
     # objective    
-    if game.custom_objective and 'battle' in g.state:
+    if hasattr(store, 'game') and game.custom_objective and 'battle' in g.state:
         frame:
             style 'empty'
             align (1.0,0)
@@ -260,11 +260,11 @@ screen s_chessboard_overlay():
                     text "{i}{size=-10}[txt[0]]{/size}[txt[1:]]" xalign 0.5 yalign 0.5 font "FONT_big" size 50 color "#a2eba6" outlines [ (4, "#00a03d", 0, 2) ]
 
 
-                    button at t_interactive:
-                        xysize(90,90)
-                        align .5,1.0
-                        action NullAction()
-                        add 'options icon' xysize(1.0,1.0)
+                    # button at t_interactive:
+                    #     xysize(90,90)
+                    #     align .5,1.0
+                    #     action NullAction()
+                    #     add 'options icon' xysize(1.0,1.0)
                     
             $ old_score = chess.get_advantage()
 
