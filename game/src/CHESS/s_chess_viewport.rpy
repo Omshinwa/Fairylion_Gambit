@@ -256,7 +256,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                     $ x = chess.POS_TO_SXY(pos)[0]
                     $ y = chess.POS_TO_SXY(pos)[1]
                     drag:
-                        tooltip pos
+                        # tooltip pos
                         id ("move_%s" % chess.POS_TO_A8(pos))
                         drag_name pos
                         xysize(SQUARESIZE, SQUARESIZE)

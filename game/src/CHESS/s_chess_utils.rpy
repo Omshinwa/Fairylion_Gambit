@@ -68,12 +68,13 @@ init python:
         return
 
     def draw_arrow(pos):
-        print("DRAW ARROW")
         if pos == None:
             return
-        chess.state = "drawing"
+        if chess.state == 'selecting':
+            chess.clean_moves()
         chess.ui['selected'] = None
         chess.ui["drawing"] = pos
+        chess.state = "drawing"
         return
 
     def f_inspect(piece):
@@ -326,7 +327,7 @@ init python:
             if piece._pilot[0] and piece._pilot[0].id in {'kallen', 'lelouch'} :
                 return img_square(Composite(
                         (SQUARESIZE, SQUARESIZE),
-                        (14, 13), Transform(f'body kallen', zoom=.18),
+                        (14, 13), Transform(f'body {piece._pilot[0].id}', zoom=.18),
                         (25, -12), Transform(f'head {piece._pilot[0].id}', zoom=.18)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),

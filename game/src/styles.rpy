@@ -121,3 +121,34 @@ transform t_interactive:
         matrixcolor ColorizeMatrix("#644", "#fff5aa")
     on insensitive:
         matrixcolor ColorizeMatrix("#333", "#777")
+
+init python:
+    # whatever, TODO
+    class AmbientMatrix(ColorMatrix):
+        def __init__(self, dark_color, light_color):
+            self.dark_color = Color(color)
+            self.light_color = Color(color)
+
+        def __call__(self, other, done):
+            if type(other) is not type(self):
+                r, g, b = self.color.rgb
+                a = self.color.alpha
+            else:
+                oldr, oldg, oldb = other.color.rgb
+                olda = other.color.alpha
+                r, g, b = self.color.rgb
+                a = self.color.alpha
+
+                r = oldr + (r - oldr) * done
+                g = oldg + (g - oldg) * done
+                b = oldb + (b - oldb) * done
+                a = olda + (a - olda) * done
+
+            r *= a
+            g *= a
+            b *= a
+
+            return Matrix([ 1, 0, 0, r,
+                            0, 1, 0, g,
+                            0, 0, 1, b,
+                            0, 0, 0, 1 ])

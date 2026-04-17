@@ -67,7 +67,6 @@ label l_map_0_0_endTurn:
         if chess.ui['selected'].color == 1:
             # if we selected a rook for the first time:
             if chess.ui['selected'].fen == 'r' and not_done('select_rook', 'onceEveryFight'):
-                # stanely "A"
                 stanley "This is a CHESSMAN Class + Model ROOK. It moves up and down, left and right, with unlimited range."
                 stanley "It's one of the most powerful CHESSMAN. Only the most skilled can pilot them."
                 $ f_select(chess.board[31])
