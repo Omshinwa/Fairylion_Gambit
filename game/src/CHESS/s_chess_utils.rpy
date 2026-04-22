@@ -286,10 +286,33 @@ init python:
 init python:
     import math
 
+    # doing this whole cache thing because it was kinda laggy when you select the moves
+    # with 32 pieces, debug mode F2 on and 'grass'
     def get_board_color(x=0,y=0) -> Color:
         if chess.bg_board:
-            return Color(renpy.load_surface("skin/square/bg_board "+chess.bg_board+".webp").get_at(chess.bg_board_pixel_coord))
+            cached = getattr(chess, '_bg_board_color_cache', None)
+            key = (chess.bg_board, chess.bg_board_pixel_coord)
+            if cached is None or cached[0] != key:
+                color = Color(renpy.load_surface("skin/square/bg_board "+chess.bg_board+".webp").get_at(chess.bg_board_pixel_coord))
+                chess._bg_board_color_cache = (key, color)
+                chess._bg_board_derived_cache = None
+                return color
+            return cached[1]
         return None
+
+    def get_board_colors():
+        # Returns (lightness, color_black, color_white) for chess.bg_board, cached.
+        base = get_board_color()
+        if base is None:
+            return None
+        cached = getattr(chess, '_bg_board_derived_cache', None)
+        if cached is None:
+            lightness = base.hls[1]
+            color_black = base.replace_lightness(0.05)
+            color_white = base.replace_lightness(0.95)
+            cached = (lightness, color_black, color_white)
+            chess._bg_board_derived_cache = cached
+        return cached
 
     # return the color highlight
     def COLOR_HIGHLIGHT(index:int = None) -> Color:

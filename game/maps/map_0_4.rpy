@@ -131,7 +131,7 @@ label l_map_0_4_Lost:
     jagen "So our goal is to have the enemy take our other pieces, then it will be stalemate!"
     abel "But will they do it?"
     jagen "We will force them."
-
+    $ game.is_over = 'loss'
 
     return
 
@@ -219,7 +219,6 @@ label l_map_0_4_endTurn:
         stanley "........."
         jagen "What's wrong [stanley()]?"
         jagen "I'm defenseless, you can take me any time."
-        stanley "It will be a stalemate by the Geneva Conventions."
         stanley "So you're ready to throw your life away?"
         jagen "The cause is just."
         stanley "You fool."

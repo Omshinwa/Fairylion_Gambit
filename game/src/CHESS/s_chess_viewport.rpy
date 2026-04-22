@@ -90,9 +90,7 @@ screen s_chessboard_viewport(chess, *args, xinit=None, yinit=None, **kwargs):
 
 screen s_chess_main(chess, demo=False, *args, **kwargs):
     if chess.bg_board:
-        $ bg_board_lightness = get_board_color().hls[1]
-        $ color_black = get_board_color().replace_lightness(0.05)
-        $ color_white = get_board_color().replace_lightness(0.95)
+        $ bg_board_lightness, color_black, color_white = get_board_colors()
     else:
         $ color_black = persistent.style_colors[-1]
         $ color_white = persistent.style_colors[0]

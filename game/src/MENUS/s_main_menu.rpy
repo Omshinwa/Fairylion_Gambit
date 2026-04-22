@@ -79,7 +79,7 @@ screen main_menu():
             vbox:
                 text _("CPU thinking time: [persistent.cpu_strength]") size 45 xalign 0.5
                 hbox:
-                    bar value FieldValue(persistent, 'cpu_strength', min=100, max=6000, step=100, force_step=True) style 'bar_slider' xsize 300 yalign 0.5
+                    bar value FieldValue(persistent, 'cpu_strength', min=100, max=8000, step=100, force_step=True) style 'bar_slider' xsize 300 yalign 0.5
                     vbox:
                         button at t_interactive:
                             style_prefix 'sty_btn'

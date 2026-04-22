@@ -40,16 +40,16 @@ label l_gameLoop_everyInteraction():
     if chess.wait_for_enemy:
         return
     if game.isWin():
-        pause 0.2
         $ game.is_over = 'win'
+        pause 0.2
         if game.needOnlyOneWin:
             $ done_flag["oncePerFight"] = Set()
             $ g.state = {'cutscene'}
             call l_animation_win
             $ renpy.jump(game.win_label)
     elif game.isLost():
-        pause 0.5
         $ game.is_over = 'loss'
+        pause 0.5
         $ g.state = {'cutscene'}
         call l_animation_lost
         call expression game.lost_label

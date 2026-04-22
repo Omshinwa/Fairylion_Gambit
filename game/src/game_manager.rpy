@@ -92,7 +92,7 @@ label l_after_failed_mission:
         show black onlayer screens with transition_bars
         if renpy.can_load(LOCAL_CHECKPOINT_SLOT):
             $ renpy.load(LOCAL_CHECKPOINT_SLOT)
-    "failed to load the checkpoint"
+        "failed to load the checkpoint"
     return
 
 label l_animation_win:
