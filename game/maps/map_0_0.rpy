@@ -53,13 +53,27 @@ label l_map_0_0:
     $ game.custom_objective = _("Don't let any pawn reach the bottom.")
     jump l_start_battle
 
+init python:
+    def eval_map_0_0(self):
+        if any(pawn.y == 7 for pawn in self.PIECELIST[0]['p']):
+            return c.MAX_SCORE
+        if len(self.get_pieces(0)) == 0:
+            return -c.MAX_SCORE
+        return self.eval_default()
+
 label l_map_0_0_start:
     call l_tutorial('story_commands')
     # $ del get('P').range['double move']
     # $ del get('P 2').range['double move']
     # $ del get('P 3').range['double move']
     # $ del get('P 4').range['double move']
+    $ chess.stalemate_flag = 0
+    $ chess.goal = eval_map_0_0
+    $ chess.promotions = [[],[]]
+    # overwrite lose_con so that stalemate condition doesnt get triggered,
+    # overwise the game would stop on stalemate before reaching endTurn
     $ game.lose_con = "any(pawn.y == 7 for pawn in chess.PIECELIST[0]['p'])"
+    $ game.win_con = "len(chess.get_pieces(0)) == 0"
     return
 
 label l_map_0_0_endTurn:
@@ -361,6 +375,17 @@ label l_map_0_3:
     with dissolve
     $ get('N').pilot = abel
     $ chess.side = 0
+
+    if g.difficulty == 'easy':
+        play audio "sound/board/tank.wav"
+        $ chess.drop('N', 'a1', 0)
+        with dissolve
+        play audio "sound/board/tank.wav"
+        $ chess.drop('P', 'e2', 0)
+        with dissolve
+        play audio "sound/board/tank.wav"
+        $ chess.drop('P', 'f2', 0)
+        with dissolve
 
     # $ game.lose_con = "get(jagen) is None"
     $ get(jagen).pilot.skills['setup'] = []

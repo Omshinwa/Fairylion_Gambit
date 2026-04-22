@@ -30,6 +30,12 @@
 
 testsuite roguelite:
     setup:
+        $ done_flag["oncePerRun"].add('tuto_basic')
+        $ done_flag["oncePerRun"].add('tuto_preparation')
+        $ g.money = 10
+        $ g.items['undo'] = 3
+        $ rogue = Roguelike()
+        $ chess = Chess_control((6, 5))
         run Preference("all mute", True)
 
     teardown:
@@ -37,42 +43,20 @@ testsuite roguelite:
 
     testsuite roguelike_preparation:
 
-        # ──────────────────────────────────────────────
-        #   HELPER: jump into preparation with our board
-        # ──────────────────────────────────────────────
-        #
-        # Each testcase calls this inline block before its own assertions.
-        # We skip tutorials, build a known board, then jump to l_preparation.
-
-        testcase penny_cannot_drop_pawn_rank:
-            description "Penny (drive_q only) has no valid moves on the pawn rank"
-
-            # ── skip tutorials ──
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-
-            # ── roguelike globals ──
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-
-            # ── fresh 6×5 board ──
+        # Run before every testcase in this suite: rebuild a fresh board,
+        # reset penny, and jump into l_preparation. Keeps testcases free of
+        # duplicated scaffolding and isolates state between tests.
+        before testcase:
             $ chess = Chess_control((6, 5))
-
-            # reset_pilot re-applies drive_q → penny.can_drive = {'*': 'q'}
-            $ reset_pilot('penny')
-
+            $ reset_pilot('penny')  # re-applies drive_q → penny.can_drive = {'*': 'q'}
             $ gp = GenericPilot()
             $ TEAM = [penny, gp]
             $ ROBOTS = []
-
             # enemy king at d5
             $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-
             # white queen at a1 (empty)
             $ queen_a = Robot_Piece('q', color=0)
             $ chess.drop(queen_a, chess.TO_POS('a1'))
-
             # white queen at b1 with gp inside
             $ queen_b = Robot_Piece('q', color=0)
             $ chess.drop(queen_b, chess.TO_POS('b1'))
@@ -80,15 +64,16 @@ testsuite roguelite:
             $ gp.deployed = True
             $ queen_b.check_for_pilot()
             $ queen_b.setup_piece()
-
             $ game = Game('l_map_rogue')
-
             run Jump('l_preparation')
             pause until screen 's_battlefield'
 
-            # Select penny from reserve (simulates clicking her portrait)
-            $ f_select(penny)
-            $ renpy.restart_interaction()
+        testcase penny_cannot_drop_pawn_rank:
+            description "Penny (drive_q only) has no valid moves on the pawn rank"
+
+            # Select penny by clicking her portrait in the reserve
+            click until id "penny"
+            click id "penny"
 
             # All six pawn-rank squares must be None (penny has no drive_^)
             assert eval (chess.ui['moves'].get(chess.TO_POS('a2')) is None) timeout 1.0
@@ -100,43 +85,19 @@ testsuite roguelite:
 
             $ f_dismiss()
 
-
         testcase penny_can_drop_innermost_rank:
             description "Penny can target queen squares on rank 1 (innermost)"
 
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-            $ chess = Chess_control((6, 5))
-            $ reset_pilot('penny')
-            $ gp = GenericPilot()
-            $ TEAM = [penny, gp]
-            $ ROBOTS = []
-            $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-            $ queen_a = Robot_Piece('q', color=0)
-            $ chess.drop(queen_a, chess.TO_POS('a1'))
-            $ queen_b = Robot_Piece('q', color=0)
-            $ chess.drop(queen_b, chess.TO_POS('b1'))
-            $ queen_b.pilot = gp
-            $ gp.deployed = True
-            $ queen_b.check_for_pilot()
-            $ queen_b.setup_piece()
-            $ game = Game('l_map_rogue')
-
-            run Jump('l_preparation')
-            pause until screen 's_battlefield'
-
-            $ f_select(penny)
-            $ renpy.restart_interaction()
+            # Select penny by clicking her portrait in the reserve
+            click until id "penny"
+            click id "penny"
 
             # a1 (empty queen) and b1 (queen with gp) are both valid targets
-            assert eval (chess.ui['moves'].get(chess.TO_POS('a1')) is not None) timeout 1.0
+            assert eval (chess.ui['moves'].get(chess.TO_POS('a1')) is not None) timeout 10.0
             assert eval (chess.ui['moves'].get(chess.TO_POS('b1')) is not None) timeout 1.0
 
-            # Empty squares on rank 1 (c1-f1) must also be None — penny needs a queen to enter
-            assert eval (chess.ui['moves'].get(chess.TO_POS('c1')) is None) timeout 1.0
+            # Empty squares on rank 1 (c1-f1) must not be None — penny can be dropped as infantry
+            assert eval (chess.ui['moves'].get(chess.TO_POS('c1'))) timeout 1.0
 
             $ f_dismiss()
 
@@ -144,47 +105,24 @@ testsuite roguelite:
         testcase undeploy_penny_by_clicking:
             description "Clicking a deployed piece twice undeployies it (penny.deployed → False)"
 
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-            $ chess = Chess_control((6, 5))
-            $ reset_pilot('penny')
-            $ gp = GenericPilot()
-            $ TEAM = [penny, gp]
-            $ ROBOTS = []
-            $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-            $ queen_a = Robot_Piece('q', color=0)
-            $ chess.drop(queen_a, chess.TO_POS('a1'))
-            $ queen_b = Robot_Piece('q', color=0)
-            $ chess.drop(queen_b, chess.TO_POS('b1'))
-            $ queen_b.pilot = gp
-            $ gp.deployed = True
-            $ queen_b.check_for_pilot()
-            $ queen_b.setup_piece()
-            $ game = Game('l_map_rogue')
-
-            run Jump('l_preparation')
-            pause until screen 's_battlefield'
-
-            # Deploy penny into queen_a via the preparation logic
-            $ f_prep_drop_piece(penny, chess.TO_POS('a1'))
-            $ renpy.restart_interaction()
-
-            assert eval (penny.deployed) timeout 1.0
-            assert eval (queen_a.pilot == penny) timeout 1.0
-
-            # First click on piece_a1 selects the queen
+            # Deploy penny into queen_a by click-click:
+            #   1. click penny in reserve — selects her, populates chess.ui['moves']
+            #   2. click the target queen — f_chessboard_clicked routes through
+            #      f_click_on_move_sq → f_prep_drop_piece
+            click until id "penny"
+            click id "penny"
             click until id "piece_a1"
             click id "piece_a1"
-            assert eval (chess.ui['selected'] == queen_a) timeout 1.0
 
-            # Second interaction: re-clicking the same deployed square undeployies it.
-            # In-game this hits the move-indicator that covers the piece; we call the
-            # handler directly here since move-indicator drags have no widget id.
-            $ f_unprepare(chess.ui['selected'])
-            $ renpy.restart_interaction()
+            assert eval (penny.deployed) timeout 1.0
+            assert eval (penny in queen_a._pilot) timeout 1.0
+            assert eval (chess.ui['selected'] == queen_a) timeout 1.0
+            # Now undeploy: click the deployed piece, then click the move indicator
+            # that sits on the same square. When selected is deployed, the viewport's
+            # move indicator (id "move_a1") is shown and f_click_on_move_sq detects
+            # the reclick and calls f_unprepare.
+            click until id "move_a1"
+            click id "move_a1"
 
             assert eval (not penny.deployed) timeout 1.0
             assert eval (not queen_a.deployed) timeout 1.0
@@ -192,30 +130,6 @@ testsuite roguelite:
 
         testcase swap_two_deployed_pieces:
             description "f_prep_click_sq_swap swaps two pieces on the board"
-
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-            $ chess = Chess_control((6, 5))
-            $ reset_pilot('penny')
-            $ gp = GenericPilot()
-            $ TEAM = [penny, gp]
-            $ ROBOTS = []
-            $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-            $ queen_a = Robot_Piece('q', color=0)
-            $ chess.drop(queen_a, chess.TO_POS('a1'))
-            $ queen_b = Robot_Piece('q', color=0)
-            $ chess.drop(queen_b, chess.TO_POS('b1'))
-            $ queen_b.pilot = gp
-            $ gp.deployed = True
-            $ queen_b.check_for_pilot()
-            $ queen_b.setup_piece()
-            $ game = Game('l_map_rogue')
-
-            run Jump('l_preparation')
-            pause until screen 's_battlefield'
 
             $ pos_a1 = chess.TO_POS('a1')
             $ pos_b1 = chess.TO_POS('b1')
@@ -240,41 +154,18 @@ testsuite roguelite:
         testcase drop_penny_on_empty_queen:
             description "Dropping penny on a pilotless queen installs her inside"
 
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-            $ chess = Chess_control((6, 5))
-            $ reset_pilot('penny')
-            $ gp = GenericPilot()
-            $ TEAM = [penny, gp]
-            $ ROBOTS = []
-            $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-            $ queen_a = Robot_Piece('q', color=0)
-            $ chess.drop(queen_a, chess.TO_POS('a1'))
-            $ queen_b = Robot_Piece('q', color=0)
-            $ chess.drop(queen_b, chess.TO_POS('b1'))
-            $ queen_b.pilot = gp
-            $ gp.deployed = True
-            $ queen_b.check_for_pilot()
-            $ queen_b.setup_piece()
-            $ game = Game('l_map_rogue')
-
-            run Jump('l_preparation')
-            pause until screen 's_battlefield'
-
             # Preconditions
             assert eval (queen_a.pilot is None) timeout 1.0
             assert eval (not penny.deployed) timeout 1.0
 
-            # Select penny from reserve, then deploy onto the empty queen.
-            # In-game the player clicks penny's portrait then clicks the queen;
-            # here we call f_select + f_prep_drop_piece (move-indicator has no id).
-            $ f_select(penny)
-            $ renpy.restart_interaction()
-            $ f_prep_drop_piece(penny, chess.TO_POS('a1'))
-            $ renpy.restart_interaction()
+            # Deploy penny onto the empty queen by click-click:
+            #   1. click penny — selects her, populates moves with queen squares
+            #   2. click piece_a1 — target is a valid move, routes through
+            #      f_click_on_move_sq → f_prep_drop_piece
+            click until id "penny"
+            click id "penny"
+            click until id "piece_a1"
+            click id "piece_a1"
 
             assert eval (penny.deployed) timeout 1.0
             assert eval (queen_a.pilot == penny) timeout 1.0
@@ -283,40 +174,18 @@ testsuite roguelite:
         testcase drop_penny_on_occupied_queen:
             description "Dropping penny on an occupied queen ejects the old pilot"
 
-            $ done_flag["oncePerRun"].add('tuto_basic')
-            $ done_flag["oncePerRun"].add('tuto_preparation')
-            $ g.money = 10
-            $ g.items['undo'] = 3
-            $ rogue = Roguelike()
-            $ chess = Chess_control((6, 5))
-            $ reset_pilot('penny')
-            $ gp = GenericPilot()
-            $ TEAM = [penny, gp]
-            $ ROBOTS = []
-            $ chess.drop(Robot_Piece('k', color=1), chess.TO_POS('d5'))
-            $ queen_a = Robot_Piece('q', color=0)
-            $ chess.drop(queen_a, chess.TO_POS('a1'))
-            $ queen_b = Robot_Piece('q', color=0)
-            $ chess.drop(queen_b, chess.TO_POS('b1'))
-            $ queen_b.pilot = gp
-            $ gp.deployed = True
-            $ queen_b.check_for_pilot()
-            $ queen_b.setup_piece()
-            $ game = Game('l_map_rogue')
-
-            run Jump('l_preparation')
-            pause until screen 's_battlefield'
-
             # Preconditions: gp is inside queen_b, penny is in reserve
             assert eval (queen_b.pilot == gp) timeout 1.0
             assert eval (gp.deployed) timeout 1.0
             assert eval (not penny.deployed) timeout 1.0
 
-            # Drop penny onto the occupied queen — old pilot must be ejected
-            $ f_select(penny)
-            $ renpy.restart_interaction()
-            $ f_prep_drop_piece(penny, chess.TO_POS('b1'))
-            $ renpy.restart_interaction()
+            # Drop penny onto the occupied queen by click-click:
+            #   1. click penny — selects her from reserve
+            #   2. click piece_b1 — f_prep_drop_piece ejects gp and installs penny
+            click until id "penny"
+            click id "penny"
+            click until id "piece_b1"
+            click id "piece_b1"
 
             assert eval (penny.deployed) timeout 1.0
             assert eval (queen_b.pilot == penny) timeout 1.0

@@ -386,8 +386,10 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
             infantry = move.data['r']
             self.board[move.to] = infantry
             self._append_piece(infantry)
-            # Remove transferred pilot from the rescuing piece
-            piece._pilot.remove(infantry._pilot[0])
+            # Clear transferred pilot slot on the rescuing piece (preserve list length)
+            transferred = infantry._pilot[0]
+            if transferred is not None:
+                piece._pilot[piece._pilot.index(transferred)] = None
             if last_state.critical_add:
                 self.CRITICAL[piece.color].remove(piece)
             if last_state.critical_remove:
@@ -405,7 +407,7 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
 
     # we only add it in the case where 'promote_q' is in the skills
     def should_add_queen_to_promotions(self, piece):
-        return True
+        return False
 
     def gen_moves(self, side: int = None) -> list:
         """

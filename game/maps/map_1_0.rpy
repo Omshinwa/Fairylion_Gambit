@@ -38,7 +38,7 @@ label l_map_1_0:
     kallen "!"
     kallen "Let me go!"
     oghi "No can do, we will use you as leverage. To prove our good faith to [name('the Empire')]."
-    oghi "''{b}The Lion of the battlefield{/b}''. Did you know people already gave you a nickname?"
+    oghi "''{b}The Lion of the battlefield{/b}''. You're getting pretty famous you know?"
     kallen "!"
     kallen "Gnn! let me GO-OAAAH!"
     call l_move_piece('c3b3', 0.5)

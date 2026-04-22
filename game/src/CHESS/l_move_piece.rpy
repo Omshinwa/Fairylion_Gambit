@@ -118,10 +118,10 @@ label l_move_piece(list_of_moves, time=None):
 
     # if its chess like, time=2.0 instead
     if time is None:
-        $ time = chess.real_dist_between_two_pos(piece.pos, move.to)/fen_to_speed(piece)
+        $ time = chess.real_dist_between_two_pos(piece.pos, move.to)/fen_to_speed(piece) * 0.8
     
     # remove health
-    if move.capture and move.capture.pilot:
+    if move.capture and move.capture.pilots:
         python:
             robot = move.capture
             for pilot in robot.pilots:
@@ -138,7 +138,7 @@ label l_move_piece(list_of_moves, time=None):
             $ i += 1
 
     $ chess.make_move(move, False)
-    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, 0.5), chess.POS_TO_SXY(move.to, 0.5), time)
+    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, (0.5,0)), chess.POS_TO_SXY(move.to, (0.5,0)), time)
     $ del time, piece
     return
 
@@ -146,10 +146,10 @@ init python:
     # Play a move animation, it has to finish at the end
     def f_create_animation_move(piece, fr, to, time, capture=None, *, mute=False):
         chess.ui['animation_move'] = DotDict(piece=piece, fr=fr, to=to, time=time, capture=capture)
+        renpy.pause(chess.ui['animation_move'].time + 0.05)
         if (not mute):
             f_play_move_piece_sound(piece, move)
         chess.state = "move"
-        renpy.pause(chess.ui['animation_move'].time)
         chess.state = "idle"
         chess.ui['animation_move'] = None
         chess.ui['selected'] = None
@@ -208,7 +208,7 @@ label l_engine_move(move):
         $ i+=1
     if i == len(moves):
         "[i]"
-        "couldnt find the move: [move.data]"
+        "couldnt find the move: \[move.data]"
         $ assert False
     $ chess.wait_for_enemy = False
     call l_move_piece(moves[i])

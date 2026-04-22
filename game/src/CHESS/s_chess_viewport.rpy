@@ -211,16 +211,22 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                     dragged f_chessboard_dragged
                     dragging f_chessboard_dragging
                     clicked f_chessboard_clicked
-                    alternate If(tooltip or chess.state == "drawing", Function(f_set_arrow, tooltip), Function(draw_arrow, tooltip))
+                    # IDK WHY THIS WORKS WITHOUT IT
+                    # alternate If(tooltip or chess.state == "drawing", Function(f_set_arrow, tooltip), Function(draw_arrow, tooltip))
 
                     fixed: # SPRITE
-                        add img_piece(piece):
-                            if chess.bg_board is None:
-                                matrixcolor ColorizeMatrix(color_black, color_white)
+
+                        if chess.bg_board is None:
+                            add GradientMap(img_piece(piece), [color_black, color_white])
+                        else:
+                            add img_piece(piece)
+                        # add img_piece(piece):
+                        #     if chess.bg_board is None:
+                        #         matrixcolor ColorizeMatrix(color_black, color_white)
                             # is it also in danger of dying?
-                            if piece.pilot and any(pilot is not None and pilot.health == 1 for pilot in piece._pilot):
+                            if piece.pilots and any(pilot.health == 1 for pilot in piece.pilots):
                                 at t_low_health
-                            if len(chess.history) == 0 and chess.move_first and piece.pilot and any(pilot is not None and 'initiative' in pilot.skills['setup'] for pilot in piece._pilot):
+                            if len(chess.history) == 0 and chess.move_first and piece.pilot and any('initiative' in pilot.skills['setup'] for pilot in piece.pilots):
                                 at t_highlight
 
                         # display the pilot in prep
@@ -256,7 +262,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                     $ x = chess.POS_TO_SXY(pos)[0]
                     $ y = chess.POS_TO_SXY(pos)[1]
                     drag:
-                        # tooltip pos
+                        tooltip pos # this bugs, when you hover it does infinite loop
                         id ("move_%s" % chess.POS_TO_A8(pos))
                         drag_name pos
                         xysize(SQUARESIZE, SQUARESIZE)
@@ -264,7 +270,6 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                         draggable False
                         droppable True
                         hovered NullAction()
-                        # alternate If(chess.state == "drawing", Function(f_set_arrow, pos), Function(draw_arrow, pos))
 
                         if move is None: # this means it's an illegal move
                             droppable False
@@ -273,6 +278,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             else:
                                 idle_child Transform("skin/square/square default eatPiece.webp", matrixcolor=SaturationMatrix(0))
                         else:
+                            # tooltip pos
                             clicked f_click_on_move_sq
                             if show_debug_menu:
                                 pass
@@ -291,9 +297,6 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
             drag: # for the whole board, check if the drag is on board
                 style 'empty'
                 drag_name None
-                fixed:
-                    if show_debug_menu:
-                        add "#0f01"
                 xysize(absolute(SQUARESIZE*chess.size[0]), absolute(SQUARESIZE*chess.size[1]))
                 draggable False
                 droppable True

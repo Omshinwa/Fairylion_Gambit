@@ -163,7 +163,9 @@ screen s_chessboard_overlay():
                     action SetVariable('game.lose_con', 'True'), Return()
         if show_debug_menu:
             button at t_interactive :
-                add "give_up" xysize 200,200
+                xysize 200,100
+                add "#f00"
+                text "WIN"
                 align 0.11,0.3
                 action SetVariable('game.win_con', 'True'), Return()
 

@@ -174,6 +174,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     xpos i%PER_ROW*100 + offset[0] + PREP_X_MARGIN
 
                 if pilot_or_robot == 'pilot':
+                    id getattr(element, 'id', element)
                     ypos 75+20+offset[1] + 100*int(i/PER_ROW) +PREP_X_MARGIN
                     if type(v_select) == Robot_Piece:
                         if not v_select.fen in {'i', 'p'}:
@@ -395,8 +396,6 @@ init python:
         return
         
     def f_prep_dragged(drags, drop):
-        if show_debug_menu:
-            print("f_prep_dragged")
         drags[0].child.xysize = (1.0,1.0)
         drag = drags[0]
         piece = drags[0].drag_name

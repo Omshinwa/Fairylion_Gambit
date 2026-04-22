@@ -167,32 +167,12 @@ init python:
                 self.CRITICAL[piece.color].append(piece)
             if last_state.critical_add:
                 self.CRITICAL[piece.color].remove(old_piece)
-            
-
-        # def make_move(self, move:Move, check_legality=None):
-        #     # THIS IS TO MAKE RESCUE MOVES
-        #     if check_legality is None:
-        #         check_legality = self.use_engine
-
-        #     return super().make_move(move, check_legality=check_legality)
-        
-        # def undo(self):
-        #     # THIS IS TO UNDO RESCUE MOVES
-        #     move = self.history[-1].move
-        #     if 'rescue' in move.flag:
-        #         for p in move.data['r'].pilot:
-        #             if p is not None and p in move.piece.pilot:
-        #                 move.piece.pilot[move.piece.pilot.index(p)] = None
-        #                 break
-        #     super().undo()
 
         def undo_item(self): # why not just undo(); because it's used to check legal moves etc
             # restore player health
             i = self.history[-1].move.capture
             if i:
-                for pilot in i.pilot:
-                    if pilot is None:
-                        continue
+                for pilot in i.pilots:
                     if pilot.health == 0:
                         TEAM.append(pilot)
                     pilot.health += 1
@@ -201,7 +181,6 @@ init python:
                 engine.copy(self)
             self.wait_for_enemy = False
             game.is_over = False
-        
 
         # handling special cases like 'promote_q' or no promotion at all:
 

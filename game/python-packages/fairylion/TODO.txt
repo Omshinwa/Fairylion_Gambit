@@ -9,6 +9,9 @@ TODO:
 
 * unit tests for prep phase
 
+* fix weird snap animation
+
+
 * option button in battle (RESIGN, SAVE, LOAD, PREFS)
 
 save on the bottom left, undo should undo the death of Jagen, instead you win from draw

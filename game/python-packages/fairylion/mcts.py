@@ -199,6 +199,12 @@ class MonteCarloSearchMixin:
                             position_score = -c.MAX_SCORE
                         elif self.stalemate_flag == 2: #whoever gets stalemated loses
                             position_score = -c.MAX_SCORE * c.COLOR_TO_SIGN[self.side]
+                        elif self.stalemate_flag == -2: #skip turn
+                            node.solved = False
+                            self.side = 1 - self.side # probably doesnt work lol
+                            position_score = state.eval(state)
+                            if abs(position_score) >= c.MAX_SCORE - 99:
+                                node.solved = True
                 else:
                     position_score = state.eval(state)
                     if abs(position_score) >= c.MAX_SCORE - 99:

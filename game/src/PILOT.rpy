@@ -135,7 +135,7 @@ init -2 python:
         @staticmethod
         def sort(TEAM, mode=None):
             if mode is None:
-                CycleVariable('Pilot.sort_method', [_("default"), _("HP"), _("EXP"), _("value")])()
+                CycleVariable('Pilot.sort_method', ["default", "HP", "EXP", "value"])()
             else:
                 Pilot.sort_method = mode
             if Pilot.sort_method == 'default':

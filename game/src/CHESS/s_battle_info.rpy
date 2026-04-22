@@ -38,7 +38,7 @@ screen s_infobox():
                             if type(piece) is int: # we selected the board in prep phase
                                 $ piece = chess.board[piece]
                             if type(piece) is Robot_Piece:
-                                if piece.pilot:
+                                if piece.pilots:
                                     for index, pilot in enumerate(piece._pilot):
                                         if pilot is not None:
                                             vbox:
@@ -181,6 +181,16 @@ screen s_battlefield_robot(piece, scale=1):
             if chess.state == 'selecting':
                 action Function(renpy.call_in_new_context,'l_tutorial_piece', piece)
                 at t_interactive
+                
+            if show_debug_menu: # display _pilot
+                hbox:
+                    yoffset -40
+                    xalign 1.0
+                    text "_pilot: ("
+                    for i in range(2):
+                        if i < len(piece._pilot):
+                            text f"{piece._pilot[i]}"
+                    text ")"
             vbox:
                 hbox: # NAME
                     xpos INFOBOX_WIDTH//10
@@ -219,6 +229,3 @@ screen s_battlefield_robot(piece, scale=1):
                         pos (-20, 13)
                         text _("mov") font "fonts/Venus+Plomb.otf" style "style_info_field" 
                         add f"icon movement {piece.fen}" pos (1,-5) xysize (95,95)
-
-            if show_debug_menu:
-                text str(piece.pos) size 40

@@ -85,6 +85,7 @@ screen s_debug(offset=(0,0)):
     # default show_debug_menu = True
     if config.developer:
         key 'K_2' action Function(f_debug_menu)
+        key 'K_q' action CycleVariable('prefs.style.pieces', ['merida', 'internet', 'robot'])
     if show_debug_menu:
         frame:
             xalign 1.0 yalign 0.0
@@ -154,8 +155,7 @@ screen s_debug(offset=(0,0)):
                         action ToggleField(chess, 'use_engine')
                 
                     button at t_interactive:
-                        align (0.8, 0.0)
-                        text chess.fen style 'style_purple_text' color COLOR_HIGHLIGHT() size 15
+                        text chess.fen[:40] style 'style_purple_text' color COLOR_HIGHLIGHT() size 15
                         action CopyToClipboard('"' + chess.fen + '"')
                 
                 # text "EVAL: [chess.eval()]" size 40
@@ -200,7 +200,7 @@ init python:
             #on reload, often they lose the char_on_battlefield field
             if piece.pilot:
                 for pilot in piece._pilot:
-                    if pilot.id in character.__dict__:
+                    if pilot and pilot.id in character.__dict__:
                         character.__dict__[pilot.id].char_on_battlefield = piece
 
     # upon reloading, link the global pilot var to the one in the save

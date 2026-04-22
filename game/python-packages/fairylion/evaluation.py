@@ -21,17 +21,18 @@ class Engine_eval():
         # 'defend' 'escape'
 
         # stalemate flag is either:
-        # 0 always draw (regular rules),
-        # 1 always win (for defense/survive), return MAX
-        # -1 always lose (for must wins), return -MAX
-        # 2 the one who gets stalemated loses
+        #  0  draw (regular rules),
+        #  1  white win
+        # -1  black win
+        #  2  the one who gets stalemated loses
+        # -2  opponent play again
         self.stalemate_flag = 0
 
     @property
     def goal(self):
         return self._goal
 
-    @goal.setter
+    @goal.setter # instead of 'goal', just copy eval man
     def goal(self, cond):
         self._goal = cond
         if cond == None:
@@ -140,6 +141,8 @@ class Engine_eval():
     def is_stalemated(self, color):
         return self.side == color and not self.is_in_check(color) and len(self.gen_legal_moves(color))==0
 
+    # This is the default result() used for isWin and isLost
+
     # return { (bool) has_terminated, (int) who_won}
     # if who_won == 0: white
     # if who_won == 1: black
@@ -157,6 +160,10 @@ class Engine_eval():
                     return True,1
                 elif self.stalemate_flag == 2:
                     return True,1-self.side
+                elif self.stalemate_flag == -2:
+                    if len(self.get_pieces(self.side)) == 0:
+                        return True,1-self.side
+                    return False,None
         else:
             position_score = self.eval(self)
             if abs(position_score) >= c.MAX_SCORE - 99:

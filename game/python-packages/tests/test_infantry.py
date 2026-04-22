@@ -189,3 +189,80 @@ def test_rescue_requires_empty_slot(e):
 
     moves = rook.moves(e)
     assert not any('rescue' in m.flag for m in moves)
+
+
+# ─── PAWN RESCUE (single + double move) ───────────────────────────────────────
+# White pawns start at y=1 (rank 2) and get double-move. Covers the case where
+# move_double_move used to generate rescue without checking pilot capacity.
+
+def test_pawn_single_rescue_requires_empty_slot(e):
+    # pawn with full pilot slot cannot rescue an infantry one square ahead
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e3', 0)
+    pawn._pilot = ['lelouch']  # full (default capacity = 1)
+
+    moves = pawn.moves(e)
+    assert not any('rescue' in m.flag for m in moves)
+
+def test_pawn_double_rescue_requires_empty_slot(e):
+    # pawn with full pilot slot cannot rescue an infantry two squares ahead
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e4', 0)
+    pawn._pilot = ['lelouch']  # full
+
+    moves = pawn.moves(e)
+    assert not any('rescue' in m.flag for m in moves)
+
+def test_pawn_single_rescue_transfers_pilot(e):
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e3', 0)
+    pawn._pilot = [None]
+    infantry._pilot = ['lelouch']
+
+    move = next(m for m in pawn.moves(e) if 'rescue' in m.flag)
+    e.make_move(move, check_legality=False)
+
+    assert 'lelouch' in pawn._pilot
+    assert infantry not in e.get_pieces(0)
+
+def test_pawn_single_rescue_undo_restores(e):
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e3', 0)
+    pawn._pilot = [None]
+    infantry._pilot = ['lelouch']
+
+    move = next(m for m in pawn.moves(e) if 'rescue' in m.flag)
+    e.make_move(move, check_legality=False)
+    e.undo()
+
+    assert e.board[e.A8_TO_POS('e3')] is infantry
+    assert infantry in e.get_pieces(0)
+    assert 'lelouch' not in pawn._pilot
+    assert e.board[e.A8_TO_POS('e2')] is pawn
+
+def test_pawn_double_rescue_transfers_pilot(e):
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e4', 0)
+    pawn._pilot = [None]
+    infantry._pilot = ['lelouch']
+
+    move = next(m for m in pawn.moves(e) if 'rescue' in m.flag and 'double move' in m.flag)
+    e.make_move(move, check_legality=False)
+
+    assert 'lelouch' in pawn._pilot
+    assert infantry not in e.get_pieces(0)
+
+def test_pawn_double_rescue_undo_restores(e):
+    pawn = e.drop('p', 'e2', 0)
+    infantry = e.drop('i', 'e4', 0)
+    pawn._pilot = [None]
+    infantry._pilot = ['lelouch']
+
+    move = next(m for m in pawn.moves(e) if 'rescue' in m.flag and 'double move' in m.flag)
+    e.make_move(move, check_legality=False)
+    e.undo()
+
+    assert e.board[e.A8_TO_POS('e4')] is infantry
+    assert infantry in e.get_pieces(0)
+    assert 'lelouch' not in pawn._pilot
+    assert e.board[e.A8_TO_POS('e2')] is pawn

@@ -107,13 +107,6 @@ transform t_flashing:
     on hide:
         ease 0.2 alpha 0
 
-# transform t_interactive:
-#     on idle:
-#         matrixcolor IdentityMatrix()
-#     on hover:
-#         matrixcolor ColorizeMatrix("#700", "#ffa")
-#     on insensitive:
-#         matrixcolor ColorizeMatrix("#333", "#777")
 transform t_interactive:
     on idle:
         matrixcolor IdentityMatrix()
@@ -152,3 +145,83 @@ init python:
                             0, 1, 0, g,
                             0, 0, 1, b,
                             0, 0, 0, 1 ])
+
+init python:
+
+    renpy.register_shader("gradient_map",
+        variables="""
+            uniform vec4 u_gm0;
+            uniform vec4 u_gm1;
+            uniform vec4 u_gm2;
+            uniform vec4 u_gm3;
+            uniform vec4 u_gm4;
+            uniform vec4 u_gm5;
+            uniform vec4 u_gm6;
+            uniform vec4 u_gm7;
+            uniform float u_gm_n;
+        """,
+        fragment_300="""
+            vec4 src = texture2D(tex0, v_tex_coord.xy);
+            float a = src.a;
+            vec3 rgb = (a > 0.001) ? src.rgb / a : vec3(0.0);
+            float lum = clamp(dot(rgb, vec3(0.299, 0.587, 0.114)), 0.0, 1.0);
+
+            vec4 stops[8];
+            stops[0] = u_gm0; stops[1] = u_gm1;
+            stops[2] = u_gm2; stops[3] = u_gm3;
+            stops[4] = u_gm4; stops[5] = u_gm5;
+            stops[6] = u_gm6; stops[7] = u_gm7;
+
+            int n = int(u_gm_n);
+            float fn = float(n - 1);
+            vec4 mapped = stops[0];
+            bool found = false;
+
+            for (int i = 0; i < 7; i++) {
+                if (!found && i < n - 1) {
+                    float t0 = float(i) / fn;
+                    float t1 = float(i + 1) / fn;
+                    if (lum >= t0 && lum < t1) {
+                        mapped = mix(stops[i], stops[i + 1], (lum - t0) / (t1 - t0));
+                        found = true;
+                    }
+                }
+            }
+            if (!found) {
+                mapped = stops[n - 1];
+            }
+
+            gl_FragColor = vec4(mapped.rgb * a, a);
+        """
+    )
+
+    def GradientMap(d, colors):
+        """
+        Apply a gradient map to displayable d.
+        Pass any list of 2-8 colors; lum=0 maps to colors[0], lum=1 to colors[-1].
+
+            image foo = GradientMap("sprite.png", ["#1a1a2e", "#e94560", "#fff"])
+            add GradientMap("icon.webp", ["#000", "#ff6633"])
+        """
+        if colors == 'neon':
+            colors = ["#000", "#2600ff", "#b61de1", "#fd4bb3", "#ff7589", "#ffa955", "#ffff00", "#fff"]
+        elif colors == 'pale god':
+            colors = ["#000","#6b6668", "#808688", "#99a2a8", "#c4beb8", "#dbcdc6", "#f6edea", "#fff"]
+        elif colors == 'pink':
+            colors = ["#110116", "#4b0e2b", "#79536d", "#b2719b","#ed91cc", "#f6c9e7", "#fbedc5"]
+        elif colors == 'noir':
+            colors = ["#000102", "#201524", "#953d39", "#d54f48"]
+
+
+        n = min(max(2, len(colors)), 8)
+        stops = [(Color(c)[0]/255.0, Color(c)[1]/255.0, Color(c)[2]/255.0, Color(c)[3]/255.0) for c in colors[:n]]
+        while len(stops) < 8:
+            stops.append(stops[-1])
+        return Transform(d,
+            shader="gradient_map",
+            u_gm0=stops[0], u_gm1=stops[1],
+            u_gm2=stops[2], u_gm3=stops[3],
+            u_gm4=stops[4], u_gm5=stops[5],
+            u_gm6=stops[6], u_gm7=stops[7],
+            u_gm_n=float(n),
+        )

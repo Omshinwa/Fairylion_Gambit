@@ -1,11 +1,3 @@
-#
-#   This handles zooming of the chessboard, and moving the camera around.
-#
-
-transform t_camera_sync(x,y,zoom,time):
-    ease time pos (x,y) zoom zoom
-
-
 init -1 python:
 
     class NoInertiaAdjustment(renpy.display.behavior.Adjustment, object):
@@ -251,8 +243,10 @@ init -1 python:
 
         # Return coordinates with the TOP LEFT BOARD as origin
         def POS_TO_SXY(self, pos, offset=0):
+            if type(offset) is float or type(offset) is int:
+                offset = (offset, offset)
             pos = self.TO_POS(pos)
-            return (absolute((self.POS_TO_XY_POV(pos)[0]+offset)*SQUARESIZE), absolute((self.size[1]-1-self.POS_TO_XY_POV(pos)[1]+offset)*SQUARESIZE))
+            return (absolute((self.POS_TO_XY_POV(pos)[0]+offset[0])*SQUARESIZE), absolute((self.size[1]-1-self.POS_TO_XY_POV(pos)[1]+offset[1])*SQUARESIZE))
         
         # bug? its counting from bottom up for Y?
         def POS_TO_XY_POV(self, pos):

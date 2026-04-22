@@ -135,9 +135,10 @@ def move_double_move(piece, moves, offset, pos, engine):
         sq1 = pos+engine.up*color
         sq = pos+engine.up*2*color
         if board[sq1] is c.EMPTY or (hasattr(board[sq1], 'fen') and board[sq1].fen == 'i'):
-            if board[sq] is c.EMPTY :
+            flag = engine.can_land_on(piece, board[sq])
+            if flag == 'm':
                 moves.append(Move(piece, pos, sq, flag='double move'))
-            elif hasattr(board[sq], 'fen') and board[sq].fen == 'i':
+            elif flag == 'r':
                 moves.append(Move(piece, pos, sq, data={'r':board[sq]}, flag={'rescue','double move'}))
 
 def move_en_passant(piece, moves, offset, pos, engine):
@@ -274,9 +275,12 @@ class Move():
             self.flag = flag
 
     def __repr__(self):
-        txt = c.FEN_TO_PIECE[self.piece.fen]
-        if self.color == 0:
-            txt = txt.upper()
+        if hasattr(self.piece, 'fen'):
+            txt = c.FEN_TO_PIECE[self.piece.fen]
+            if self.color == 0:
+                txt = txt.upper()
+        else:
+            txt = self.piece.id
         if self.engine:
             txt += f" {self.engine.POS_TO_A8(self.fr)}{self.engine.POS_TO_A8(self.to)}"
         else:

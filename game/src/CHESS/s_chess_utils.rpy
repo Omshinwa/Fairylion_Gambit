@@ -64,6 +64,8 @@ init python:
             else:
                 chess.ui["arrows"].add((chess.ui["drawing"], pos))
         chess.ui["drawing"] = None
+        if chess.state == 'selecting':
+            f_dismiss(skip_sound=True)
         chess.state = "idle"
         return
 
@@ -71,7 +73,7 @@ init python:
         if pos == None:
             return
         if chess.state == 'selecting':
-            chess.clean_moves()
+            f_dismiss(skip_sound=True)
         chess.ui['selected'] = None
         chess.ui["drawing"] = pos
         chess.state = "drawing"
@@ -92,6 +94,8 @@ init python:
         return
 
     def f_select(piece):
+        if not isinstance(piece, Simple_Piece) and not isinstance(piece, Pilot):
+            return
         if chess.state == 'selecting' and piece == chess.ui['selected']:
             return
         if chess.ui['animation_move']:
@@ -202,8 +206,6 @@ init python:
         # Click is a callback after activated.
         # DISMISS when ACTIVATED was called when we already selected the same piece
         global IF_ACTIVATED
-        if show_debug_menu:
-            print("clicked")
         if 'battle' in g.state:
             if IF_ACTIVATED:
                 f_dismiss()
@@ -222,8 +224,6 @@ init python:
         return
     
     def f_chessboard_dragged(drags, drop):
-        if show_debug_menu:
-            print("f_chessboard_dragged")
         drags[0].child.xysize = (1.0,1.0)
         drag = drags[0]
         piece = drags[0].drag_name
@@ -302,33 +302,39 @@ init python:
 
     # apply a transform to the image given as arg
     def img_square(str, **kwargs):
-        return Transform(str, align=(0.5, 0.5), xysize=(SQUARESIZE, SQUARESIZE), **kwargs)
+        return Transform(str, align=(0.5, 1.0), xysize=(SQUARESIZE, SQUARESIZE), **kwargs)
 
     def img_piece(piece):
-        if prefs.style.pieces in {'merida'}:
-            extension = '.svg'
-        elif prefs.style.pieces == 'robot':
-            return Transform('img_rig_piece idle', align=(0.5, 0.5), xysize=(int(SQUARESIZE*1.5), int(SQUARESIZE*1.5)),)
-        else:
-            extension = '.webp'
-
-        if piece.fen != "i": #inside a robot
-            if piece.color == 2:
-                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=ColorizeMatrix("#555", "#aaa"))
-            elif piece.movement == None and piece.fen != 'k':
-                if piece.color:
-                    return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/black {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=ColorizeMatrix("#0c157a", "#dcfffe"))
-                else:
-                    return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=ColorizeMatrix("#01d", "#dcfffe"))
-            else:
-                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.COLOR_TO_STR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
-
-        else:
+        if piece.fen == "i": #inside a robot
             if piece._pilot[0] and piece._pilot[0].id in {'kallen', 'lelouch'} :
                 return img_square(Composite(
-                        (SQUARESIZE, SQUARESIZE),
-                        (14, 13), Transform(f'body {piece._pilot[0].id}', zoom=.18),
-                        (25, -12), Transform(f'head {piece._pilot[0].id}', zoom=.18)), matrixcolor=IdentityMatrix())
+                        (1.0, 1.0),
+                        (25, 33), Transform(f'body {piece._pilot[0].id}', zoom=.15),
+                        (35, 12), Transform(f'head {piece._pilot[0].id}', zoom=.15)), matrixcolor=IdentityMatrix())
             return img_square(Composite(
                     (SQUARESIZE, SQUARESIZE),
                     (40, 40), Transform('body', zoom=2, nearest=True)), matrixcolor=IdentityMatrix())
+
+        if prefs.style.pieces in {'merida'}:
+            extension = '.svg'
+        elif prefs.style.pieces == 'robot':
+            if piece.fen in {'p', 'n'}:
+                if piece.color == 0:
+                    return Transform(GradientMap(f'robot {piece.fen}', 'pale god'), align=(0.5, 1.0), xzoom=1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
+                else:
+                    return Transform(GradientMap(f'robot {piece.fen}', 'noir'), align=(0.5, 1.0), xzoom=-1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
+            return Transform('img_rig_piece idle', align=(0.5, 1.0), xysize=(int(SQUARESIZE*1.5), int(SQUARESIZE*1.5)),)
+        else:
+            extension = '.webp'
+        
+        # gotta specify xzoom=1, here because robots have -1 as zoom. 
+        if piece.color == 2:
+            return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#555", "#aaa"))
+        elif piece.movement == None and piece.fen != 'k':
+            if piece.color:
+                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/black {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#0c157a", "#dcfffe"))
+            else:
+                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#01d", "#dcfffe"))
+        else:
+            return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.COLOR_TO_STR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", xzoom=1, dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
+

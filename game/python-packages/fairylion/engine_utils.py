@@ -250,6 +250,7 @@ class EngineUtils():
         else:
             self.history = []
 
+
         self.up = chess.up
         self.down = chess.down
         self.left = chess.left
@@ -269,7 +270,7 @@ class EngineUtils():
                 self.promotions[i].append(prom)
 
         # copy rules
-        self.goal = chess.goal
+        self.goal = chess.goal # instead of 'goal', just copy eval man
         self.stalemate_flag = chess.stalemate_flag
 
         # copy pieces and board
@@ -342,6 +343,8 @@ class EngineUtils():
         if len(self.CRITICAL[1]) != len(other.CRITICAL[1]):
             return False
         if self.stalemate_flag != other.stalemate_flag:
+            return False
+        if self.eval != other.eval:
             return False
         for color in [0,1]:
             for piece_index in range(len(self.CRITICAL[color])):
