@@ -309,7 +309,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
             if chess.ui['animation_move'].capture:
                 $ piece = chess.ui['animation_move'].capture
                 add img_piece(piece):
-                    pos chess.POS_TO_SXY(piece.pos, 0.5)
+                    pos chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT())
 
             add img_piece(chess.ui['animation_move'].piece):
                 at transform:

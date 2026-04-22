@@ -62,8 +62,8 @@ label l_death_move_piece(robot, move, time):
         # could be refactored with l_move_piece
         global g, chess, renpy
         g.state = {'cutscene'}
-        fr_pos = chess.POS_TO_SXY(move.fr, 0.5)
-        to_pos = chess.POS_TO_SXY(move.to, 0.5)
+        fr_pos = chess.POS_TO_SXY(move.fr, PIECE_ALIGNMENT())
+        to_pos = chess.POS_TO_SXY(move.to, PIECE_ALIGNMENT())
 
         midway_point = to_pos[:]  # copy
         direction_x = 1 if to_pos[0] > fr_pos[0] else (-1 if to_pos[0] < fr_pos[0] else 0)
@@ -138,7 +138,7 @@ label l_move_piece(list_of_moves, time=None):
             $ i += 1
 
     $ chess.make_move(move, False)
-    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, (0.5,0)), chess.POS_TO_SXY(move.to, (0.5,0)), time)
+    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, PIECE_ALIGNMENT()), chess.POS_TO_SXY(move.to, PIECE_ALIGNMENT()), time)
     $ del time, piece
     return
 

@@ -302,7 +302,13 @@ init python:
 
     # apply a transform to the image given as arg
     def img_square(str, **kwargs):
-        return Transform(str, align=(0.5, 1.0), xysize=(SQUARESIZE, SQUARESIZE), **kwargs)
+        return Transform(str, align=(0.5, 0.5), xysize=(SQUARESIZE, SQUARESIZE), **kwargs)
+
+    # Offset for POS_TO_SXY when placing a piece sprite, matching the anchor used in img_piece.
+    def PIECE_ALIGNMENT():
+        if prefs.style.pieces == 'robot':
+            return (0.5, 1.0)
+        return (0.5, 0.5)
 
     def img_piece(piece):
         if piece.fen == "i": #inside a robot

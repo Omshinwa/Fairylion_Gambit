@@ -109,24 +109,25 @@ screen s_debug(offset=(0,0)):
             vbox: # debug # release
                 spacing -10
                 style_prefix "style_debug"
-                pos(180,0)
+                pos(180,800)
 
                 text "[STAGE_SCENE]"
 
                 text "renpy.get_mode(): [renpy.get_mode()]"
 
                 hbox:
+                    text "tooltip:" size 20
+                    text str(GetTooltip())
+                    text "g.state:" size 20
+                    text str(' '.join(g.state))
+                    text "chess:" size 20
+                    text str(chess.state)
+
+                hbox:
                     text "chess.side:" size 25
                     text str(chess.side)
                     text "engine.side:" size 25
                     text str(engine.side)
-                hbox:
-                    text "tooltip:" size 25
-                    text str(GetTooltip())
-                    text "g.state:" size 25
-                    text str(' '.join(g.state))
-                    text "chess:" size 25
-                    text str(chess.state)
                 hbox: 
                     text "moves:" size 25
                     for move in chess.ui["moves"]:
@@ -149,7 +150,7 @@ screen s_debug(offset=(0,0)):
 
                 if 'battle' in g.state:
                     button at t_interactive:
-                        text "USE AI" size 80:
+                        text "USE AI" size 50:
                             if not chess.use_engine:
                                 color "#828282"
                         action ToggleField(chess, 'use_engine')
