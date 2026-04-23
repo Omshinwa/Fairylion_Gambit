@@ -147,7 +147,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
             pos (offset[0], offset[1] + SPCE_TWEEN_P_R + 340)
             hbox:
                 xalign 0.5
-                add img_piece(Robot_Piece('P')) xysize(80,80) yalign 0.0
+                add "white pawn merida" xysize(80,80) yalign 0.0
                 text "=" size 60 style "style_3d_big_txt" yalign 0.5
                 text "∞" size 100 style "style_3d_big_txt" yalign 0.5
     draggroup:

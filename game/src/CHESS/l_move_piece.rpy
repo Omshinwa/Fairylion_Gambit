@@ -119,6 +119,8 @@ label l_move_piece(list_of_moves, time=None):
     # if its chess like, time=2.0 instead
     if time is None:
         $ time = chess.real_dist_between_two_pos(piece.pos, move.to)/fen_to_speed(piece) * 0.8
+    if renpy.is_skipping():
+        $ time = 0.1
     
     # remove health
     if move.capture and move.capture.pilots:

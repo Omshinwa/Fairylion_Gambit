@@ -26,10 +26,6 @@ init python:
         # handles event stuff for a single battle.
         def __init__(self, level=None, **kwargs):
             global chess
-            if "needOnlyOneWin" in kwargs:
-                self.needOnlyOneWin = kwargs["needOnlyOneWin"]
-            else:
-                self.needOnlyOneWin = True
             # self.player = chess.player # by default we play from White's perspective
             self.level = level or ("l_map_" + str(g.progress//100) + "_" + str(g.progress%100))
             self.win_con = None # checkmate / survive / else
@@ -120,5 +116,9 @@ label l_animation_lost:
             "You still have Undos. Use one?"
             "Yes":
                 call l_use_item('undo')
+                $ game.is_over = False
+                $ chess.wait_for_enemy = False
+                jump l_gameLoop.gameLoop
             "No":
-                return
+                pass
+    return

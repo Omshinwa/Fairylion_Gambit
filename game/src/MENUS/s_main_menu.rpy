@@ -110,7 +110,7 @@ label l_switch_difficulty:
         $ g.difficulty = 'normal'
     else:
         $ g.difficulty = 'easy'
-        "In Easy mode, you start with more undos, more pilots, get more money, but the game won't remember your best run."
+        # "In Easy mode, you start with more undos, more pilots, get more money, but the game won't remember your best run."
     return
 
 label l_estimate_cpu_str():

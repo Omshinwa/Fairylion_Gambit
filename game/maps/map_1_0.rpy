@@ -2,9 +2,6 @@ label l_map_1_0:
     call l_black_scene_change
     
     jagen "Test, im dead so this shouldnt display."
-    "DEV: c'était la dernière map à peu près scripté"
-    "Merci d'avoir joué!"
-    
     "3 years later into the conflict-"
 
     $ game = Game('l_map_1_0')

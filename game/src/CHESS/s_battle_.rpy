@@ -160,7 +160,7 @@ screen s_chessboard_overlay():
                 if game.is_over:
                     action NullAction()
                 else:
-                    action SetVariable('game.lose_con', 'True'), Return()
+                    action Jump('l_gameLoop_everyInteraction.give_up'), Return()
         if show_debug_menu:
             button at t_interactive :
                 xysize 200,100

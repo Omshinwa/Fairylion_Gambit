@@ -347,11 +347,11 @@ init python:
         if prefs.style.pieces in {'merida'}:
             extension = '.svg'
         elif prefs.style.pieces == 'robot':
-            if piece.fen in {'p', 'n'}:
+            if piece.fen in {'p', 'n', 'k'}:
                 if piece.color == 0:
                     return Transform(GradientMap(f'robot {piece.fen}', 'pale god'), align=(0.5, 1.0), xzoom=1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
                 else:
-                    return Transform(GradientMap(f'robot {piece.fen}', 'noir'), align=(0.5, 1.0), xzoom=-1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
+                    return Transform(GradientMap(f'robot {piece.fen}', 'pale god'), align=(0.5, 1.0), xzoom=-1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
             return Transform('img_rig_piece idle', align=(0.5, 1.0), xysize=(int(SQUARESIZE*1.5), int(SQUARESIZE*1.5)),)
         else:
             extension = '.webp'

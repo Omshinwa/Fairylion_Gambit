@@ -401,3 +401,25 @@ label l_map_0_3_Win:
     abel "Phew, can't believe we won this."
     jagen "Hoho, you can rejoice when we're out of this castle."
     return
+
+label l_map_0_3_Lost:
+    show jagen at left
+    jagen "Prince, I know you can do it."
+    jagen "Let's analyze the starting position."
+    play audio 'sound/misc/whoosh1.wav'
+    while (chess.undo_item()):
+        pass
+    with dissolve
+    python:
+        for piece in chess.get_pieces(0):
+            if piece.fen == 'p':
+                chess.ui['arrows'].add((piece.pos, piece.pos))
+    jagen "You have to exploit your extra PAWNs."
+    $ chess.ui['arrows'].add((34, 94)) # d2 -> d8
+    jagen "They have a special ability when they reach the top of the board."
+    move chess['d2'] 6 up
+    pause 0.5
+    $ chess['d8'].fen = 'r'
+    jagen "They can transform into any of our starting pieces, like the ROOK."
+    jagen "So trade your pieces when you can, and slowly advance your PAWNs."
+    $ game.is_over = 'loss'

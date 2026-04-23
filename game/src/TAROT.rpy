@@ -51,8 +51,6 @@ label l_use_item(item, freeItem=False):
                 $ chess.undo_item()
                 with dissolve
             $ g.state = {'battle'}
-            jump l_gameLoop.gameLoop
-            # in case we lost, we dont want to just return
         elif rogue: # return to prep screen
             menu:
                 "Return to Deployment Phase?"

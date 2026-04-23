@@ -319,7 +319,8 @@ init -1 python:
             # return get_pieces() sorted by IDs
             # issue was, when you select an infantry that has Enter_empty moves, the make_move and undo would change
             # the order of get_pieces(), which would make the dragging pieces change
-            return sorted(self.get_pieces(), key=lambda piece: piece.pid)
+            return sorted(self.get_pieces(), key=lambda piece: -piece.y)
+            # return sorted(self.get_pieces(), key=lambda piece: piece.pid)
 
         # used in l_move_piece when calling an impossible move during cutscene
         # allow for fantasy moves in cutscenes, only for l_move_piece(A8H8) format
@@ -357,7 +358,8 @@ init -1 python:
             renpy.transition(dissolve, 'master')
             f_create_animation_move(piece, fr, chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT()), 0.2)
         
-        def remove_with(self, piece, direction=None):
+        def remove_with(self, piece, direction=None, time=0.2):
+            piece = get(piece)
             to = self.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT())
             if direction == 'left' or piece.x == 0:
                 to = (to[0]-SQUARESIZE * c.COLOR_TO_SIGN[self.player], to[1])
@@ -367,6 +369,6 @@ init -1 python:
                 to = (to[0], to[1]+SQUARESIZE * c.COLOR_TO_SIGN[self.player])
             elif direction == 'down' or piece.y == self.size[1] - 1:
                 to = (to[0], to[1]-SQUARESIZE * c.COLOR_TO_SIGN[self.player])
-            f_create_animation_move(piece, chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT()), to, 0.2)
+            f_create_animation_move(piece, chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT()), to, time)
             self.remove_piece(piece)
             renpy.transition(dissolve, 'master')

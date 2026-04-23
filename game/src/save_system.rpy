@@ -57,10 +57,6 @@ init python:
         else:
             print(f"Failed to load the checkpoint related to {filename}")
         renpy.load(filename)
-        # try:
-        # except Exception as e:
-        #     print(f"Failed to load {filename}: {e}, falling back to checkpoint")
-        #     renpy.load(LOCAL_CHECKPOINT_SLOT)
 
     def delete_slot_with_checkpoint(filename:str):
         print(f"deleting {filename}")

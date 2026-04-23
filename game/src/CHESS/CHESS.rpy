@@ -176,11 +176,11 @@ init python:
                     if pilot.health == 0:
                         TEAM.append(pilot)
                     pilot.health += 1
+                    if pilot in DEAD_OR_DESERT:
+                        DEAD_OR_DESERT.remove(pilot)
             super().undo()
             if self.use_engine:
                 engine.copy(self)
-            self.wait_for_enemy = False
-            game.is_over = False
 
         # handling special cases like 'promote_q' or no promotion at all:
 

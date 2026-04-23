@@ -1,5 +1,15 @@
 # credits: Jse
 
+# we have game.is_over that states if the game is over or not
+# game.isWin() and game.isLost() returns a bool whetever the game is won or lost
+# they evaluate game.win_con and game.lose_con, which contain a string that states the
+# win and loss conditions
+
+# l_gameLoop_everyInteraction is called on any interaction
+# they call game.lost_label and game.win_label
+# the default labels are l_after_successful_mission and l_after_failed_mission
+# which will call label_Win and label_Lost
+
 label l_null:
     return
 
@@ -42,12 +52,12 @@ label l_gameLoop_everyInteraction():
     if game.isWin():
         $ game.is_over = 'win'
         pause 0.2
-        if game.needOnlyOneWin:
-            $ done_flag["oncePerFight"] = Set()
-            $ g.state = {'cutscene'}
-            call l_animation_win
-            $ renpy.jump(game.win_label)
+        $ done_flag["oncePerFight"] = Set()
+        $ g.state = {'cutscene'}
+        call l_animation_win
+        $ renpy.jump(game.win_label)
     elif game.isLost():
+        label .give_up:
         $ game.is_over = 'loss'
         pause 0.5
         $ g.state = {'cutscene'}

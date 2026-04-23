@@ -559,9 +559,9 @@ label l_tutorial_piece(piece):
             renpy.pause(1, modal=False)
             moves = [move for move in newboard.gen_moves(0) if move.fr == 31]
             while len(moves) > 0:
-                newboard.make_move(moves.pop(0))
+                newboard.make_move(moves.pop(0), False)
                 renpy.pause(1, modal=False)
-                newboard.make_move([move for move in newboard.gen_moves(0) if move.to == 31][0])
+                newboard.make_move([move for move in newboard.gen_moves(0) if move.to == 31][0], False)
                 newboard.clean_moves()
                 squares = piece.get_range()
                 for sq in squares:

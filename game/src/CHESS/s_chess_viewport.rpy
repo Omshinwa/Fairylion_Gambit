@@ -214,13 +214,16 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
 
                     fixed: # SPRITE
 
-                        if chess.bg_board is None:
-                            add GradientMap(img_piece(piece), [color_black, color_white])
-                        else:
-                            add img_piece(piece)
-                        # add img_piece(piece):
-                        #     if chess.bg_board is None:
-                        #         matrixcolor ColorizeMatrix(color_black, color_white)
+                        # if chess.bg_board is None:
+                        #     add img_piece(piece)
+                        #     # add GradientMap(img_piece(piece), [color_black, color_white])
+                        # else:
+
+                        # add GradientMap(img_piece(piece), [color_white, color_black]):
+                        add img_piece(piece):
+                            matrixcolor ColorizeMatrix(color_black, color_white) * ContrastMatrix(1.2)
+                            
+                            # if chess.bg_board is None:
                             # is it also in danger of dying?
                             if piece.pilots and any(pilot.health == 1 for pilot in piece.pilots):
                                 at t_low_health

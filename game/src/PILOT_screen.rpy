@@ -242,7 +242,7 @@ init -1 python in character:
             if key == "":  # Skip empty lines
                 continue
 
-            globals()[key] = renpy.store.Character(value['name'], image=key, show_pilot=key, condition=f'{key} not in DEAD_OR_DESERT')
+            globals()[key] = renpy.store.Character(value['name'], image=key, show_pilot=key, condition=f'{key}.isHere()')
             # show_pilot??? i think show_ variables are passed to say() screen
             globals()[key].id = key
 

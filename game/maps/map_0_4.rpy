@@ -105,6 +105,16 @@ label l_map_0_4:
     # gotta set it up before the _start so jagen doesnt die
     $ get(jagen).pilot.skills['setup'] = []
 
+    if g.difficulty == 'easy':
+        jagen "[abel()], I need you to sneak out of here."
+        abel "?"
+        abel "What about the prince?"
+        jagen "Don't worry, I have a plan."
+        abel "Alright, you don't have to tell me twice."
+        $ chess.remove_with(abel, 'right', 0.4)
+        pause 0.3
+        jagen "Alright, now..."
+
     $ game.custom_objective = _("Draw against the enemy.")
     jump l_start_battle
     
@@ -119,6 +129,8 @@ label l_map_0_4_Win:
     return
 
 label l_map_0_4_Lost:
+    if jagen in DEAD_OR_DESERT:
+        $ DEAD_OR_DESERT.remove(jagen)
     jagen "No, this is not it..."
     jagen "Prince, do you remember what a stalemate is?"
     young_suzaku "When we can't move but our King isn't directly under attack?"
@@ -130,7 +142,7 @@ label l_map_0_4_Lost:
     jagen "It is merely trapped, though if we gave one move to the enemy, they will checkmate us next turn."
     jagen "So our goal is to have the enemy take our other pieces, then it will be stalemate!"
     abel "But will they do it?"
-    jagen "We will force them."
+    jagen "We will force them!"
     $ game.is_over = 'loss'
 
     return
