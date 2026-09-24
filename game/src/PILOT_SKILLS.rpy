@@ -295,7 +295,7 @@ define -1 SKILLLIST = {
 
 label l_try_to_learn(pilot, skill):
     if pilot.xp < SKILLLIST[skill].cost:
-        "Not enough EXP. [pilot.name] has [pilot.xp] EXP, the skill [SKILLLIST[skill].name.upper()] requires [SKILLLIST[skill].cost] EXP."
+        "Not enough EXP. [pilot()] has [pilot.xp] EXP, the skill [SKILLLIST[skill].name.upper()] requires [SKILLLIST[skill].cost] EXP."
         return
     
     menu:
@@ -332,12 +332,12 @@ screen s_all_pilots():
             button at t_interactive:
                 xysize 200,200
                 action Call('l_character_info', pilot)
-                add pilot.img_side() xysize 200,200:
-                    if not pilot.xp_all and not show_debug_menu:
-                        at transform:
-                            on insensitive:
-                                matrixcolor ColorizeMatrix("#eee", "#fff")
-                sensitive pilot.xp_all or show_debug_menu
+                add pilot.img_side() xysize 200,200
+                    # if not pilot.xp_all and not show_debug_menu:
+                    #     at transform:
+                    #         on insensitive:
+                    #             matrixcolor ColorizeMatrix("#eee", "#fff")
+                # sensitive pilot.xp_all or show_debug_menu
 
     button at t_interactive:
         align (0.0, 1.0)

@@ -1,4 +1,5 @@
 label l_map_1_0:
+    stop music
     call l_black_scene_change
     
     jagen "Test, im dead so this shouldnt display."
@@ -108,7 +109,7 @@ init python:
         kallen_x = self.get(0).x
         if kallen_x == 0:
             return c.MAX_SCORE
-        kallen_position_bonus = (6 - kallen_x) * 100
+        kallen_position_bonus = (6 - kallen_x) * 10
         return self.eval_default() + kallen_position_bonus
 
 label l_map_1_0_start:
@@ -126,14 +127,15 @@ label l_map_1_0_Lost:
 
 label l_map_1_0_endTurn:
     $ sq = get(kallen).pos_a8
-    if len(chess.history) > 8 and not_done('1', 'onceEveryFight'):
+    if len(chess.history) > 9 and not_done('1', 'onceEveryFight'):
         kallen "I can't make any progress..."
         if chess.is_sq_atk(chess.A8_TO_POS('a5')):
             $ chess.drop_with('K', 'a2')
         else:
             $ chess.drop_with('K', 'a5')
         $ get('K').pilot = lelouch
-        $ chess.CRITICAL[0].append(get('K'))
+        if g.difficulty == 'normal':
+            $ chess.CRITICAL[0].append(get('K'))
         kallen "?!"
         kallen "A Chessman KING?"
         lelouch "Let's get her out of here."
@@ -147,7 +149,14 @@ label l_map_1_0_Win:
         $ chess.remove_with(get('n'), direction='right')
     pause .5
 
-    move kallen 1 toward lelouch
+    if get(lelouch) is None:
+        $ chess.drop('K', 'b6')
+        $ get('K').pilot = lelouch
+        with dissolve
+    
+    # kallen has to be at least 2 space away from lelouch
+    if abs(get(lelouch).x - get(kallen).x) + abs(get(lelouch).y - get(kallen).y) > 2:
+        move kallen 1 toward lelouch
 
     # show black with dissolve
     # $ chess.set_fen("7/7/7/7/7/7")
@@ -175,9 +184,9 @@ label l_map_1_0_Win:
     show lelouch at left
     pause 1
     kallen "No... Who are you?"
-    lelouch "Don't you hate feeling powerless?"
+    lelouch "Do you want to know where the prince is?"
     kallen "?!"
-    lelouch "Don't you want to defeat [name('the Holy Empire')]?"
+    lelouch "Do you want to defeat [name('the Holy Empire')]?"
     kallen "What are you talking about?! Who are you!"
     lelouch "Follow me."
     hide lelouch
@@ -200,7 +209,7 @@ label l_map_1_0_bis:
 
     kallen "This... how did you get it?"
     show lelouch at left
-    lelouch "Can you pilot the ROOK?"
+    lelouch "Can you pilot a ROOK?"
     kallen "What do you want from me?"
     lelouch "Pilot it. You'll need it to defeat [name('the Holy Empire')]."
     kallen "Defeat... [name('the Holy Empire')]..."
@@ -225,3 +234,38 @@ label l_map_1_0_bis_endTurn:
 
 label l_map_1_0_bis_Win:
     lelouch "Let's go, Lion of the Battlefield. We have a long road ahead."
+
+    scene
+    with dissolve
+
+    show bg desert:
+        xysize (1.0, 1.0)
+    with dissolve
+    pause .1
+    show oghi at right
+    pause .05
+    show soldier_kingdom at left
+    oghi "What do you mean you lost them?"
+    oghi "Go after them! Take more Chessmen if you have to!"
+    $ g.progress = 101
+    return
+    
+label l_story_to_roguelike:
+    "This is the end of the story demo. Thank you for playing."
+    "Switching to endless roguelite mode."
+
+    scene onlayer screens
+    scene
+    if not_done('tuto_basic'):
+        call l_tutorial('basic', False)
+    $ g.money = 10
+    $ rogue = Roguelike()
+    $ g.items['undo'] = 3
+
+    if g.difficulty == 'easy':
+        $ g.items['undo'] = 999
+    $ chess = Chess_control((6,5))
+    $ TEAM = [lelouch, kallen, GenericPilot(), GenericPilot()]
+    $ ROBOTS = [Robot_Piece('r',color=0), Robot_Piece('n',color=0), Robot_Piece('b',color=0), Robot_Piece('q',color=0)]
+    show screen s_roguelike
+    jump l_rogue_next_map

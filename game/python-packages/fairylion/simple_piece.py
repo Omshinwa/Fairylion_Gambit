@@ -145,6 +145,15 @@ class Simple_Piece():
 
         return squares
 
+    def attacks_sq(self, engine, target_sq):
+        """Fast early-exit: True iff this piece attacks target_sq. No set built."""
+        board = engine.board
+        for instruction, offset in self.range.items():
+            fn = ATTACKS_SQ_FUNCTION.get(instruction)
+            if fn is not None and fn(target_sq, offset, self.pos, board):
+                return True
+        return False
+
     def add_pilot(self, *pilot_list):
         for pilot in pilot_list:
             if pilot is not None:

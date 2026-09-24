@@ -79,6 +79,7 @@ label l_after_successful_mission:
     if renpy.has_label (game.level + "_Win"):
         call expression game.level + "_Win"
     show black onlayer screens with transition_bars
+    $ renpy.set_return_stack([])
     jump l_map_select
 
 label l_after_failed_mission:

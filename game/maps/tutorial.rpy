@@ -7,9 +7,9 @@ label l_tutorial(which, unskippable=True):
     pause
     hide screen s_tutorialPause
     if renpy.can_show(f"tutorial {which}2"):
-        call l_tutorial(which+'2', unskippable) from _call_l_tutorial_1
+        call l_tutorial(which+'2', unskippable)
     if renpy.can_show(f"tutorial {which}3"):
-        call l_tutorial(which+'3', unskippable) from _call_l_tutorial_2
+        call l_tutorial(which+'3', unskippable)
     return
 
 screen s_tutorialPause(which, unskippable=True):

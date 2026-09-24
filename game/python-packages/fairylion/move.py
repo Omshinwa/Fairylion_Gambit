@@ -204,7 +204,7 @@ def atk_jump(squares, offset, pos, board):
     for x in offset:
         if not board[pos+x] is c.OFFBOARD:
             squares.add(pos+x)
-    
+
 def atk_line(squares, offset, pos, board):
     for direction in offset:
         sq = pos + direction
@@ -232,6 +232,48 @@ def atk_line_jump(squares, offset, pos, board):
                 squares.add(sq)
                 break
 
+# ---------------------------------------------------------------------------
+# Targeted-attack variants used by is_sq_atk early-exit.
+# Return True iff `target_sq` is attacked. No set is built.
+# ---------------------------------------------------------------------------
+def attacks_jump(target_sq, offset, pos, board):
+    for x in offset:
+        sq = pos + x
+        if sq == target_sq and not board[sq] is c.OFFBOARD:
+            return True
+    return False
+
+def attacks_line(target_sq, offset, pos, board):
+    for direction in offset:
+        sq = pos + direction
+        while board[sq] is c.EMPTY:
+            if sq == target_sq:
+                return True
+            sq += direction
+        if board[sq] and sq == target_sq:
+            return True
+    return False
+
+def attacks_line_jump(target_sq, offset, pos, board):
+    for direction in offset:
+        between = False
+        i = 0
+        while i<99:
+            i+=1
+            sq = pos + direction*i
+            target = board[sq]
+            if target is c.OFFBOARD:
+                break
+            elif target == c.EMPTY:
+                continue
+            elif between == False:
+                between = True
+            else:
+                if sq == target_sq:
+                    return True
+                break
+    return False
+
 MOVE_TO_FUNCTION = {
     'JUMP' : move_jump,
     'LINE' : move_line,
@@ -251,6 +293,13 @@ ATK_TO_FUNCTION = {
     'JUMP_cap_only' : atk_jump,
     'LINE' : atk_line,
     'LINE_jump' : atk_line_jump,
+}
+
+ATTACKS_SQ_FUNCTION = {
+    'JUMP' : attacks_jump,
+    'JUMP_cap_only' : attacks_jump,
+    'LINE' : attacks_line,
+    'LINE_jump' : attacks_line_jump,
 }
 
 class Move():

@@ -211,6 +211,8 @@ init python:
             colors = ["#110116", "#4b0e2b", "#79536d", "#b2719b","#ed91cc", "#f6c9e7", "#fbedc5"]
         elif colors == 'noir':
             colors = ["#000102", "#201524", "#953d39", "#d54f48"]
+        elif colors == 'collant':
+            colors = ["#000", "#242625", "#37322f", "#594f4c", "#6f635f", "#908379", "#be9673", "#ecece4"]
 
 
         n = min(max(2, len(colors)), 8)

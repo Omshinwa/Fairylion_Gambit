@@ -27,8 +27,8 @@ screen s_battlefield(*args, **kwargs):
     if renpy.get_mode() == 'pause' or renpy.get_mode() == 'say' or game.is_over:
         button: # DISMISS
             xysize 1.0,1.0
-            if config.developer:
-                text "RETURN" color "#0f0"
+            # if config.developer:
+            #     text "RETURN" color "#0f0"
             action Return()
 
 #              ███ ███████████    █████████ 
@@ -63,8 +63,8 @@ screen s_chess_dismiss():
     button: # DISMISS
         xysize (1.0, 1.0)
         if 'cutscene' in g.state or chess.ui["selected"] or chess.ui["arrows"] or chess.ui['animation_move']: # avoid doing returns for nothing
-            if config.developer:
-                text "F_DISMISS" color "#0f0" ypos 50
+            # if config.developer:
+            #     text "F_DISMISS" color "#0f0" ypos 50
             action Function(f_dismiss), Return()
         else:
             action NullAction()

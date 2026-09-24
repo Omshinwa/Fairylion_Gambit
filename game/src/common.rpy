@@ -21,7 +21,7 @@ label l_close_pop_up:
     # used to close pop up windows (like pilot info window)
     $ Move.engine = chess
     $ remove_blur_master()
-    call screen s_pauseScreen(hard_stop=True) # so it doesnt move ahead during exp screens
+    # call screen s_pauseScreen(hard_stop=True) # so it doesnt move ahead during exp screens
     return
 
 screen s_popup_blurry_screen():

@@ -319,7 +319,7 @@ init -1 python:
             # return get_pieces() sorted by IDs
             # issue was, when you select an infantry that has Enter_empty moves, the make_move and undo would change
             # the order of get_pieces(), which would make the dragging pieces change
-            return sorted(self.get_pieces(), key=lambda piece: -piece.y)
+            return sorted(self.get_pieces(), key=lambda piece: (-piece.y, piece.x))
             # return sorted(self.get_pieces(), key=lambda piece: piece.pid)
 
         # used in l_move_piece when calling an impossible move during cutscene
@@ -345,7 +345,7 @@ init -1 python:
             Similar to drop, except it also plays an anim if it's from the edge of the board.
             """
             piece = self.drop(piece, pos, color)
-            fr = self.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT())
+            fr = self.POS_TO_SXY(piece.pos, piece.alignement())
             # we move it one square from the edge
             if direction == 'right' or piece.x == 0:
                 fr = (fr[0]-SQUARESIZE * c.COLOR_TO_SIGN[self.player], fr[1])
@@ -356,11 +356,12 @@ init -1 python:
             elif direction == 'up' or piece.y == self.size[1] - 1:
                 fr = (fr[0], fr[1]-SQUARESIZE * c.COLOR_TO_SIGN[self.player])
             renpy.transition(dissolve, 'master')
-            f_create_animation_move(piece, fr, chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT()), 0.2)
+            f_create_animation_move(piece, fr, chess.POS_TO_SXY(piece.pos, piece.alignement()), 0.2)
         
         def remove_with(self, piece, direction=None, time=0.2):
-            piece = get(piece)
-            to = self.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT())
+            if not isinstance(piece, Robot_Piece):
+                piece = get(piece)
+            to = self.POS_TO_SXY(piece.pos, piece.alignement())
             if direction == 'left' or piece.x == 0:
                 to = (to[0]-SQUARESIZE * c.COLOR_TO_SIGN[self.player], to[1])
             elif direction == 'right' or piece.x == self.size[0] - 1:
@@ -369,6 +370,6 @@ init -1 python:
                 to = (to[0], to[1]+SQUARESIZE * c.COLOR_TO_SIGN[self.player])
             elif direction == 'down' or piece.y == self.size[1] - 1:
                 to = (to[0], to[1]-SQUARESIZE * c.COLOR_TO_SIGN[self.player])
-            f_create_animation_move(piece, chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT()), to, time)
+            f_create_animation_move(piece, chess.POS_TO_SXY(piece.pos, piece.alignement()), to, time)
             self.remove_piece(piece)
             renpy.transition(dissolve, 'master')

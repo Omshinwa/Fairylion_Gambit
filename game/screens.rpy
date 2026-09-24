@@ -146,6 +146,13 @@ screen say(who, what, pilot=None):
                 else:
                     add pilot.id crop(0, 0, 730, pilot.img_side_xy[1]+600) xzoom -0.6 yzoom 0.6 xalign 0.0 yalign 1.0 at t_dissolve
 
+        if not renpy.is_skipping():
+            button at t_interactive:
+                align (1.0, 1.0)
+                style_prefix 'sty_btn'
+                text "SKIP?"
+                action Skip()
+
 transform t_hologram:
     orientation (0,-20,0)
     zpos 250
@@ -342,14 +349,14 @@ screen quick_menu():
     ## Ensure this appears on top of other screens.
     zorder 100
 
-    if quick_menu and config.developer:
+    if quick_menu:
 
         hbox:
             style_prefix "quick"
 
             xalign 0.5
             yalign 1.0
-            if config.developer or not 'battle' in g.state:
+            if show_debug_menu or not 'battle' in g.state:
                 textbutton _("Back") action Rollback()
             textbutton _("History") action ShowMenu('history')
             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
@@ -1331,16 +1338,27 @@ screen skip_indicator():
     zorder 100
     style_prefix "skip"
 
-    frame:
+    # frame:
 
+    #     hbox:
+    #         spacing 9
+
+    #         text _("Skipping")
+
+    #         text "▸" at delayed_blink(0.0, 1.0) style "skip_triangle"
+    #         text "▸" at delayed_blink(0.2, 1.0) style "skip_triangle"
+    #         text "▸" at delayed_blink(0.4, 1.0) style "skip_triangle"
+    button at t_interactive:
+        style_prefix 'sty_btn'
+        action Skip()
         hbox:
             spacing 9
 
             text _("Skipping")
 
-            text "▸" at delayed_blink(0.0, 1.0) style "skip_triangle"
-            text "▸" at delayed_blink(0.2, 1.0) style "skip_triangle"
-            text "▸" at delayed_blink(0.4, 1.0) style "skip_triangle"
+            text "▸" at delayed_blink(0.0, 1.0) style "skip_triangle" size 50
+            text "▸" at delayed_blink(0.2, 1.0) style "skip_triangle" size 50
+            text "▸" at delayed_blink(0.4, 1.0) style "skip_triangle" size 50
 
 
 ## This transform is used to blink the arrows one after another.
@@ -1645,7 +1663,7 @@ screen quick_menu():
             xalign 0.5
             yalign 1.0
 
-            if config.developer or not 'battle' in g.state:
+            if show_debug_menu or not 'battle' in g.state:
                 textbutton _("Back") action Rollback()
             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
             textbutton _("Auto") action Preference("auto-forward", "toggle")

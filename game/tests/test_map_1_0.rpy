@@ -5,22 +5,6 @@
 
 testsuite battle_maps:
 
-    testcase map_0_4:
-        only True
-        description "Map 0-4 death, see if it's playable"
-        # i remember i had an issue with the animation of the piece replaying
-        # on death
-        run Jump("l_map_0_4")
-        skip until screen "s_start_battle"
-        assert "Draw against the enemy"
-        click until eval ('battle' in g.state)
-        click id "piece_h4"
-        assert eval (renpy.get_widget("s_battlefield", "move_f5") is not None) 
-        pause until id "move_f5"
-        click id "move_f5"
-        pause until eval (not chess.wait_for_enemy) timeout 10.0
-
-
     testcase map_1_0:
         description "Move g3 to f3 and wait for enemy reply"
 

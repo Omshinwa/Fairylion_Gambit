@@ -221,47 +221,6 @@ screen s_rename():
                                 
                                 text " · rename?" color "#bbb" xalign 1.0
 
-                
-                # if rename_mode: old stuff where you would click on each field
-                    #     frame:
-                    #         background '#ff06'
-                    #         has vbox
-                    #         hbox:
-                    #             xfill True
-                    #             button at t_interactive:
-                    #                 action Function(renpy.set_return_stack,[]), Call('l_rename', field1, 'article', '', default=prefs.names[field1]['article'])
-                    #                 frame:
-                    #                     vbox:
-                    #                         text "{color=#666}(optional){/color}\nARTICLE" size 40 style 'default' font "fonts/DRAMEDYXY.ttf" xalign 0.5
-                    #                         text prefs.names[field1]['article']
-                    #             button at t_interactive:
-                    #                 action Function(renpy.set_return_stack,[]), Call('l_rename', field1, 'adjective', '', default=prefs.names[field1]['adjective'])
-                    #                 frame:
-                    #                     vbox:
-                    #                         text "{color=#666}(optional){/color}\nADJECTIVE" size 40 style 'default' font "fonts/DRAMEDYXY.ttf" xalign 0.5
-                    #                         text prefs.names[field1]['adjective']
-                    #             button at t_interactive:
-                    #                 action Function(renpy.set_return_stack,[]), Call('l_rename', field1, 'name', '', default=prefs.names[field1]['name'])
-                    #                 frame:
-                    #                     vbox:
-                    #                         text "{color=#c55}(mandatory){/color}\nNAME" size 40 style 'default' font "fonts/DRAMEDYXY.ttf"
-                    #                         text prefs.names[field1]['name']
-                    #         hbox:
-                    #             xalign 0.5
-                    #             xfill True
-                    #             button at t_interactive:
-                    #                 action Function(renpy.set_return_stack,[]), Call('l_rename', field1, 'inhabitant', '', default=prefs.names[field1]['inhabitant'])
-                    #                 frame:
-                    #                     vbox:
-                    #                         text "{color=#c55}(mandatory)\n{/color}INHABITANT" size 40 style 'default' font "fonts/DRAMEDYXY.ttf" xalign 0.5
-                    #                         text prefs.names[field1]['inhabitant']
-                    #             button at t_interactive:
-                    #                 action Function(renpy.set_return_stack,[]), Call('l_rename', field1, 'plural', '', default=prefs.names[field1]['plural'])
-                    #                 frame:
-                    #                     vbox:
-                    #                         text "{color=#666}(optional){/color}\nPLURAL FORM" size 40 style 'default' font "fonts/DRAMEDYXY.ttf" xalign 0.5
-                    #                         text prefs.names[field1]['plural']
-                
                 if country_mode == field1:
                     frame:
                         background '#000a'
@@ -270,15 +229,12 @@ screen s_rename():
                         text "{i}[prefs.names[country_mode]['desc']!i]" color '#fff' size 40 font 'fonts/Venus+Plomb.otf' line_spacing 10
 
 
-        
     button at t_interactive:
         align 1.0, 1.0
         text "RESET" style 'style_3d_big_txt'
-        
         action Confirm('Reset all names?', Function(reset_names), Hide('confirm'))
 
     button at t_interactive:
         align 0, 1.0
         text "BACK" style 'style_3d_big_txt'
-        
         action Hide(None, dissolve_fast)

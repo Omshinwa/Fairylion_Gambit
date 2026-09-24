@@ -97,16 +97,16 @@ class Engine_eval():
 
     def eval_king_default(self, king):
         piece_value = 0
+        if king not in self.CRITICAL[king.color]:
+            return c.COLOR_TO_SIGN[king.color] * 300
+
         if any(element.value >= 800 for element in self.PIECELIST[1-king.color]['M']): # middle game, calculate king safety
             piece_value = self.eval_king_safety(king)
         else: #else, calculate activity?
-            if self.goal is None:
-                if not self.PIECELIST[1-king.color]['K']: # if theres no opposing king
-                    return c.COLOR_TO_SIGN[king.color] * 300
-                # if king.color == 0: # count only once for both kings, we give a bonus if we trapped the opposing king
-                piece_value = self.corner_king_bonus(king) - self.distance_between_kings()
-            else:
+            if not self.PIECELIST[1-king.color]['K']: # if theres no opposing king
                 return c.COLOR_TO_SIGN[king.color] * 300
+            # if king.color == 0: # count only once for both kings, we give a bonus if we trapped the opposing king
+            piece_value = self.corner_king_bonus(king) - self.distance_between_kings()
         return piece_value
         
     def eval_king_safety(self, king):

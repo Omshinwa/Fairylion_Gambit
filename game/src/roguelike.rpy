@@ -199,7 +199,7 @@ label l_map_rogue:
     scene
 
     if not_done('tuto_basic'):
-        call l_tutorial('basic', False) from _call_l_tutorial
+        call l_tutorial('basic', False)
 
     # init stuff
     $ g.money = 10

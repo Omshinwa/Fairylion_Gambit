@@ -7,7 +7,7 @@ COLOR_TO_SIGN = {0:1, 1:-1, 2:0}
 SIGN_TO_COLOR = {1:0, -1:1}
 COLOR_TO_STR = {0:'white', 1:'black', 2:'grey'}
 
-FEN_TO_VALUE = {'p':100, 'n':300, 'b':300, 'r':500, 'q':900, 'k':9900, 'g':300, 'c':300, 'i':20}
+FEN_TO_VALUE = {'p':100, 'n':300, 'b':300, 'r':500, 'q':900, 'k':300, 'g':300, 'c':300, 'i':50}
 PIECE_TO_FEN = { 'pawn':'p', 'knight':'n', 'bishop':'b',
 'rook':'r', 'queen':'q', 'king':'k', 'infantry':'i', 'ghost':'g', 'cannon':'c', 'mann':'m', 'fairylion':'f', 'jester':'j', 'dragon':'d', 'sentinel':'s'}
 FEN_TO_PIECE = { value:key for key, value in PIECE_TO_FEN.items() }

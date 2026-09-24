@@ -159,6 +159,11 @@ init -1 python:
                     squares[move.to] = [move]
 
             return squares
+
+        def alignement(self):
+            if prefs.style.pieces == 'robot' and self.fen != 'i':
+                return (0.5, 1.0)
+            return (0.5, 0.5)
             
         def get_range_set(self): # returns a set {move, move}
             squares = set()

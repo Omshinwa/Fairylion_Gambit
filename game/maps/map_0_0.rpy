@@ -207,7 +207,6 @@ label l_map_0_2_Win:
     return
 
 
-
 # ::::    ::::      :::     :::::::::  
 # +:+:+: :+:+:+   :+: :+:   :+:    :+: 
 # +:+ +:+:+ +:+  +:+   +:+  +:+    +:+ 
@@ -407,8 +406,8 @@ label l_map_0_3_Lost:
     jagen "Prince, I know you can do it."
     jagen "Let's analyze the starting position."
     play audio 'sound/misc/whoosh1.wav'
-    while (chess.undo_item()):
-        pass
+    while (chess.history):
+        $ chess.undo_item()
     with dissolve
     python:
         for piece in chess.get_pieces(0):

@@ -161,14 +161,12 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
             return False
         if target == c.EMPTY: # EMPTY
             return 'm'
-        
-        if isinstance(target, Simple_Piece): # we eating a piece?
-            if piece.color != target.color:
-                if target.killable:
-                    return 'c'
-            elif target.fen == 'i' and None in piece._pilot:
-                return 'r' # rescue
-        return False
+
+        if piece.color != target.color:
+            if target.killable:
+                return 'c'
+        elif target.fen == 'i' and None in piece._pilot:
+            return 'r' # rescue
     
     #
     #       INFANTERY STUFF
@@ -184,7 +182,7 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
         if target == c.EMPTY: # EMPTY
             return 'm'
         
-        if isinstance(target, Simple_Piece) and None in target._pilot: # moving to a piece
+        if None in target._pilot: # moving to a piece
             if target.color == piece.color:
                 return 'enter_ally'
             elif target.color == 2:
@@ -445,22 +443,20 @@ class Engine(Engine_eval, MonteCarloSearchMixin, EngineUtils, MinimaxSearchMixin
     def is_sq_atk(self, sq: int, side: int = None) -> bool:
         """
         Returns True if the square is attacked by the given side.
+        Early-exits at the ray/jump level (no attack set is built).
         """
         if side is None:
             side = self.side
-        attacked_squares = set()
-        
+        direction = self.down if side else self.up
+
         for piece in self.get_pieces(side):
             if piece.movement == 'p':
-                direction = self.down if side else self.up
                 pos = piece.pos
                 if sq == pos+1+direction or sq == pos-1+direction:
                     return True
-            else:
-                piece.atk_sq(self, attacked_squares)
-
-        # print(f"attacked_squares : {attacked_squares}")
-        return sq in attacked_squares
+            elif piece.attacks_sq(self, sq):
+                return True
+        return False
 
     def print_atk(self,side=None):
         if side is None:

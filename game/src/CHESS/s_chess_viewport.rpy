@@ -225,7 +225,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             
                             # if chess.bg_board is None:
                             # is it also in danger of dying?
-                            if piece.pilots and any(pilot.health == 1 for pilot in piece.pilots):
+                            if piece.pilots and any(pilot.health == 1 for pilot in piece.pilots) and 'battle' in g.state:
                                 at t_low_health
                             if len(chess.history) == 0 and chess.move_first and piece.pilot and any('initiative' in pilot.skills['setup'] for pilot in piece.pilots):
                                 at t_highlight
@@ -310,7 +310,7 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
             if chess.ui['animation_move'].capture:
                 $ piece = chess.ui['animation_move'].capture
                 add img_piece(piece):
-                    pos chess.POS_TO_SXY(piece.pos, PIECE_ALIGNMENT())
+                    pos chess.POS_TO_SXY(piece.pos, piece.alignement())
 
             add img_piece(chess.ui['animation_move'].piece):
                 at transform:

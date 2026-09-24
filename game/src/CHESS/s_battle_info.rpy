@@ -219,7 +219,8 @@ screen s_battlefield_robot(piece, scale=1):
                         text _("class") style "style_info_field"
                         add f"battle_ui/icon type {piece.type} outline.webp".replace("*", "star").replace("#", "hash") xysize(60,60)
                         text _("value") style "style_info_field"
-                        if piece.value > 10000:
+
+                        if piece in chess.CRITICAL[0] or piece in chess.CRITICAL[1]:
                             $ text_value = 99
                         else:
                             $ text_value = f" {int(piece.value/100)}"

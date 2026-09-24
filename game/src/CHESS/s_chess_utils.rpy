@@ -323,47 +323,51 @@ init python:
             color =  Color(persistent.style_colors[index])
         return color.rotate_hue(0.5).replace_hls_saturation(1.0)
 
-    # apply a transform to the image given as arg
-    def img_square(str, **kwargs):
-        return Transform(str, align=(0.5, 0.5), xysize=(SQUARESIZE, SQUARESIZE), **kwargs)
+    # apply diverse transform properties
+    def img_square(piece, str, **kwargs):
+        size_ratio = 1
+        xzoom = -1 if prefs.style.pieces == 'robot' and piece.fen in {'p', 'n', 'k'} and piece.color == 0 else 1
+        recolor = IdentityMatrix()
 
-    # Offset for POS_TO_SXY when placing a piece sprite, matching the anchor used in img_piece.
-    def PIECE_ALIGNMENT():
-        if prefs.style.pieces == 'robot':
-            return (0.5, 1.0)
-        return (0.5, 0.5)
+        if 'size_ratio' in kwargs:
+            size_ratio = kwargs['size_ratio']
+            del kwargs['size_ratio']
 
+        if piece.color == 2:
+            recolor = ColorizeMatrix("#555", "#aaa")
+        elif piece.movement == None and piece.fen != 'k':
+            if piece.color:
+                recolor = ColorizeMatrix("#0c157a", "#dcfffe")
+            else:
+                recolor = ColorizeMatrix("#01d", "#dcfffe")
+
+        return Transform(str, align=piece.alignement(), xzoom=xzoom, xysize=(int(SQUARESIZE*size_ratio), int(SQUARESIZE*size_ratio)), matrixcolor=recolor, **kwargs)
+
+    # find which displayable to use
     def img_piece(piece):
         if piece.fen == "i": #inside a robot
             if piece._pilot[0] and piece._pilot[0].id in {'kallen', 'lelouch'} :
-                return img_square(Composite(
+                return img_square(piece, Composite(
                         (1.0, 1.0),
                         (25, 33), Transform(f'body {piece._pilot[0].id}', zoom=.15),
-                        (35, 12), Transform(f'head {piece._pilot[0].id}', zoom=.15)), matrixcolor=IdentityMatrix())
-            return img_square(Composite(
+                        (35, 12), Transform(f'head {piece._pilot[0].id}', zoom=.15)))
+            return img_square(piece, Composite(
                     (SQUARESIZE, SQUARESIZE),
-                    (40, 40), Transform('body', zoom=2, nearest=True)), matrixcolor=IdentityMatrix())
+                    (40, 40), Transform('body', zoom=2, nearest=True)))
 
         if prefs.style.pieces in {'merida'}:
             extension = '.svg'
         elif prefs.style.pieces == 'robot':
-            if piece.fen in {'p', 'n', 'k'}:
+            if piece.fen in {'p', 'n', 'k', 'q'}:
                 if piece.color == 0:
-                    return Transform(GradientMap(f'robot {piece.fen}', 'pale god'), align=(0.5, 1.0), xzoom=1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
+                    return img_square(piece, GradientMap(f'robot {piece.fen}', 'pale god'), size_ratio=1.4)
                 else:
-                    return Transform(GradientMap(f'robot {piece.fen}', 'pale god'), align=(0.5, 1.0), xzoom=-1, xysize=(int(SQUARESIZE*1.4), int(SQUARESIZE*1.4)),)
-            return Transform('img_rig_piece idle', align=(0.5, 1.0), xysize=(int(SQUARESIZE*1.5), int(SQUARESIZE*1.5)),)
+                    return img_square(piece, GradientMap(f'robot {piece.fen}', 'collant'), size_ratio=1.4)
+            return img_square(piece, 'img_rig_piece idle', size_ratio=1.5)
         else:
             extension = '.webp'
         
-        # gotta specify xzoom=1, here because robots have -1 as zoom. 
-        if piece.color == 2:
-            return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#555", "#aaa"))
-        elif piece.movement == None and piece.fen != 'k':
-            if piece.color:
-                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/black {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#0c157a", "#dcfffe"))
-            else:
-                return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/white {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288), xzoom=1, matrixcolor=ColorizeMatrix("#01d", "#dcfffe"))
-        else:
-            return img_square(Image(f"/skin/pieces/{prefs.style.pieces}/{c.COLOR_TO_STR[piece.color]} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", xzoom=1, dpi=288), matrixcolor=SaturationMatrix(1.0)) #matrixcolor=IdentityMatrix()
+        color = 'white' if piece.color == 2 else c.COLOR_TO_STR[piece.color]
+    
+        return img_square(piece, Image(f"/skin/pieces/{prefs.style.pieces}/{color} {c.FEN_TO_PIECE[piece.fen]} {prefs.style.pieces}{extension}", dpi=288))
 

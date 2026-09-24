@@ -28,6 +28,7 @@ label l_preparation():
 
 label l_start_battle():
     $ autosave('battle')
+    $ renpy.stop_skipping()
 
     if 'preparation' in g.state: # FOR NON PREDEPLOYED
         if not chess.PIECELIST[chess.player]['K']:
@@ -201,8 +202,8 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                                     at transform:
                                         matrixcolor ColorizeMatrix("#000","#999")
 
-                        if element.id == 'kallen':
-                            add "head kallen" xysize (1.0,1.0):
+                        if element.id in {'kallen', 'lelouch'}:
+                            add f"head {element.id}" xysize (1.0,1.0) offset(-7,-7):
                                 if element.health == 1:
                                     at t_low_health
                         else:
@@ -237,7 +238,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
                                     
-                        add f"white {c.FEN_TO_PIECE[element.fen]} {prefs.style.pieces}" xysize (1.0, 1.0)
+                        add f"white {c.FEN_TO_PIECE[element.fen]} merida" xysize (1.0, 1.0)
 
                 activated f_chessboard_activated 
                 dragged f_prep_dragged

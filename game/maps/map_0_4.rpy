@@ -8,6 +8,7 @@
 # ###       ### ###     ### ###        
 
 label l_map_0_4:
+    stop music
     $ TEAM = [young_suzaku, jagen, abel]
     $ jagen.health = 1
     $ young_suzaku.health = young_suzaku.max_health
@@ -86,8 +87,9 @@ label l_map_0_4:
     $ chess.drop('r', 'c7')
     $ chess.drop('r', 'f7')
     $ chess.drop('r', 'c8')
-    $ chess.drop('r', 'd8')
-    $ chess.drop('r', 'e8')
+    if g.difficulty != 'easy':
+        $ chess.drop('r', 'd8')
+        $ chess.drop('r', 'e8')
     $ chess.drop('r', 'f8')
     with dissolve
     pause 0.3
@@ -224,9 +226,9 @@ label l_map_0_4_endTurn:
         pause 0.5
     elif exist_stalemate_capture and len(chess.history) > 10 and not_done('stalemate2', 'onceEveryFight'):
         $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = True
-        stanley "......"
+        stanley "This..."
         pause 0.5
-    elif exist_stalemate_capture and len(chess.history) > 16 and not_done('stalemate3', 'onceEveryFight'):
+    elif exist_stalemate_capture and len(chess.history) > 14 and not_done('stalemate3', 'onceEveryFight'):
         $ AUTO_CENTER_ON_SPEAK_CHAR_BATTLEFIELD = True
         stanley "........."
         jagen "What's wrong [stanley()]?"

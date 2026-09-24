@@ -8,43 +8,38 @@ screen main_menu():
     text _("{i}BEST RUN: [persistent.best_run] rounds") xalign 0.5 ypos 50 style 'style_purple_text' color COLOR_HIGHLIGHT() font 'Venus+Cormier.otf' size 100
 
     vbox:
-        align 0.5,1.0
+        align .5,.5
         hbox:
             button at t_interactive:
-                # ysize 400
+                ysize 400
                 text _("{i}STORY\nMODE") color "#10cafb" size 80
                 style_prefix 'sty_btn'
                 action With(Dissolve(.25)),Jump('l_intro')
 
-            button at t_interactive:
-                # ysize 400
-                text _("{i}ROGUE\nMODE") color "#10cafb" size 80
-                style_prefix 'sty_btn'
-                action With(Dissolve(.25)),Jump('l_map_rogue')
-                    
             vbox:
                 button at t_interactive:
+                    ysize 250
+                    text _("{i}ROGUE\nLITE") color "#10cafb" size 80
+                    style_prefix 'sty_btn'
+                    action With(Dissolve(.25)),Jump('l_map_rogue')
+                    
+                button at t_interactive:
                     # ysize 400
-                    text _("{i}SHOP") size 80
+                    text _("{i}^ SHOP") size 80
                     style_prefix 'sty_btn'
                     action With(Dissolve(.25)),Jump('l_shop_persistent')
 
-                button at t_interactive:
-                    # ysize 400
-                    text _("{i}PILOTS") size 80
-                    style_prefix 'sty_btn'
-                    action With(Dissolve(.25)),Show('s_all_pilots')
-
-            vbox:
-                button at t_interactive:
-                    text _("play normal pos") size 40
-                    style_prefix 'sty_btn'
-                    action Jump('load_standard_pos')
-
-                # button at t_interactive:
-                #     text _("check mcts tree") size 40
-                #     style_prefix 'sty_btn'
-                #     action Jump('l_mcts_visualizer') # check the other renpy project instead
+            if show_debug_menu:
+                vbox:
+                    button at t_interactive:
+                        text _("play normal pos") size 40
+                        style_prefix 'sty_btn'
+                        action Jump('load_standard_pos')
+                    button at t_interactive:
+                        # ysize 400
+                        text _("{i}PILOTS") size 80
+                        style_prefix 'sty_btn'
+                        action With(Dissolve(.25)),Show('s_all_pilots')
 
         hbox:
 
@@ -54,14 +49,15 @@ screen main_menu():
                 action With(Dissolve(.25)),Show('s_how_to_checkmate')
 
             button at t_interactive:
-                text _("Customize") size 35
+                text _("Rename countries") size 35
                 style_prefix 'sty_btn'
                 action With(Dissolve(.25)),Show('s_rename'),Return()
 
-        button at t_interactive:
-            text  _("Delete Save") size 35
-            style_prefix 'sty_btn'
-            action Confirm(prompt=_("Are you sure?"),yes=[Function(delete_save)])
+        if show_debug_menu:
+            button at t_interactive:
+                text  _("Delete Save") size 35
+                style_prefix 'sty_btn'
+                action Confirm(prompt=_("Are you sure?"),yes=[Function(delete_save)])
 
         hbox:
             button at t_interactive:
@@ -73,34 +69,35 @@ screen main_menu():
                     text _("> Difficulty: Easy")  size 35
                     action Call('l_switch_difficulty')
 
-        fixed:
-            xalign 0.8
-            xysize (900,200)
-            vbox:
-                text _("CPU thinking time: [persistent.cpu_strength]") size 45 xalign 0.5
-                hbox:
-                    bar value FieldValue(persistent, 'cpu_strength', min=100, max=8000, step=100, force_step=True) style 'bar_slider' xsize 300 yalign 0.5
-                    vbox:
-                        button at t_interactive:
-                            style_prefix 'sty_btn'
-                            text _("> AUTO") size 35
-                            action Call('l_estimate_cpu_str')
+    fixed:
+        align 0.7,1.0
+        xysize (900,200)
+        vbox:
+            text _("CPU thinking time: [persistent.cpu_strength]") size 45 xalign 0.5
+            hbox:
+                bar value FieldValue(persistent, 'cpu_strength', min=100, max=8000, step=100, force_step=True) style 'bar_slider' xsize 300 yalign 0.5
+                vbox:
+                    button at t_interactive:
+                        style_prefix 'sty_btn'
+                        text _("> AUTO") size 35
+                        action Call('l_estimate_cpu_str')
 
     vbox:
         align (1.0, 1.0)
         hbox:
+            spacing 0
             xalign 1.0
             button at t_interactive style 'sty_btn_button':
-                add "gui/main_menu/icon_itch.png" xysize(100,100)
+                add "gui/main_menu/icon_itch.png" xysize(50,50)
                 action OpenURL("https://omshinwa.itch.io/fairylion")
             button at t_interactive style 'sty_btn_button':
-                add "gui/main_menu/icon_twitter.jpg"  xysize(100,100)
+                add "gui/main_menu/icon_twitter.jpg"  xysize(50,50)
                 action OpenURL("https://x.com/Omshinwa")
             button at t_interactive style 'sty_btn_button':
-                add "gui/main_menu/icon_bluesky.svg"  xysize(100,100)
+                add "gui/main_menu/icon_bluesky.svg"  xysize(50,50)
                 action OpenURL("https://bsky.app/profile/omshinwa.itch.io")
             button at t_interactive style 'sty_btn_button':
-                add "gui/main_menu/icon_discord.jpg"  xysize(100,100)
+                add "gui/main_menu/icon_discord.jpg" xysize(50,50)
                 action OpenURL("https://discord.com/invite/gU8bxGC87Z")
         
         text 'VER. [config.version]' xalign 1.0
@@ -110,7 +107,8 @@ label l_switch_difficulty:
         $ g.difficulty = 'normal'
     else:
         $ g.difficulty = 'easy'
-        # "In Easy mode, you start with more undos, more pilots, get more money, but the game won't remember your best run."
+        "In Easy mode, the story maps are easier. You also start with more undos,"
+        "more pilots, get more money in the roguelite more but the game won't remember your best run."
     return
 
 label l_estimate_cpu_str():
