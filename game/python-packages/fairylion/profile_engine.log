@@ -1,0 +1,878 @@
+engine profile run at 2026-05-03 14:23:23
+MCTS_ITERATIONS=1500  MOVEGEN_REPS=1500  CHECK_REPS=15000
+
+
+########################################################################
+# POSITION: opening (start position)
+# FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+########################################################################
+legal moves at root: 20
+
+========================================================================
+  MCTS x1500  -- wall time: 0.551s
+========================================================================
+---- by tottime (self time) ----
+         1362387 function calls in 0.551 seconds
+
+   Ordered by: internal time
+   List reduced from 64 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   184956    0.118    0.000    0.250    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    23125    0.064    0.000    0.348    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   115605    0.057    0.000    0.057    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    69351    0.030    0.000    0.030    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    26546    0.025    0.000    0.039    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   208069    0.024    0.000    0.024    0.000 {method 'get' of 'dict' objects}
+    51200    0.023    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+   184956    0.021    0.000    0.021    0.000 {method 'items' of 'dict' objects}
+    47966    0.018    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+    13382    0.017    0.000    0.229    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   106184    0.014    0.000    0.014    0.000 {method 'extend' of 'list' objects}
+     2560    0.012    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+     1500    0.011    0.000    0.042    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+      421    0.010    0.000    0.366    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+        1    0.009    0.009    0.551    0.551 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    13382    0.009    0.000    0.013    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    22704    0.008    0.000    0.349    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+     6736    0.007    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    59660    0.006    0.000    0.006    0.000 {built-in method builtins.len}
+     3368    0.006    0.000    0.008    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+
+
+---- by cumulative ----
+         1362387 function calls in 0.551 seconds
+
+   Ordered by: cumulative time
+   List reduced from 64 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.551    0.551 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:79(<lambda>)
+        1    0.009    0.009    0.551    0.551 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+      421    0.001    0.000    0.369    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:85(expand_initial)
+      421    0.010    0.000    0.366    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    22704    0.008    0.000    0.349    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    23125    0.064    0.000    0.348    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   184956    0.118    0.000    0.250    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    13382    0.017    0.000    0.229    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   115605    0.057    0.000    0.057    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     6736    0.007    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+     1500    0.001    0.000    0.043    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:52(eval_default)
+     1500    0.011    0.000    0.042    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+     2560    0.012    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    26546    0.025    0.000    0.039    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    69351    0.030    0.000    0.030    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    51200    0.023    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    47966    0.018    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+   208069    0.024    0.000    0.024    0.000 {method 'get' of 'dict' objects}
+   184956    0.021    0.000    0.021    0.000 {method 'items' of 'dict' objects}
+   106184    0.014    0.000    0.014    0.000 {method 'extend' of 'list' objects}
+
+
+
+========================================================================
+  gen_legal_moves x1500  -- wall time: 1.148s
+========================================================================
+---- by tottime (self time) ----
+         2985002 function calls in 1.146 seconds
+
+   Ordered by: internal time
+   List reduced from 28 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   492000    0.306    0.000    0.637    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    61500    0.167    0.000    0.893    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   307500    0.139    0.000    0.139    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+   184500    0.078    0.000    0.078    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   553500    0.061    0.000    0.061    0.000 {method 'get' of 'dict' objects}
+    63000    0.058    0.000    0.090    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   492000    0.053    0.000    0.053    0.000 {method 'items' of 'dict' objects}
+    30000    0.036    0.000    0.491    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   252000    0.033    0.000    0.033    0.000 {method 'extend' of 'list' objects}
+     1500    0.032    0.000    1.145    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    24000    0.022    0.000    0.143    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    12000    0.021    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+    60000    0.020    0.000    0.889    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    30000    0.019    0.000    0.026    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+   120000    0.014    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+    90000    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+    12000    0.014    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:129(move_double_move)
+     4500    0.012    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+     7500    0.010    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    30000    0.009    0.000    0.009    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+
+
+---- by cumulative ----
+         2985002 function calls in 1.146 seconds
+
+   Ordered by: cumulative time
+   List reduced from 28 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    1.146    1.146 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:84(<lambda>)
+     1500    0.032    0.000    1.145    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    61500    0.167    0.000    0.893    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    60000    0.020    0.000    0.889    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+   492000    0.306    0.000    0.637    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    30000    0.036    0.000    0.491    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+    24000    0.022    0.000    0.143    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   307500    0.139    0.000    0.139    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    63000    0.058    0.000    0.090    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   184500    0.078    0.000    0.078    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   553500    0.061    0.000    0.061    0.000 {method 'get' of 'dict' objects}
+   492000    0.053    0.000    0.053    0.000 {method 'items' of 'dict' objects}
+   252000    0.033    0.000    0.033    0.000 {method 'extend' of 'list' objects}
+    12000    0.021    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+    30000    0.019    0.000    0.026    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    12000    0.014    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:129(move_double_move)
+     4500    0.012    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+     7500    0.010    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+   120000    0.014    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+    90000    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+
+
+
+========================================================================
+  is_in_check x15000  -- wall time: 0.216s
+========================================================================
+---- by tottime (self time) ----
+         600002 function calls in 0.216 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   120000    0.072    0.000    0.149    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.040    0.000    0.209    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    75000    0.031    0.000    0.031    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   135000    0.015    0.000    0.015    0.000 {method 'get' of 'dict' objects}
+    15000    0.013    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   120000    0.013    0.000    0.013    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+    15000    0.005    0.000    0.214    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+        1    0.003    0.003    0.216    0.216 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+---- by cumulative ----
+         600002 function calls in 0.216 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.216    0.216 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+    15000    0.005    0.000    0.214    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    15000    0.040    0.000    0.209    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   120000    0.072    0.000    0.149    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    75000    0.031    0.000    0.031    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.013    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   135000    0.015    0.000    0.015    0.000 {method 'get' of 'dict' objects}
+   120000    0.013    0.000    0.013    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+
+
+########################################################################
+# POSITION: midgame (Ruy Lopez, ~move 10, lots of pieces, tactical)
+# FEN: r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N1P/PP1P1PP1/RNBQR1K1 w - - 0 8
+########################################################################
+legal moves at root: 28
+
+========================================================================
+  MCTS x1500  -- wall time: 0.468s
+========================================================================
+---- by tottime (self time) ----
+         1134231 function calls in 0.468 seconds
+
+   Ordered by: internal time
+   List reduced from 62 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   148427    0.090    0.000    0.204    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    92779    0.055    0.000    0.055    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    18708    0.051    0.000    0.282    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    61049    0.031    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    55648    0.024    0.000    0.024    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    21960    0.020    0.000    0.032    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   148427    0.017    0.000    0.017    0.000 {method 'get' of 'dict' objects}
+    47206    0.017    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+   148427    0.017    0.000    0.017    0.000 {method 'items' of 'dict' objects}
+    11191    0.014    0.000    0.194    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+     2136    0.013    0.000    0.050    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    87840    0.012    0.000    0.012    0.000 {method 'extend' of 'list' objects}
+     1500    0.010    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+        1    0.008    0.008    0.468    0.468 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+      252    0.008    0.000    0.285    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    11191    0.007    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    18708    0.007    0.000    0.289    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    61049    0.006    0.000    0.006    0.000 {built-in method math.sqrt}
+    52966    0.005    0.000    0.005    0.000 {built-in method builtins.len}
+     5136    0.005    0.000    0.007    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:125(update)
+
+
+---- by cumulative ----
+         1134231 function calls in 0.468 seconds
+
+   Ordered by: cumulative time
+   List reduced from 62 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.468    0.468 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:79(<lambda>)
+        1    0.008    0.008    0.468    0.468 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    18708    0.007    0.000    0.289    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+      252    0.001    0.000    0.288    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:85(expand_initial)
+      252    0.008    0.000    0.285    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    18708    0.051    0.000    0.282    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   148427    0.090    0.000    0.204    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    11191    0.014    0.000    0.194    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+    92779    0.055    0.000    0.055    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     2136    0.013    0.000    0.050    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+     1500    0.001    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:52(eval_default)
+     1500    0.010    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+    61049    0.031    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    21960    0.020    0.000    0.032    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+     3985    0.004    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    47206    0.017    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+    55648    0.024    0.000    0.024    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   148427    0.017    0.000    0.017    0.000 {method 'get' of 'dict' objects}
+   148427    0.017    0.000    0.017    0.000 {method 'items' of 'dict' objects}
+    87840    0.012    0.000    0.012    0.000 {method 'extend' of 'list' objects}
+
+
+
+========================================================================
+  gen_legal_moves x1500  -- wall time: 1.541s
+========================================================================
+---- by tottime (self time) ----
+         3903002 function calls in 1.538 seconds
+
+   Ordered by: internal time
+   List reduced from 32 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   661500    0.390    0.000    0.879    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+   414000    0.238    0.000    0.238    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    84000    0.225    0.000    1.228    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   247500    0.104    0.000    0.104    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    85500    0.082    0.000    0.126    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   661500    0.074    0.000    0.074    0.000 {method 'get' of 'dict' objects}
+   661500    0.073    0.000    0.073    0.000 {method 'items' of 'dict' objects}
+    42000    0.048    0.000    0.707    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   342000    0.044    0.000    0.044    0.000 {method 'extend' of 'list' objects}
+     1500    0.043    0.000    1.538    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    84000    0.029    0.000    1.257    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    42000    0.025    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+     7500    0.024    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    24000    0.022    0.000    0.125    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   129000    0.019    0.000    0.019    0.000 {method 'append' of 'list' objects}
+   127500    0.017    0.000    0.017    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+     4500    0.016    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+    42000    0.011    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+    96000    0.010    0.000    0.010    0.000 {built-in method builtins.len}
+    12000    0.010    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+
+
+---- by cumulative ----
+         3903002 function calls in 1.538 seconds
+
+   Ordered by: cumulative time
+   List reduced from 32 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    1.538    1.538 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:84(<lambda>)
+     1500    0.043    0.000    1.538    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    84000    0.029    0.000    1.257    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    84000    0.225    0.000    1.228    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   661500    0.390    0.000    0.879    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    42000    0.048    0.000    0.707    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   414000    0.238    0.000    0.238    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    85500    0.082    0.000    0.126    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    24000    0.022    0.000    0.125    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   247500    0.104    0.000    0.104    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   661500    0.074    0.000    0.074    0.000 {method 'get' of 'dict' objects}
+   661500    0.073    0.000    0.073    0.000 {method 'items' of 'dict' objects}
+   342000    0.044    0.000    0.044    0.000 {method 'extend' of 'list' objects}
+    42000    0.025    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+     7500    0.024    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+     4500    0.016    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   129000    0.019    0.000    0.019    0.000 {method 'append' of 'list' objects}
+   127500    0.017    0.000    0.017    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+    12000    0.010    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+    12000    0.008    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:129(move_double_move)
+
+
+
+========================================================================
+  is_in_check x15000  -- wall time: 0.221s
+========================================================================
+---- by tottime (self time) ----
+         585002 function calls in 0.221 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   120000    0.069    0.000    0.153    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    75000    0.040    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.040    0.000    0.214    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    15000    0.013    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   120000    0.013    0.000    0.013    0.000 {method 'get' of 'dict' objects}
+   120000    0.013    0.000    0.013    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+    15000    0.005    0.000    0.218    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+        1    0.003    0.003    0.221    0.221 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+---- by cumulative ----
+         585002 function calls in 0.221 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.221    0.221 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+    15000    0.005    0.000    0.218    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    15000    0.040    0.000    0.214    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   120000    0.069    0.000    0.153    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    75000    0.040    0.000    0.040    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.013    0.000    0.021    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   120000    0.013    0.000    0.013    0.000 {method 'get' of 'dict' objects}
+   120000    0.013    0.000    0.013    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+
+
+########################################################################
+# POSITION: midgame (Sicilian, complex, many sliders active)
+# FEN: r2qk2r/pp1n1ppp/2p1pn2/3p4/3P1B2/2NBPN2/PPPQ1PPP/2KR3R w kq - 0 9
+########################################################################
+legal moves at root: 45
+
+========================================================================
+  MCTS x1500  -- wall time: 0.336s
+========================================================================
+---- by tottime (self time) ----
+         810744 function calls in 0.335 seconds
+
+   Ordered by: internal time
+   List reduced from 68 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    87798    0.055    0.000    0.128    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    50189    0.036    0.000    0.036    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    72436    0.035    0.000    0.041    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    12621    0.032    0.000    0.178    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    37609    0.016    0.000    0.016    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    44725    0.015    0.000    0.023    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+     1672    0.014    0.000    0.056    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    15738    0.014    0.000    0.023    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    94171    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+    87798    0.010    0.000    0.010    0.000 {method 'items' of 'dict' objects}
+     7831    0.010    0.000    0.125    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+     1500    0.010    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+    62952    0.008    0.000    0.008    0.000 {method 'extend' of 'list' objects}
+        1    0.007    0.007    0.335    0.335 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    72436    0.006    0.000    0.006    0.000 {built-in method math.sqrt}
+     7831    0.005    0.000    0.008    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+      117    0.005    0.000    0.166    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+     4672    0.004    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:125(update)
+    12487    0.004    0.000    0.181    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    42043    0.004    0.000    0.004    0.000 {built-in method builtins.len}
+
+
+---- by cumulative ----
+         810744 function calls in 0.335 seconds
+
+   Ordered by: cumulative time
+   List reduced from 68 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.335    0.335 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:79(<lambda>)
+        1    0.007    0.007    0.335    0.335 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    12487    0.004    0.000    0.181    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    12621    0.032    0.000    0.178    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+      117    0.000    0.000    0.167    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:85(expand_initial)
+      117    0.005    0.000    0.166    0.001 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    87798    0.055    0.000    0.128    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+     7831    0.010    0.000    0.125    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+     1672    0.014    0.000    0.056    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    72436    0.035    0.000    0.041    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+     1500    0.001    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:52(eval_default)
+     1500    0.010    0.000    0.037    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+    50189    0.036    0.000    0.036    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    44725    0.015    0.000    0.023    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+    15738    0.014    0.000    0.023    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    37609    0.016    0.000    0.016    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+     1773    0.002    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    94171    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+    87798    0.010    0.000    0.010    0.000 {method 'items' of 'dict' objects}
+    62952    0.008    0.000    0.008    0.000 {method 'extend' of 'list' objects}
+
+
+
+========================================================================
+  gen_legal_moves x1500  -- wall time: 2.348s
+========================================================================
+---- by tottime (self time) ----
+         5736002 function calls in 2.344 seconds
+
+   Ordered by: internal time
+   List reduced from 31 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   945000    0.578    0.000    1.337    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+   540000    0.372    0.000    0.372    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+   135000    0.341    0.000    1.869    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   405000    0.172    0.000    0.172    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   136500    0.123    0.000    0.194    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+  1012500    0.113    0.000    0.113    0.000 {method 'get' of 'dict' objects}
+   945000    0.103    0.000    0.103    0.000 {method 'items' of 'dict' objects}
+    67500    0.076    0.000    0.957    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   546000    0.071    0.000    0.071    0.000 {method 'extend' of 'list' objects}
+     1500    0.064    0.000    2.343    0.002 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+     7500    0.059    0.000    0.088    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+   135000    0.046    0.000    1.916    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    67500    0.039    0.000    0.057    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+   205500    0.030    0.000    0.030    0.000 {method 'append' of 'list' objects}
+    67500    0.028    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+    24000    0.022    0.000    0.189    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   148500    0.020    0.000    0.020    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+     4500    0.018    0.000    0.033    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   147000    0.015    0.000    0.015    0.000 {built-in method builtins.len}
+    12000    0.010    0.000    0.016    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+
+
+---- by cumulative ----
+         5736002 function calls in 2.344 seconds
+
+   Ordered by: cumulative time
+   List reduced from 31 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    2.344    2.344 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:84(<lambda>)
+     1500    0.064    0.000    2.343    0.002 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+   135000    0.046    0.000    1.916    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+   135000    0.341    0.000    1.869    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+   945000    0.578    0.000    1.337    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    67500    0.076    0.000    0.957    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   540000    0.372    0.000    0.372    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+   136500    0.123    0.000    0.194    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    24000    0.022    0.000    0.189    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   405000    0.172    0.000    0.172    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+  1012500    0.113    0.000    0.113    0.000 {method 'get' of 'dict' objects}
+   945000    0.103    0.000    0.103    0.000 {method 'items' of 'dict' objects}
+     7500    0.059    0.000    0.088    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+   546000    0.071    0.000    0.071    0.000 {method 'extend' of 'list' objects}
+    67500    0.039    0.000    0.057    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+     4500    0.018    0.000    0.033    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   205500    0.030    0.000    0.030    0.000 {method 'append' of 'list' objects}
+    67500    0.028    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+   148500    0.020    0.000    0.020    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+    12000    0.010    0.000    0.016    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:41(move_jump_no_cap)
+
+
+
+========================================================================
+  is_in_check x15000  -- wall time: 0.185s
+========================================================================
+---- by tottime (self time) ----
+         480002 function calls in 0.185 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    90000    0.054    0.000    0.123    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.034    0.000    0.178    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    45000    0.029    0.000    0.029    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    15000    0.013    0.000    0.020    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+   105000    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+    90000    0.010    0.000    0.010    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+    15000    0.005    0.000    0.182    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+        1    0.003    0.003    0.185    0.185 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+---- by cumulative ----
+         480002 function calls in 0.185 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.185    0.185 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+    15000    0.005    0.000    0.182    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    15000    0.034    0.000    0.178    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    90000    0.054    0.000    0.123    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    45000    0.029    0.000    0.029    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.013    0.000    0.020    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    45000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   105000    0.011    0.000    0.011    0.000 {method 'get' of 'dict' objects}
+    90000    0.010    0.000    0.010    0.000 {method 'items' of 'dict' objects}
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+
+
+########################################################################
+# POSITION: endgame (K+R+P vs K+R, sparse, long rays)
+# FEN: 8/5pk1/6p1/7p/8/1R6/5PKP/3r4 w - - 0 1
+########################################################################
+legal moves at root: 21
+
+========================================================================
+  MCTS x1500  -- wall time: 0.298s
+========================================================================
+---- by tottime (self time) ----
+         706923 function calls in 0.298 seconds
+
+   Ordered by: internal time
+   List reduced from 63 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    44283    0.029    0.000    0.075    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    54364    0.028    0.000    0.033    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    22759    0.025    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    23051    0.024    0.000    0.131    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    26523    0.023    0.000    0.036    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    14162    0.017    0.000    0.109    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   106092    0.013    0.000    0.013    0.000 {method 'extend' of 'list' objects}
+     2468    0.012    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    21524    0.009    0.000    0.009    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+      472    0.009    0.000    0.168    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+        1    0.009    0.009    0.298    0.298 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    14162    0.008    0.000    0.012    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    23051    0.008    0.000    0.139    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    44283    0.006    0.000    0.006    0.000 {method 'get' of 'dict' objects}
+    44283    0.006    0.000    0.006    0.000 {method 'items' of 'dict' objects}
+     5468    0.006    0.000    0.007    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:125(update)
+      470    0.005    0.000    0.009    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    13285    0.005    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+    54364    0.005    0.000    0.005    0.000 {built-in method math.sqrt}
+    35185    0.005    0.000    0.005    0.000 {method 'append' of 'list' objects}
+
+
+---- by cumulative ----
+         706923 function calls in 0.298 seconds
+
+   Ordered by: cumulative time
+   List reduced from 63 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.298    0.298 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:79(<lambda>)
+        1    0.009    0.009    0.298    0.298 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+      472    0.001    0.000    0.172    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:85(expand_initial)
+      472    0.009    0.000    0.168    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    23051    0.008    0.000    0.139    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    23051    0.024    0.000    0.131    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    14162    0.017    0.000    0.109    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+    44283    0.029    0.000    0.075    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+     2468    0.012    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    26523    0.023    0.000    0.036    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    54364    0.028    0.000    0.033    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    22759    0.025    0.000    0.025    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     1500    0.001    0.000    0.024    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:52(eval_default)
+     1500    0.004    0.000    0.023    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+     1907    0.002    0.000    0.020    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    13285    0.005    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+   106092    0.013    0.000    0.013    0.000 {method 'extend' of 'list' objects}
+    14162    0.008    0.000    0.012    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    21524    0.009    0.000    0.009    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+      470    0.005    0.000    0.009    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+
+
+
+========================================================================
+  gen_legal_moves x1500  -- wall time: 0.581s
+========================================================================
+---- by tottime (self time) ----
+         1434002 function calls in 0.580 seconds
+
+   Ordered by: internal time
+   List reduced from 27 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+   130500    0.082    0.000    0.215    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    67500    0.074    0.000    0.074    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    67500    0.068    0.000    0.374    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    69000    0.060    0.000    0.092    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    36000    0.040    0.000    0.267    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   276000    0.032    0.000    0.032    0.000 {method 'extend' of 'list' objects}
+     1500    0.030    0.000    0.579    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    63000    0.027    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    67500    0.022    0.000    0.396    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    36000    0.019    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+     1500    0.016    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+   130500    0.016    0.000    0.016    0.000 {method 'get' of 'dict' objects}
+   130500    0.016    0.000    0.016    0.000 {method 'items' of 'dict' objects}
+     1500    0.014    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   103500    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+    36000    0.010    0.000    0.010    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+    75000    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+    51000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+     6000    0.006    0.000    0.066    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    36000    0.005    0.000    0.005    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:399(__init__)
+
+
+---- by cumulative ----
+         1434002 function calls in 0.580 seconds
+
+   Ordered by: cumulative time
+   List reduced from 27 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.580    0.580 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:84(<lambda>)
+     1500    0.030    0.000    0.579    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    67500    0.022    0.000    0.396    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    67500    0.068    0.000    0.374    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    36000    0.040    0.000    0.267    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   130500    0.082    0.000    0.215    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    69000    0.060    0.000    0.092    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    67500    0.074    0.000    0.074    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     6000    0.006    0.000    0.066    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+   276000    0.032    0.000    0.032    0.000 {method 'extend' of 'list' objects}
+     1500    0.016    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    36000    0.019    0.000    0.028    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    63000    0.027    0.000    0.027    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+     1500    0.014    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   130500    0.016    0.000    0.016    0.000 {method 'get' of 'dict' objects}
+   130500    0.016    0.000    0.016    0.000 {method 'items' of 'dict' objects}
+   103500    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+    36000    0.010    0.000    0.010    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+    75000    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+    51000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+
+
+
+========================================================================
+  is_in_check x15000  -- wall time: 0.090s
+========================================================================
+---- by tottime (self time) ----
+         225002 function calls in 0.090 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    30000    0.018    0.000    0.048    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.016    0.000    0.083    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    15000    0.013    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+    15000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    15000    0.005    0.000    0.088    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    30000    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+    30000    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
+        1    0.003    0.003    0.090    0.090 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+---- by cumulative ----
+         225002 function calls in 0.090 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.090    0.090 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+    15000    0.005    0.000    0.088    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    15000    0.016    0.000    0.083    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    30000    0.018    0.000    0.048    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.013    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    15000    0.018    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    60000    0.007    0.000    0.007    0.000 {method 'extend' of 'list' objects}
+    15000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    30000    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+    30000    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+
+
+########################################################################
+# POSITION: endgame (K+Q vs K+R, very sparse)
+# FEN: 8/8/4k3/8/8/3K4/3Q4/4r3 w - - 0 1
+########################################################################
+legal moves at root: 21
+
+========================================================================
+  MCTS x1500  -- wall time: 0.304s
+========================================================================
+---- by tottime (self time) ----
+         736431 function calls in 0.304 seconds
+
+   Ordered by: internal time
+   List reduced from 59 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    74469    0.038    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    29159    0.026    0.000    0.039    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    36169    0.024    0.000    0.065    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    13124    0.022    0.000    0.022    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    16167    0.019    0.000    0.097    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+    25661    0.016    0.000    0.115    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+     4424    0.016    0.000    0.061    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+   116636    0.013    0.000    0.013    0.000 {method 'extend' of 'list' objects}
+        1    0.012    0.012    0.304    0.304 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+    16167    0.010    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    23045    0.010    0.000    0.010    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+      498    0.010    0.000    0.145    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    25661    0.009    0.000    0.124    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+     7424    0.008    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:125(update)
+      327    0.008    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    74469    0.007    0.000    0.007    0.000 {built-in method math.sqrt}
+    38814    0.005    0.000    0.005    0.000 {method 'append' of 'list' objects}
+    36169    0.005    0.000    0.005    0.000 {method 'get' of 'dict' objects}
+    36169    0.005    0.000    0.005    0.000 {method 'items' of 'dict' objects}
+    41393    0.004    0.000    0.004    0.000 {built-in method builtins.len}
+
+
+---- by cumulative ----
+         736431 function calls in 0.304 seconds
+
+   Ordered by: cumulative time
+   List reduced from 59 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.304    0.304 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:79(<lambda>)
+        1    0.012    0.012    0.304    0.304 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:146(monte_carlo_search)
+      498    0.001    0.000    0.149    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:85(expand_initial)
+      498    0.010    0.000    0.145    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    25661    0.009    0.000    0.124    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    25661    0.016    0.000    0.115    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    16167    0.019    0.000    0.097    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+    36169    0.024    0.000    0.065    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+     4424    0.016    0.000    0.061    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:63(UCT_select_child)
+    74469    0.038    0.000    0.045    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:49(utc)
+    29159    0.026    0.000    0.039    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    13124    0.022    0.000    0.022    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     1500    0.001    0.000    0.018    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:52(eval_default)
+     1500    0.002    0.000    0.017    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:83(eval_loop_piecelist)
+      825    0.001    0.000    0.016    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+    16167    0.010    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+   116636    0.013    0.000    0.013    0.000 {method 'extend' of 'list' objects}
+      327    0.008    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+     7424    0.008    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/mcts.py:125(update)
+     4613    0.002    0.000    0.011    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/evaluation.py:56(eval_single_piece)
+
+
+
+========================================================================
+  gen_legal_moves x1500  -- wall time: 0.553s
+========================================================================
+---- by tottime (self time) ----
+         1390502 function calls in 0.551 seconds
+
+   Ordered by: internal time
+   List reduced from 27 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    66000    0.085    0.000    0.085    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+   121500    0.078    0.000    0.217    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    69000    0.059    0.000    0.089    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    67500    0.047    0.000    0.351    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    36000    0.040    0.000    0.247    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+     1500    0.030    0.000    0.551    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+   276000    0.030    0.000    0.030    0.000 {method 'extend' of 'list' objects}
+    55500    0.024    0.000    0.024    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    67500    0.022    0.000    0.374    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+     1500    0.021    0.000    0.041    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+    36000    0.020    0.000    0.030    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+   121500    0.015    0.000    0.015    0.000 {method 'items' of 'dict' objects}
+   121500    0.015    0.000    0.015    0.000 {method 'get' of 'dict' objects}
+   105000    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+    36000    0.014    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+     1500    0.009    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+    72000    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+    48000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+    36000    0.005    0.000    0.005    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:399(__init__)
+    36000    0.005    0.000    0.005    0.000 {method 'pop' of 'list' objects}
+
+
+---- by cumulative ----
+         1390502 function calls in 0.551 seconds
+
+   Ordered by: cumulative time
+   List reduced from 27 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.551    0.551 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:84(<lambda>)
+     1500    0.030    0.000    0.551    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:421(gen_legal_moves)
+    67500    0.022    0.000    0.374    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    67500    0.047    0.000    0.351    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    36000    0.040    0.000    0.247    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:248(make_move)
+   121500    0.078    0.000    0.217    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    69000    0.059    0.000    0.089    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    66000    0.085    0.000    0.085    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+     3000    0.001    0.000    0.056    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:127(moves)
+     1500    0.021    0.000    0.041    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:18(move_line)
+   276000    0.030    0.000    0.030    0.000 {method 'extend' of 'list' objects}
+    36000    0.020    0.000    0.030    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:316(undo)
+    55500    0.024    0.000    0.024    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+   121500    0.015    0.000    0.015    0.000 {method 'items' of 'dict' objects}
+   121500    0.015    0.000    0.015    0.000 {method 'get' of 'dict' objects}
+     1500    0.009    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:4(move_jump)
+   105000    0.014    0.000    0.014    0.000 {method 'append' of 'list' objects}
+    36000    0.014    0.000    0.014    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:310(__init__)
+    72000    0.007    0.000    0.007    0.000 {built-in method builtins.len}
+    48000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:150(can_land_on)
+
+
+
+========================================================================
+  is_in_check x15000  -- wall time: 0.082s
+========================================================================
+---- by tottime (self time) ----
+         225002 function calls in 0.082 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    30000    0.018    0.000    0.046    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.015    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    15000    0.013    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    15000    0.010    0.000    0.075    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    60000    0.006    0.000    0.006    0.000 {method 'extend' of 'list' objects}
+    15000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    15000    0.004    0.000    0.080    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    30000    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+    30000    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
+        1    0.003    0.003    0.082    0.082 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+---- by cumulative ----
+         225002 function calls in 0.082 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.082    0.082 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/profile_engine.py:89(<lambda>)
+    15000    0.004    0.000    0.080    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:436(is_in_check)
+    15000    0.010    0.000    0.075    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_.py:443(is_sq_atk)
+    30000    0.018    0.000    0.046    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/simple_piece.py:148(attacks_sq)
+    15000    0.013    0.000    0.019    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/engine_utils.py:7(get_pieces)
+    15000    0.015    0.000    0.015    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:246(attacks_line)
+    60000    0.006    0.000    0.006    0.000 {method 'extend' of 'list' objects}
+    15000    0.006    0.000    0.006    0.000 /Users/omshinwa/Documents/GAMEDEV/FAIRYLION/Fairylion_Gambit/game/python-packages/fairylion/move.py:239(attacks_jump)
+    30000    0.003    0.000    0.003    0.000 {method 'get' of 'dict' objects}
+    30000    0.003    0.000    0.003    0.000 {method 'items' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
+
+
+========================================================================
+  SUMMARY (wall time, seconds)
+========================================================================
+position                                                   MCTS   movegen   inCheck
+opening (start position)                                  0.551     1.148     0.216
+midgame (Ruy Lopez, ~move 10, lots of pieces, tactical    0.468     1.541     0.221
+midgame (Sicilian, complex, many sliders active)          0.336     2.348     0.185
+endgame (K+R+P vs K+R, sparse, long rays)                 0.298     0.581     0.090
+endgame (K+Q vs K+R, very sparse)                         0.304     0.553     0.082

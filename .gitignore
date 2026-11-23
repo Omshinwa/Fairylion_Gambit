@@ -1,0 +1,23 @@
+# Ignore all dotfiles except .git and .gitignore
+#
+# https://www.reddit.com/r/Unity3D/comments/elazbl/why_is_my_gitignore_not_working/
+#
+.*
+!.gitignore
+!.git
+
+# Ignore all .rpyc files
+*.rpyc
+*.pyc
+
+# Ignore all .save files
+game/saves/*
+
+# Ignore .zip files (such as builts)
+*.zip
+
+/errors.txt
+/traceback.txt
+cache/*
+game/cache/*
+log.txt

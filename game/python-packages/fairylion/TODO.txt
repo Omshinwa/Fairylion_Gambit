@@ -1,0 +1,9 @@
+TODO:
+
+* tarot skills implemented on characters (and displayable on the battlefield ui), consumable vs trigger skills? separated top and bottom maybe
+
+* redraw robot pawn
+
+* option button in battle (RESIGN, SAVE, LOAD, PREFS)
+
+* claude: remove attaqued
