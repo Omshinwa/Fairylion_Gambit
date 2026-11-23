@@ -56,7 +56,7 @@ init python:
             return _(f"Castle")
         return _(f"Normal Move")
 
-label l_death_move_piece(robot, move, time):
+label l_death_move_piece(robot, move, anim_time):
     python:
         # when a pilot gets taken in a move, do a special anim
         # could be refactored with l_move_piece
@@ -71,9 +71,9 @@ label l_death_move_piece(robot, move, time):
 
         midway_point = (absolute(float(midway_point[0]) - SQUARESIZE/2 * direction_x), absolute(float(midway_point[1]) - SQUARESIZE/2 * direction_y))
         chess.state = "move"
-        chess.ui['animation_move'] = DotDict(piece=piece, fr=fr_pos, to=midway_point, time=time, capture=move.capture)
+        chess.ui['animation_move'] = DotDict(piece=piece, fr=fr_pos, to=midway_point, time=anim_time, capture=move.capture)
         f_play_move_piece_sound(piece, move)
-        renpy.pause(time)
+        renpy.pause(anim_time)
     
     $ i = 0
     while i < len(robot._pilot):
@@ -83,13 +83,13 @@ label l_death_move_piece(robot, move, time):
         $ i+=1
 
     python:
-        time = 0.5
-        f_create_animation_move(piece, midway_point, to_pos, time, mute=True)
+        anim_time = 0.5
+        f_create_animation_move(piece, midway_point, to_pos, anim_time, mute=True)
         g.state = {'battle'}
         chess.make_move(move, False)
     return
 
-label l_move_piece(list_of_moves, time=None):
+label l_move_piece(list_of_moves, anim_time=None):
     if type(list_of_moves) == Move:
         $ move = list_of_moves
     elif type(list_of_moves) == str: # something in the form of 'a3a4'
@@ -105,7 +105,7 @@ label l_move_piece(list_of_moves, time=None):
             temp.append((_("X"), 'CANCEL'))
             temp = renpy.display_menu(temp)
         if type(temp) == int:
-            call l_move_piece(list_of_moves[temp], time) from _call_l_move_piece_1
+            call l_move_piece(list_of_moves[temp], anim_time) from _call_l_move_piece_1
         else:
             $ f_dismiss()
         return
@@ -116,11 +116,11 @@ label l_move_piece(list_of_moves, time=None):
     $ piece = move.piece
     $ chess.clean_arrows()
 
-    # if its chess like, time=2.0 instead
-    if time is None:
-        $ time = chess.real_dist_between_two_pos(piece.pos, move.to)/fen_to_speed(piece) * 0.8
+    # if its chess like, anim_time=2.0 instead
+    if anim_time is None:
+        $ anim_time = chess.real_dist_between_two_pos(piece.pos, move.to)/fen_to_speed(piece) * 0.8
     if renpy.is_skipping():
-        $ time = 0.1
+        $ anim_time = 0.1
     
     # remove health
     if move.capture and move.capture.pilots:
@@ -134,14 +134,14 @@ label l_move_piece(list_of_moves, time=None):
         while i < len(robot._pilot):
             $ pilot = robot._pilot[i]
             if pilot is not None and pilot.health == 0:
-                call l_death_move_piece(robot, move, time)
-                $ del time, piece, robot, i
+                call l_death_move_piece(robot, move, anim_time)
+                $ del anim_time, piece, robot, i
                 return
             $ i += 1
 
     $ chess.make_move(move, False)
-    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, piece.alignement()), chess.POS_TO_SXY(move.to, piece.alignement()), time)
-    $ del time, piece
+    $ f_create_animation_move(piece, chess.POS_TO_SXY(move.fr, piece.alignement()), chess.POS_TO_SXY(move.to, piece.alignement()), anim_time)
+    $ del anim_time, piece
     return
 
 init python:
