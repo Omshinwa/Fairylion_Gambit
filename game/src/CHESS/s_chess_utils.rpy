@@ -363,7 +363,12 @@ init python:
                     return img_square(piece, GradientMap(f'robot {piece.fen}', 'pale god'), size_ratio=1.4)
                 else:
                     return img_square(piece, GradientMap(f'robot {piece.fen}', 'collant'), size_ratio=1.4)
-            return img_square(piece, 'img_rig_piece idle', size_ratio=1.5)
+            if renpy.has_live2d():
+                return img_square(piece, 'img_rig_piece idle', size_ratio=1.5)
+            # No Live2D on this platform: use a static rook (the rig is a rook too, and
+            # the 'internet' skin has no images for the fairy pieces).
+            color = 'white' if piece.color == 2 else c.COLOR_TO_STR[piece.color]
+            return img_square(piece, Image(f"/skin/pieces/internet/{color} rook internet.webp", dpi=288))
         else:
             extension = '.webp'
         

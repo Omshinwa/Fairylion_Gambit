@@ -183,4 +183,7 @@ init python:
         pass
 
 
-image img_rig_piece = Live2D("images/robot/rook_rig", loop=True) 
+# Live2D() raises at init if Live2D isn't available (e.g. a web build without the
+# Cubism SDK for Web), which stops the whole game from loading. Fall back to Null();
+# img_piece() then shows a static piece instead of the rig.
+image img_rig_piece = Live2D("images/robot/rook_rig", loop=True) if renpy.has_live2d() else Null()
