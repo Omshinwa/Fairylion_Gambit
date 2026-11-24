@@ -81,31 +81,33 @@ init -2 python:
             self.xp_all += value
 
         def _heart_display(self):
-            # return an array representing the health to display
+            # return an array representing the stamina to display
             # '*' = gray/empty
-            # 0, 1, 2 or 3 etc = color
-            # if it's negatif, it's a small heard
-            # if it's positif, it's a big heart.
+            # ('small', level) or ('big', level): level is the loyalty color (see src/loyalty.rpy)
+            # small hearts are the stamina the pilot won't risk in a battle
+            # left to right: small hearts first, then big hearts, then empty ones
             heart_list = []
+            level = loyalty_of(self)
+            reserved = loyalty_reserved_stamina(self)
             for heart in range(self.max_health):
                 if heart >= self.health:
                     heart_list.append('*')
+                elif heart < reserved:
+                    heart_list.append(('small', level))
                 else:
-                    if heart == 0 and TRUST_TO_LOYALTY(self.trust)<2:
-                        heart_list.append(- TRUST_TO_LOYALTY(self.trust))
-                    else:
-                        heart_list.append(TRUST_TO_LOYALTY(self.trust))
+                    heart_list.append(('big', level))
 
-            return reversed(heart_list)
+            return heart_list
 
         def rest(self):
             """
             return True if health was changed, False otherwise
             """
             original = self.health
-            self.health = min(self.health+1, self.max_health)
-            if 'rest' in pilot.skills['once']:
-                self.health = min(self.health+1, self.max_health)
+            gain = 1 + loyalty_rest_bonus(self) # Red loyalty: +1
+            if 'rest' in self.skills['once']:
+                gain += 1
+            self.health = min(self.health+gain, self.max_health)
             if original != self.health:
                 return True
             return False

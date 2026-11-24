@@ -209,9 +209,9 @@ screen s_in_between_rounds_mini(battle=True, state=None, original=None):
                                 else:
                                     vbox:
                                         if pilot in original and original[pilot] == pilot.health:
-                                            text _("HEALTH: [original[pilot]]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text'
+                                            text _("STAMINA: [original[pilot]]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text'
                                         else:
-                                            text _("HEALTH: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color '#ffa'
+                                            text _("STAMINA: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color '#ffa'
 
                                             if state>=1:
                                                 if 'rest' in pilot.skills['once']:
@@ -267,7 +267,7 @@ screen s_recruit(recruitable_pilots):
                                 ypos 5
                                 xysize(300,140)
                                 vbox:
-                                    text _("HEALTH: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
+                                    text _("STAMINA: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
                                     text _("EXP: [pilot.xp]") xalign 0.0 style 'style_big_white_text' color g.colors['green']
                     button:
                         if show_debug_menu:

@@ -1,4 +1,6 @@
 label l_intro:
+    hide screen s_roguelike # it reads rogue.round
+    $ rogue = False # leaving roguelite: loyalty is no longer locked at Blue (see src/loyalty.rpy)
     $ init_pilots()
     scene
     scene onlayer screens

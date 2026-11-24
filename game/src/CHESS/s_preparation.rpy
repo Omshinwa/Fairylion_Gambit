@@ -18,6 +18,8 @@ label l_preparation():
     if not_done('tuto_preparation'):
         pause
         call l_tutorial('preparation')
+    if not_done('tuto_loyalty'): # see src/loyalty.rpy
+        call l_tutorial('loyalty')
 
     play music "music/preparation.mp3"
 
@@ -324,6 +326,10 @@ init python:
         renpy.restart_interaction()
 
     def f_prep_drop_piece(element, pos):
+        # Yellow and Grey loyalty: won't be deployed if they can die (see src/loyalty.rpy)
+        if isinstance(element, Pilot) and not element.deployed and not loyalty_can_deploy(element):
+            loyalty_refuse_notify(element)
+            return
         if not renpy.music.is_playing(channel='sound'):
             renpy.play("sound/board/tank.wav", channel='sound')
         element.deployed = True

@@ -108,6 +108,14 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
 
+## Pilot screen (to do later)
+
+The pilot screen (`s_character_info` in `src/PILOT_screen.rpy`) needs tabs:
+
+- Stats: stamina, experience, the Trust stat shown as LOYALTY (for example "LOYALTY: 5 (Good)"), and the icons of the learned skills.
+- Skills: learn new skills and see what each one does (the current "- skills -" and "- learn -" part).
+- Relationships: the pilot's affinity with every other character (see Trust and affinity).
+
 ## Permadeath
 
 Characters can die if they lose all their stamina. Then, when they should talk, the Ren'Py engine skips them (I set up a special condition in the Character arguments).
@@ -130,15 +138,19 @@ Since Trust is lelouch's affinity, it follows the same rules: it goes up when a 
 
 ### Loyalty
 
-Trust sets a loyalty level, and each level has its own color and effect. These thresholds are double the current ones in `TRUST_TO_LOYALTY` (`src/CONSTANTS.rpy`): update the code to match.
+Trust sets a loyalty level, and each level has its own color and effect. Implemented in `src/loyalty.rpy` (`TRUST_TO_LOYALTY`, `loyalty_of()`).
+
+Small hearts show the stamina a pilot won't risk: they can only be deployed with more stamina than that. Pilots with 1 max stamina can't be deployed if their Trust is too low. Show each level's effect in the pilot stats menu as a passive, so the player remembers it.
 
 | Trust | Color | Effect |
 |---|---|---|
-| 20 or more | Red | Trust gains are doubled. |
-| 10 to 19 | Blue | +1 extra stamina each time they recover. Show it in the pilot stats menu as a passive, so the player remembers it. |
-| 2 to 9 | Green | Fights even if they can die. |
-| -10 to 1 | Yellow | Won't fight if they can die: needs at least 2 stamina to be deployed. |
-| below -10 | Grey | 50% chance to leave the group at the start of each day. |
+| 20 or more | Red | Trust gains are doubled. +2 stamina per rest instead of +1. |
+| 10 to 19 | Blue | Normal. |
+| 0 to 9 | Green | Default. Won't fight if they could die: 1 small heart, so they need 2 stamina to be deployed. |
+| -10 to -1 | Yellow | Only fights with full stamina: every heart is small except the last one. |
+| below -10 | Grey | Same as Yellow, and 50% chance to leave the group at the start of each day. |
+
+In roguelite mode, every pilot is locked at Blue (for now `loyalty_of()` returns Blue whenever a roguelite run is active).
 
 A character who leaves goes into `DEAD_OR_DESERT`. Before they leave, a short conversation plays (2 or 3 lines) where the pilot tells lelouch why they're leaving.
 

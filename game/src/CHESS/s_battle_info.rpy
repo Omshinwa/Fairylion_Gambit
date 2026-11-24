@@ -118,7 +118,7 @@ screen s_battlefield_pilot(pilot, index, scale=1, robot=None):
                 fixed:
                     ypos 5
                     xysize(140,70)
-                    add "heart big" matrixcolor ColorizeMatrix(LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][1],LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][0]) xpos 70 ypos -7
+                    add "heart big" matrixcolor ColorizeMatrix(loyalty_color(pilot)[1],loyalty_color(pilot)[0]) xpos 70 ypos -7
                     text "[pilot.health]{size=-20}/[pilot.max_health]" style 'style_3d_big_txt' yalign 0.5:
                         if pilot.health == 1:
                             color "#f77"  outlines [ (3, "#f00", 0, 3) ] # '#d30000' outlines [ (3, "#f00", 0, 3) ]

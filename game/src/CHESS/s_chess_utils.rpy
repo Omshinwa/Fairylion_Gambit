@@ -129,6 +129,8 @@ init python:
             # select a piece on your side
             if isinstance(piece, Robot_Piece) and piece.deployed and chess.POS_TO_XY_POV(piece.pos)[1] >= 2:
                 return
+            if isinstance(piece, Pilot) and not piece.deployed and not loyalty_can_deploy(piece):
+                loyalty_refuse_notify(piece)
             for x in range(chess.size[0]):
                 for y in range(chess.size[1]):
                     pos = chess.XY_TO_POS[x][y]

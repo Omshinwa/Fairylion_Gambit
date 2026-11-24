@@ -46,17 +46,15 @@ screen s_character_info(pilot):
             grid 2 3:
                 yspacing -20
                 xspacing 80
-                text _("HEALTH:") style 'style_3d_big_txt' align 1.0,0.5
+                text _("STAMINA:") style 'style_3d_big_txt' align 1.0,0.5
                 hbox: #HEARTS
                     xsize 200
                     for heart in pilot._heart_display():
                         if heart == '*':
                             add "heart grey"
                         else:
-                            if heart<0: #small heart
-                                add "heart small" matrixcolor ColorizeMatrix(LOYALTY_COLORS[-heart][1],LOYALTY_COLORS[-heart][0])
-                            else:
-                                add "heart big" matrixcolor ColorizeMatrix(LOYALTY_COLORS[heart][1],LOYALTY_COLORS[heart][0])
+                            $ heart_size, heart_level = heart # 'small' or 'big', see src/loyalty.rpy
+                            add "heart [heart_size]" matrixcolor ColorizeMatrix(LOYALTY_COLORS[heart_level][1],LOYALTY_COLORS[heart_level][0])
                 
                 text _("EXPERIENCE:") style "style_3d_big_txt" align 1.0,0.5
                 text _("[pilot.xp]{size=-20}/[pilot.xp_all]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ] yalign 1.0
@@ -102,6 +100,23 @@ screen s_character_info(pilot):
 
             vpgrid:
                 cols 2
+                # LOYALTY passive (see src/loyalty.rpy)
+                $ loyalty_desc = loyalty_passive_desc(pilot)
+                if loyalty_desc:
+                    $ loyalty_color = LOYALTY_COLORS[loyalty_of(pilot)]
+                    fixed:
+                        xysize (500,120)
+                        hbox:
+                            xsize 500
+                            spacing 5
+                            fixed:
+                                xysize 112,112
+                                add "heart big" matrixcolor ColorizeMatrix(loyalty_color[1], loyalty_color[0]) xysize (90,90) fit "contain" align (0.5,0.5)
+                            fixed:
+                                xysize 380,112
+                                text loyalty_desc font "FONT_bold" size 35 color "#fff" align 0.3,0.5 layout "subtitle":
+                                    if len(loyalty_desc) > 40:
+                                        size 30
                 for category in ['once', 'setup']:
                     for skill in pilot.skills[category]:
                         # Don't display those skills if learned
