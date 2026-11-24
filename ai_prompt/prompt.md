@@ -3,11 +3,11 @@ Think of a Fire Emblem campaign, but with chess gameplay.
 The pieces are huge robots called CHESSMEN. The characters pilot those robots, which move like chess pieces.
 
 I only wrote a few maps. Based on them, I want you to build:
-- the world map, the army preparation and the affinity tab (see Gameplay),
+- the world map, the deployment and the affinity tab (see Gameplay),
 - the ship and its rooms (see The ship),
-- the next 2 maps: the one where we meet kaworu, then the one where we try to meet nunnally.
+- the next 2 maps, each with a scripted fight: one after meeting kaworu, and one after meeting nunnally, the scientist and the mercenary (see Story).
 
-After those 2 maps, the ship becomes available, and all the following maps are randomly generated with the same generator as the roguelike mode (`setup_rogue()` in `src/roguelike.rpy`).
+After those 2 maps, the ship becomes available, and all the following fights are randomized, endlessly, with the same generator as the roguelike mode (`setup_rogue()` in `src/roguelike.rpy`).
 
 Put the code for each system in its own .rpy files so it can easily be black-boxed.
 
@@ -26,7 +26,7 @@ THE MIDDLE KINGDOM: in the past, they and the Holy Empire were a single country.
 THE UNITED NATIONS: a faraway ally of the Middle Kingdom. They are similar to the US and Europe: they help the Middle Kingdom indirectly, but never interfere directly for fear of a nuclear war with the Holy Empire. They could have dark skin.
 THE MILLENIUM DYNASTY: a country with a rich history. They help the Middle Kingdom more directly, and they have the Cannon piece (from xiangqi, Chinese chess). In general they are very Asian-coded.
 
-chess world map.psd gives an idea of the world map. The big red country is the Holy Empire. The small white country is the Middle Kingdom.
+`world_map.webp` (in this folder) gives an idea of the world map. The big red country is the Holy Empire. The small white country is the Middle Kingdom.
 
 # Story
 
@@ -40,27 +40,49 @@ We then play kallen, a soldier of the MIDDLE KINGDOM. Her superior oghi just bet
 
 The two of them collaborate, because lelouch knows the whereabouts of the Prince. He also provides the ROOK CHESSMAN to kallen.
 
-This is part of the two maps i want you to code:
-The two of them encounter kaworu, a friend of kallen. First they need to go to rendezvous point A: lelouch tells them they need to go there to retrieve someone before they can go to the Prince (it's on the way anyway). He doesn't tell kallen who: they go there to retrieve nunnally, a scientist and a mercenary. The scientist and the mercenary aren't in the game yet, so add them. Cue a fight where kaworu also takes part in a pawn.
+These are the two maps I want you to code, each with a scripted fight:
+
+1. The two of them encounter kaworu, a friend of kallen. Then they fight some enemies, and kaworu takes part in a Pawn.
+2. lelouch tells them they need to go to rendezvous point A to retrieve someone before they can go to the Prince (it's on the way anyway). He doesn't tell kallen who: it's nunnally, a scientist and a mercenary. The scientist and the mercenary aren't in the game yet, so add them. After meeting them, they fight.
+
+# Characters
+
+Each character has a story that can change their gameplay: unique rules that affect their relationships (especially Trust), which discussions and character development can unlock or change.
+
+- `lelouch`: the hero, a prince of the Holy Empire (see Story). He hides his identity as the mysterious KING. Cold and calculating, like Lelouch in the anime Code Geass. His tarot card is the Magician: he makes his plans reality.
+- `nunnally`: lelouch's sister. She uses a wheelchair. A mix of Rollo and Nunnally from Code Geass: she wants to be useful. She doesn't fight until she convinces lelouch to let her pilot a robot. Then she must learn to drive a Ghost with cc, or a Cannon with china. It's a scripted mission:
+  1. A conversation where she convinces lelouch.
+  2. Put nunnally in the classroom with cc or china. This works even if the teacher hasn't learned all their skills.
+  3. Put nunnally in a robot with an extra seat, with the same teacher, to finalize it. She learns the skill, and a scripted dialogue plays.
+- `kallen`: a Middle Kingdom soldier, known as "the Lion of the battlefield". Blunt and proud, like Kallen in Code Geass. A royalist: she loses 4 Trust every time you recruit a non-royalist.
+- `suzaku`: the Prince of the Middle Kingdom (`young_suzaku` in the flashback). He loses 2 Trust every time you deploy him, and gains 2 Trust every time he isn't deployed. After talking with lelouch, he stops losing Trust when deployed.
+- `kaworu`: kallen's friend. Personality and gender not decided yet.
+- `oghi`: kallen's superior, who betrays the Middle Kingdom.
+- `jagen`: the Prince's servant. He dies in the flashback.
+- `abel`: works for jagen, and escapes with the Prince.
+- `stanley`: a commander of the Holy Empire.
+- `cc`: can teach nunnally to drive the Ghost.
+- `china`: can teach nunnally to drive the Cannon.
+- The scientist and the mercenary: new characters for you to invent. A quick draft is enough; I'll probably change them later.
 
 
 # Gameplay
 
 ## World map
 
-Between fights there is a world map where the player can see the stamina of each character and every CHESSMAN they possess. They click on the next dot for the next scripted fight. Social discussions and the affinity tab are also on the world map (see Trust and affinity).
+Between fights there is a world map where the player can see the stamina of each character and every CHESSMAN they possess. They click on the next dot for the next scripted fight. Social discussions and the affinity tab are also on the world map (see Trust and affinity). The full world map unlocks after `map_1_1`, my last written map.
 
-The world map also has a PREPARATION menu, similar to the pilot and robot stats screen. There, the player builds their tarot deck (if they have any cards) and their team presets: many slots, each a 2x8 (or 2x6) grid where they place robots and pilots, so they don't have to place every piece by hand before each battle.
+The world map also has a PREPARATION menu, similar to the pilot and robot stats screen. There, the player builds their tactic card deck (if they have any cards) and their team presets: many slots, each a 2x8 (or 2x6) grid where they place robots and pilots, so they don't have to place every piece by hand before each battle.
 
-## Army preparation
+## Deployment
 
-Once the world map is unlocked, the player can also arrange their army. They prepare the 16 squares available to them, choosing where the robots are placed and who pilots them. They can quick-load a team preset if it has the same width as the board, then adjust it by hand for that board. The king must start in the middle of the back row (e1 for White on an 8x8 board). The Middle Kingdom is always white.
+Deployment is the step right before a battle starts, where the player makes their last adjustments. Once the world map is unlocked, the player can arrange their army. They prepare the 16 squares available to them, choosing where the robots are placed and who pilots them. They can quick-load a team preset if it has the same width as the board, then adjust it by hand for that board. The king must start in the middle of the back row (e1 for White on an 8x8 board). The Middle Kingdom is always white.
 
 ## The ship
 
 Like in XCOM, there are micro and macro plays: the micro plays are the fights, the macro is improving your technology tree, getting passive buffs, etc.
 
-After the player rescues suzaku, they negotiate with the UN and the Millenium Dynasty, who provide a huge ship that acts as a hangar for the CHESSMEN.
+In the final game, after the player rescues suzaku, they negotiate with the UN and the Millenium Dynasty, who provide a huge ship that acts as a hangar for the CHESSMEN. For this debug build, make the ship available earlier: right after the 2 new maps.
 
 One battle = one day: it's the basic unit of time. Some rare days have no battle, so everyone gets a chance to rest and use the ship's facilities.
 
@@ -81,7 +103,7 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 - Radar room: the player can preview the enemy composition of the next fight from the world map. It works by itself once built, with no pilot needed.
 - Classroom: must be 2 pilots. One pilot must have learned all their skills: they become the teacher and transfer all their XP to the second pilot, the student for that day.
 
-# Characters
+# Pilots
 
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
@@ -104,11 +126,7 @@ Each character has an affinity with every other character. Lelouch's affinity wi
 - Queen: a pilot with `drive_q` can drive a Queen alone. Otherwise, 2 pilots with high affinity can drive a Queen together: one who can drive the Rook and one who can drive a minor piece. Keep `drive_q` working, since roguelike mode uses it. I may later remove it from story mode only.
 - A tab displays every character and their current affinity with the others.
 
-Each character can also have unique rules that affect their relationships, especially their Trust. Discussions and character development can change these rules. For example:
-
-- kallen loses 4 Trust every time you recruit a non-royalist.
-- suzaku loses 2 Trust every time you deploy him, and gains 2 Trust every time he isn't deployed. After talking with lelouch, he stops losing Trust when deployed.
-- nunnally must choose between china and cc as a teacher, to learn to drive a Ghost or a Cannon. This is a mission to fulfill before the next dialogue can happen: put nunnally in the classroom with either cc or china.
+Since Trust is lelouch's affinity, it follows the same rules: it goes up when a pilot fights alongside lelouch or shares a room with him. Some characters also have unique Trust rules (see Characters).
 
 ### Loyalty
 
@@ -128,24 +146,26 @@ A character who leaves goes into `DEAD_OR_DESERT`. Before they leave, a short co
 
 Each pilot has skills (see `PILOTS.csv` and `src/PILOT_SKILLS.rpy`): driving skills (which robots they can pilot), setup skills like Castle or Initiative, and one-time skills like Stamina Up.
 
-### Tarot
+### Tactic cards
+
+Tactic cards are themed on tarot cards. In game, call them TACTIC CARDS so it's explicit that they change the battle.
 
 When a character progresses in the story, they gain a tarot skill that unlocks their tarot card. For example, lelouch is the Magician: he makes his plans reality. In the final game this should be tied to the story, but for now a pilot unlocks their tarot skill when they have learned all their skills.
 
-During a battle, the player can play tarot cards. Each card has an effect that totally changes the rules of chess for 1 move. For example, the Fool: skip your turn.
+During a battle, the player can play tactic cards. Each card has an effect that totally changes the rules of chess for 1 move. For example, the Fool: skip your turn.
 
-The player has a limited deck: in the PREPARATION menu, they choose which tarot cards they can use in a battle (for example, only 3 different cards).
+The player has a limited deck: in the PREPARATION menu, they choose which tactic cards they can use in a battle (for example, only 3 different cards).
 
 A few cards already exist in `src/TAROT.rpy` and `src/PILOT_SKILLS.rpy` (`Tarot_skill`): the Fool, the Magician (`magicien`) and the Empress.
 
 ## Robots
 
-Robots can be upgraded in the overworld for money. The upgrades mostly reward keeping robots out of battle when you can.
+On the world map, the player clicks the UN or the Dynasty country to buy more robots and robot upgrades with money. The upgrades mostly reward keeping robots out of battle when you can.
 
 - Bitcoin miner: when this robot doesn't fight, +2 money.
 - Speed up the development of the ship.
 - Allow repainting the robot.
-- Allow handicapped people (nunnally) to drive it.
+- Extra seat: the robot holds 2 pilots. Usually only the first pilot drives it (except for Queens, see Trust and affinity), so the second pilot's main use is gaining affinity with the first. A robot with a free seat can also RESCUE a stray pilot by moving onto them; this is already in the code (move flag `rescue`, see `tests/test_rescue.rpy`).
 
 ## ignore
 

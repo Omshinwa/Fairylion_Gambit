@@ -219,6 +219,13 @@ init python:
     build.classify('**/#**', None)
     build.classify('**/thumbs.db', None)
 
+    ## Dev-only files that shouldn't ship to players.
+    build.classify('ai_prompt/**', None)
+    build.classify('pytest.ini', None)
+    build.classify('saves/**', None)
+    build.classify('game/python-packages/tests/**', None)
+    build.classify('game/python-packages/**__pycache__/**', None)
+
     ## To archive files, classify them as 'archive'.
 
     # build.classify('game/**.png', 'archive')

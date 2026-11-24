@@ -175,7 +175,8 @@ label l_enemy_play():
         if not chess.eq_board(engine):
             $ engine.copy(chess)
         if renpy.variant("web"):
-            $ engine_background_think(depth, persistent.cpu_strength)
+            ## no threads on web: think synchronously
+            $ engine_background_think(persistent.cpu_strength)
         else:
             ## allow the move to be played in the background
             $ renpy.invoke_in_thread(engine_background_think, persistent.cpu_strength, True)
