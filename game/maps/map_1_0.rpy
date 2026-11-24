@@ -6,6 +6,7 @@ label l_map_1_0:
     "3 years later into the conflict-"
 
     $ game = Game('l_map_1_0')
+    $ TEAM = [kallen, lelouch] # the flashback team of map 0-4 is over (TEAM is shown by the rewards screen)
     $ chess = Chess_control((5,5), bg='desert', bg_board='sand')
     $ chess.set_fen("5/5/5/5/5")
     $ chess.drop(kallen, 'c3', 0)

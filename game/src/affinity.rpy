@@ -12,6 +12,15 @@
 
 default AFFINITY = {} # (id_a, id_b) sorted -> int, lelouch pairs are stored as Trust instead
 
+# Affinities a new story starts with (the pair's order doesn't matter), applied by affinity_reset()
+define AFFINITY_START = {
+    # kallen (see Characters in ai_prompt/prompt.md)
+    ('kallen', 'stanley'): -2,
+    ('kallen', 'china'): -2,
+    ('kallen', 'cc'): -2,
+    ('kallen', 'kaworu'): 2,
+}
+
 define AFFINITY_FIGHT = 1
 define AFFINITY_SEAT = 3
 
@@ -22,6 +31,12 @@ init python:
 
     def _affinity_key(a, b):
         return tuple(sorted((a.id, b.id)))
+
+    def affinity_reset():
+        """A new story starts (l_intro): every affinity goes back to AFFINITY_START."""
+        AFFINITY.clear()
+        for pair, value in AFFINITY_START.items():
+            AFFINITY[tuple(sorted(pair))] = value
 
     def get_affinity(a, b):
         if a is b:
@@ -88,7 +103,7 @@ init python:
 
     def affinity_table_members(pilot):
         """Who appears in the Relationships table: named pilots in TEAM (Lelouch first), plus the pilot being viewed."""
-        members = [p for p in TEAM if affinity_counts(p) and p.isHere()]
+        members = [p for p in TEAM if affinity_counts(p)]
         if pilot not in members and affinity_counts(pilot):
             members.append(pilot)
         members.sort(key=lambda p: p.id != 'lelouch') # stable: Lelouch first, then TEAM order

@@ -99,15 +99,19 @@ init -2 python:
 
             return heart_list
 
+        def rest_gain(self):
+            """STAMINA gained each time this pilot rests."""
+            gain = 1 + loyalty_rest_bonus(self) # Red loyalty: +1
+            if 'rest' in self.skills['once']:
+                gain += 1
+            return gain
+
         def rest(self):
             """
             return True if health was changed, False otherwise
             """
             original = self.health
-            gain = 1 + loyalty_rest_bonus(self) # Red loyalty: +1
-            if 'rest' in self.skills['once']:
-                gain += 1
-            self.health = min(self.health+gain, self.max_health)
+            self.health = min(self.health+self.rest_gain(), self.max_health)
             if original != self.health:
                 return True
             return False

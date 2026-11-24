@@ -1,9 +1,22 @@
+init python:
+    def reset_board():
+        """Back on the map: an empty board, and nobody sits in a robot anymore
+        (the say screen shows the cockpit mugshot of a character still linked to a piece)."""
+        global chess
+        chess = Chess_control()
+        for pilot_id in character.PILOTLIST:
+            char = getattr(character, pilot_id, None)
+            if hasattr(char, 'char_on_battlefield'):
+                del char.char_on_battlefield
+
 label l_map_select:
     $ g.items['undo'] += 3
+    $ reset_board()
     scene onlayer screens
     scene
-    show screen s_map_select 
+    show screen s_map_select
     with dissolve_fast
+    call l_new_day # see src/day.rpy
 
     label .loop:
     call screen s_pauseScreen(hard_stop=True)

@@ -76,6 +76,8 @@ init python:
 
 label l_after_successful_mission:
     $ affinity_battle_won() # see src/affinity.rpy
+    if story_rewards_battle(): # EXP and rest from map 1-0 on, see src/battle_rewards.rpy
+        call l_story_battle_rewards
     $ g.progress += 1
     if renpy.has_label (game.level + "_Win"):
         call expression game.level + "_Win"

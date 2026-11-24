@@ -275,54 +275,12 @@ label l_result_screen:
 
     show screen s_recruit(Pilot.get_rogue_recruits())
 
-    pause
-    $ renpy.set_screen_variable('state', 1, screen='s_in_between_rounds')
-
-    python: ### remove used robots, rest people
-        # remove used robots
+    python: ### remove used robots
         ROBOTS = [robot for i, robot in enumerate(ROBOTS) if not robot.deployed]
         # sort them by value
         ROBOTS.sort(key=lambda r: r.value)
 
-        for pilot in TEAM:
-            # ignore the dead
-            if pilot.health <= 0:
-                continue
-
-            if pilot.deployed:
-                pilot.increase_xp(1)
-                renpy.play('sound/misc/xp.wav', channel='sound')
-                if renpy.get_screen_variable('state', screen='s_in_between_rounds') == 1:
-                    renpy.pause(0.3, modal=False)
-        
-        for pilot in TEAM:
-            # ignore the dead
-            if pilot.health <= 0:
-                continue
-
-            # if we didnt use a pilot, rest it:
-            if not pilot.deployed:
-                if pilot.rest():
-                    renpy.play('sound/misc/xp.wav', channel='sound')
-                    if renpy.get_screen_variable('state', screen='s_in_between_rounds') == 1:
-                        renpy.pause(0.3, modal=False)
-
-    $ renpy.set_screen_variable('state', 2, screen='s_in_between_rounds')
-    pause
-    $ renpy.set_screen_variable('state', 3, screen='s_in_between_rounds')
-
-    python: ### give XP to the checkmating piece
-        pilot = chess.history[-1].move.piece._pilot
-        if len(pilot) == 1:
-            pilot[0].increase_xp(2)
-        elif len(pilot) >= 2:
-            pilot[0].increase_xp(1)
-            pilot[1].increase_xp(1)
-        renpy.play('sound/misc/boost.wav')
-
-    if renpy.get_screen_variable('state', screen='s_in_between_rounds')<4:
-        pause
-        $ renpy.set_screen_variable('state', 4, screen='s_in_between_rounds')
+    call l_battle_rewards # EXP and rest, see src/battle_rewards.rpy
 
     label .loop:
         call screen s_pauseScreen(hard_stop=True)

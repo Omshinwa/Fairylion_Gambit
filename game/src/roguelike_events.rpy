@@ -114,7 +114,8 @@ screen s_in_between_rounds():
                 ease 0.5 xpos 0
         use s_in_between_rounds_mini(False, state, original_health)
 
-    use s_shop_coin()
+    if rogue: # also shown after story battles (src/battle_rewards.rpy), which have no shop
+        use s_shop_coin()
 
 screen s_in_between_rounds_mini(battle=True, state=None, original=None):
     layer 'master'
@@ -204,7 +205,7 @@ screen s_in_between_rounds_mini(battle=True, state=None, original=None):
 
                                             if state>=1:
                                                 text _("> deployed:  +1") ypos -10 xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
-                                            if state>=3 and chess.history and pilot in chess.history[-1].move.piece._pilot:
+                                            if state>=3 and pilot in rewards_checkmate_pilots(): # see src/battle_rewards.rpy
                                                 text _("> checkmate: +2") ypos -20  xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
                                 else:
                                     vbox:
@@ -214,10 +215,11 @@ screen s_in_between_rounds_mini(battle=True, state=None, original=None):
                                             text _("STAMINA: [pilot.health]/[pilot.max_health]") xalign 0.0 style 'style_big_white_text' color '#ffa'
 
                                             if state>=1:
+                                                $ rest_gain = pilot.rest_gain() # Red loyalty and the Rest skill add to it
                                                 if 'rest' in pilot.skills['once']:
-                                                    text _("> xtra rest: +2") ypos -10  xalign 0.0 font "fonts/Compagnon-Medium.otf"  style 'style_big_white_text' size 30 at t_emphazise_text
+                                                    text _("> xtra rest: +[rest_gain]") ypos -10  xalign 0.0 font "fonts/Compagnon-Medium.otf"  style 'style_big_white_text' size 30 at t_emphazise_text
                                                 else:
-                                                    text _("> rested:    +1") ypos -10  xalign 0.0 font "fonts/Compagnon-Medium.otf"  style 'style_big_white_text' size 30 at t_emphazise_text
+                                                    text _("> rested:    +[rest_gain]") ypos -10  xalign 0.0 font "fonts/Compagnon-Medium.otf"  style 'style_big_white_text' size 30 at t_emphazise_text
         
         if state >= 4:
             button:

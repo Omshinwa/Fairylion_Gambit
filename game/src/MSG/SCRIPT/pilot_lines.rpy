@@ -38,6 +38,18 @@ init -2 python:
 # CC is good at drawing food from memory (hobby she had as a child because she drew what she wanted to eat.)
 # Maybe someday she killed someone and decided to never kill (maybe a dog or something). VV remembers
 
+label l_pilot_desert(pilot):
+    # a Grey pilot leaves the group on a new day (see l_new_day in src/day.rpy)
+    # placeholder talk for everyone: give a character their own lines with "if pilot.id == 'kallen':", like in l_pilot_death
+    $ deserter = getattr(character, pilot.id) # their Character, to talk as them
+    deserter "[lelouch.name], I'm done. I can't follow you anymore."
+    lelouch "Then go. I won't stop you."
+    deserter "Goodbye."
+    python:
+        TEAM.remove(pilot)
+        DEAD_OR_DESERT.append(pilot) # they won't talk anymore, except in flashbacks
+    return
+
 label l_pilot_death(pilot):
     if pilot == lelouch: 
         lelouch "I can't die here... Not yet..."

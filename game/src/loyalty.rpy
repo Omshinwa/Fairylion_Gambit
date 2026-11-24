@@ -6,7 +6,7 @@
 #   10 to 19     Blue    Normal.
 #   0 to 9       Green   Default. Won't fight if they could die: 1 small heart.
 #   -10 to -1    Yellow  Only fights with full STAMINA: every heart is small except the last one.
-#   below -10    Grey    Same as Yellow. 50% chance to leave each day (not implemented yet, needs the day system).
+#   below -10    Grey    Same as Yellow. 50% chance to leave the group each new day (l_new_day in src/day.rpy).
 #
 # Small hearts are STAMINA the pilot won't risk: they can only be deployed with more STAMINA than that.
 # A 1-STAMINA pilot at Green has no big heart, so they can't be deployed.
@@ -21,6 +21,8 @@ define LOYALTY_RED = 4
 # (light, dark) per level, indexed by loyalty_of() / TRUST_TO_LOYALTY()
 define LOYALTY_COLORS = [("#9fb39c","#789070"), ("#e2da89","#e5b24a"), ("#a0e79e","#47a878"),  ("#9ee0e7","#7584c2"), ("#ff93c5","#d55170")]
 define LOYALTY_TO_NAME = [_('Worst'),_('Bad'),_('Average'),_('Good'),_('Best')]
+define LOYALTY_EMOJI = ["💀", "🤢", "😐", "🙂", "😄"] # skull, sick, neutral, smile, big smile
+define LOYALTY_GREY_LEAVE_CHANCE = 0.5 # each new day
 
 init python:
     def TRUST_TO_LOYALTY(trust):
@@ -38,6 +40,8 @@ init python:
     def loyalty_of(pilot):
         """A pilot's loyalty level. Use this rather than TRUST_TO_LOYALTY(pilot.trust)."""
         if rogue: # roguelite: everyone is locked at Blue
+            return LOYALTY_BLUE
+        if pilot.id == 'lelouch': # Trust is how much the others trust him: he has no loyalty, no effect
             return LOYALTY_BLUE
         return TRUST_TO_LOYALTY(pilot.trust)
 
@@ -89,6 +93,12 @@ init python:
             message = __("{name} won't fight while they could die.").format(name=pilot.name)
         renpy.show_screen('s_loyalty_refuse', message=message, color=loyalty_color(pilot))
         renpy.restart_interaction() # called from click callbacks: make sure it gets drawn
+
+    def loyalty_deserters():
+        """Grey pilots who leave the group today (l_new_day). Never lelouch or generic pilots."""
+        return [pilot for pilot in TEAM
+            if pilot is not lelouch and affinity_counts(pilot)
+            and loyalty_of(pilot) == LOYALTY_GREY and renpy.random.random() < LOYALTY_GREY_LEAVE_CHANCE]
 
     def gain_trust(pilot, amount):
         """Change a pilot's Trust (their affinity with lelouch). Returns the change applied."""

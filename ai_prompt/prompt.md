@@ -54,8 +54,8 @@ Each character has a story that can change their gameplay: unique rules that aff
   1. A conversation where she convinces lelouch.
   2. Put nunnally in the classroom with cc or china. This works even if the teacher hasn't learned all their skills.
   3. Put nunnally in a robot with an extra seat, with the same teacher, to finalize it. She learns the skill, and a scripted dialogue plays.
-- `kallen`: a Middle Kingdom soldier, known as "the Lion of the battlefield". Blunt and proud, like Kallen in Code Geass. A royalist: she loses 4 Trust every time you recruit a non-royalist.
-- `suzaku`: the Prince of the Middle Kingdom (`young_suzaku` in the flashback). He loses 2 Trust every time you deploy him, and gains 2 Trust every time he isn't deployed. After talking with lelouch, he stops losing Trust when deployed.
+- `kallen`: a Middle Kingdom soldier, known as "the Lion of the battlefield". Blunt and proud, like Kallen in Code Geass. She starts with some affinities already set: -2 with stanley, china and cc, and +2 with kaworu (`AFFINITY_START` in `src/affinity.rpy`, applied when a new story starts).
+- `suzaku`: the Prince of the Middle Kingdom (`young_suzaku` in the flashback). He loses 2 Trust every time you deploy him, and gains 2 Trust every time he isn't deployed. After talking with lelouch, he stops losing Trust when deployed. Implemented in `src/character_rules.rpy` (counted when a battle starts). The talk with lelouch must set the flag: `$ done_flag['oncePerRun'].add('suzaku_trusts_lelouch')`.
 - `kaworu`: kallen's friend. Personality and gender not decided yet.
 - `oghi`: kallen's superior, who betrays the Middle Kingdom.
 - `jagen`: the Prince's servant. He dies in the flashback.
@@ -84,7 +84,7 @@ Like in XCOM, there are micro and macro plays: the micro plays are the fights, t
 
 In the final game, after the player rescues suzaku, they negotiate with the UN and the Millenium Dynasty, who provide a huge ship that acts as a hangar for the CHESSMEN. For this debug build, make the ship available earlier: right after the 2 new maps.
 
-One battle = one day: it's the basic unit of time. Some rare days have no battle, so everyone gets a chance to rest and use the ship's facilities.
+One battle = one day: it's the basic unit of time. Some rare days have no battle, so everyone gets a chance to rest and use the ship's facilities. A new day starts in `l_new_day` (`src/day.rpy`), called by `l_map_select` when a won battle goes back to the map.
 
 Each day, the player chooses how to develop the ship, such as building new rooms. This works like a technology tree that costs tech points: most rooms must be researched before they can be built. For example: research training rooms (2 tech points), then build a training room (2 tech points), then build another one (2 tech points), which extends the room so it holds 2 pilots. A room can't be used on the day it is extended.
 
@@ -107,6 +107,8 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
+
+After each won battle, the rewards screen (the roguelite one, `s_in_between_rounds`) gives +1 EXP to every pilot who fought, rests the others, and gives +2 EXP to the pilot(s) of the piece that made the checkmate (the winning move). In story mode it starts at map 1-0 (not during the tutorial maps 0-x), before the map's victory dialogue. See `src/battle_rewards.rpy`.
 
 ## Pilot screen
 
@@ -142,7 +144,7 @@ Since Trust is lelouch's affinity, it follows the same rules: it goes up when a 
 
 Trust sets a loyalty level, and each level has its own color and effect. Implemented in `src/loyalty.rpy` (`TRUST_TO_LOYALTY`, `loyalty_of()`).
 
-Small hearts show the stamina a pilot won't risk: they can only be deployed with more stamina than that. Pilots with 1 max stamina can't be deployed if their Trust is too low. Show each level's effect in the pilot stats menu as a passive, so the player remembers it.
+Small hearts show the stamina a pilot won't risk: they can only be deployed with more stamina than that. Pilots with 1 max stamina can't be deployed if their Trust is too low. Show each level's effect in the pilot stats menu as a passive, so the player remembers it. The STATS tab also shows an emoji after LOYALTY, from Grey to Red: 💀 🤢 😐 🙂 😄 (`LOYALTY_EMOJI` in `src/loyalty.rpy`).
 
 | Trust | Color | Effect |
 |---|---|---|
@@ -154,7 +156,9 @@ Small hearts show the stamina a pilot won't risk: they can only be deployed with
 
 In roguelite mode, every pilot is locked at Blue (for now `loyalty_of()` returns Blue whenever a roguelite run is active).
 
-A character who leaves goes into `DEAD_OR_DESERT`. Before they leave, a short conversation plays (2 or 3 lines) where the pilot tells lelouch why they're leaving.
+Lelouch has no loyalty: Trust is how much the others trust him. `loyalty_of()` returns Blue (no effect) for him, and his STATS tab has no LOYALTY row.
+
+A character who leaves goes into `DEAD_OR_DESERT`. Before they leave, a short conversation plays (2 or 3 lines) where the pilot tells lelouch why they're leaving. Implemented: `l_new_day` (`src/day.rpy`) rolls the 50% for each Grey pilot (`loyalty_deserters()` in `src/loyalty.rpy`, never lelouch or generic pilots), and `l_pilot_desert` (`src/MSG/SCRIPT/pilot_lines.rpy`) plays the talk. For now everyone uses the same placeholder lines.
 
 ## Skills
 

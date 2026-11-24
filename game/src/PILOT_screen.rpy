@@ -42,25 +42,31 @@ screen s_character_info(pilot):
         xpos 0.4
         ypos 20
         vbox:
-            xpos 30
             spacing 10
-            # TABS
-            hbox:
-                xalign 0.5
-                spacing 40
-                for tab_id, tab_name in [('stats', _("STATS")), ('skills', _("SKILLS")), ('relationships', _("RELATIONSHIPS"))]:
-                    if tab_id != 'relationships' or not rogue: # no affinity in roguelite
-                        button at t_interactive:
-                            style 'empty'
-                            action SetScreenVariable('tab', tab_id)
-                            text tab_name style 'style_purple_text' font "Venus+Plomb.otf" kerning 10 color (COLOR_HIGHLIGHT() if tab == tab_id else "#fff8")
+            # TABS: same width each and filling the panel, so they don't move when the content below changes
+            $ tabs = [(tab_id, tab_name) for tab_id, tab_name in [('stats', _("STATS")), ('skills', _("SKILLS")), ('relationships', _("RELATIONSHIPS"))] if tab_id != 'relationships' or not rogue] # no affinity in roguelite
+            grid len(tabs) 1:
+                xfill True
+                spacing 4
+                for tab_id, tab_name in tabs:
+                    button at t_interactive:
+                        style 'empty'
+                        xfill True
+                        ysize 70
+                        background Solid("#0007") # the tabs that aren't open are darker
+                        selected_background None
+                        action SetScreenVariable('tab', tab_id)
+                        text tab_name style 'style_purple_text' font "Venus+Plomb.otf" size 36 kerning 4 align (0.5, 0.5)
 
-            if tab == 'skills':
-                use s_pilot_tab_skills(pilot)
-            elif tab == 'relationships' and not rogue:
-                use s_pilot_relationships(pilot) # see src/affinity.rpy
-            else:
-                use s_pilot_tab_stats(pilot)
+            vbox:
+                xpos 30
+                spacing 10
+                if tab == 'skills':
+                    use s_pilot_tab_skills(pilot)
+                elif tab == 'relationships' and not rogue:
+                    use s_pilot_relationships(pilot) # see src/affinity.rpy
+                else:
+                    use s_pilot_tab_stats(pilot)
 
     vbox:
         xalign 1.0
@@ -97,9 +103,13 @@ screen s_pilot_tab_stats(pilot):
         $ loyalty_text = __(LOYALTY_TO_NAME[loyalty_level])
     else:
         $ loyalty_text = "{} ({})".format(pilot.trust, __(LOYALTY_TO_NAME[loyalty_level]))
+    # drawn with Ren'Py's emoji font, without the outline (it draws a stroke across emoji)
+    $ loyalty_text += " {outlinecolor=#0000}" + LOYALTY_EMOJI[loyalty_level] + "{/outlinecolor}"
+    $ show_loyalty = pilot.id != 'lelouch' # Trust is the others' loyalty to lelouch, he has none himself
+    $ stat_rows = 4 if show_loyalty else 3
     vbox:
         spacing 10
-        grid 2 4:
+        grid 2 stat_rows:
             yspacing -20
             xspacing 80
             text _("STAMINA:") style 'style_3d_big_txt' align 1.0,0.5
@@ -118,8 +128,9 @@ screen s_pilot_tab_stats(pilot):
             text _("VALUE?") style "style_3d_big_txt" align 1.0,0.5
             text _("[pilot.price_euristic()]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ]  yalign 1.0
 
-            text _("LOYALTY:") style "style_3d_big_txt" align 1.0,0.5
-            text loyalty_text font "fonts/cmu_b.ttf" size 60 color loyalty_color[0] outlines [ (4, loyalty_color[1], 0, 2) ] yalign 1.0
+            if show_loyalty:
+                text _("LOYALTY:") style "style_3d_big_txt" align 1.0,0.5
+                text loyalty_text font "fonts/cmu_b.ttf" size 60 color loyalty_color[0] outlines [ (4, loyalty_color[1], 0, 2) ] yalign 1.0
 
         # LOYALTY passive (see src/loyalty.rpy)
         $ loyalty_desc = loyalty_passive_desc(pilot)
@@ -141,7 +152,8 @@ screen s_pilot_tab_stats(pilot):
                     if robot in pilot.can_drive:
                         button at t_interactive:
                             xysize(100,100)
-                            action Hide(None, Dissolve(.2)), Function(renpy.call_in_new_context,'l_tutorial_piece', pilot.can_drive[robot])
+                            # remove the blur before the new context: closing the piece info only removes the new context's copy of it
+                            action Hide(None, Dissolve(.2)), Function(remove_blur_master), Function(renpy.call_in_new_context,'l_tutorial_piece', pilot.can_drive[robot])
                             if pilot.can_drive[robot] == 'p' and 'promote_q' in pilot.skills['once']:
                                 add 'skill promote_q' xysize(100,100) align 0.5,0.5 nearest True
                             else:
