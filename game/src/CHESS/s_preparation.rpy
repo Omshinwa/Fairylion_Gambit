@@ -57,6 +57,7 @@ label l_start_battle():
     with dissolve
     pause
     $ chess.start()
+    $ affinity_battle_start() # see src/affinity.rpy
     $ done_flag["onceEveryFight"] = Set()
 
     # _START LABEL HAPPENS AFTER CHESS.START AND THE BATTLE SCREEN

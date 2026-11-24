@@ -2,7 +2,7 @@
 # Trust is a pilot's affinity with lelouch. It sets their loyalty level:
 #
 #   Trust        Level   Effect
-#   20 or more   Red     +2 STAMINA per rest. Trust gains are doubled.
+#   20 or more   Red     +2 STAMINA per rest.
 #   10 to 19     Blue    Normal.
 #   0 to 9       Green   Default. Won't fight if they could die: 1 small heart.
 #   -10 to -1    Yellow  Only fights with full STAMINA: every heart is small except the last one.
@@ -71,7 +71,7 @@ init python:
         """Text for the loyalty passive in the pilot stats screen. None at Blue (no effect)."""
         level = loyalty_of(pilot)
         if level == LOYALTY_RED:
-            return _("+2 STAMINA when resting. TRUST gains x2.")
+            return _("+2 STAMINA when resting.")
         if level == LOYALTY_GREEN and loyalty_reserved_stamina(pilot):
             return _("Won't fight if they could die.")
         if level == LOYALTY_YELLOW:
@@ -91,9 +91,7 @@ init python:
         renpy.restart_interaction() # called from click callbacks: make sure it gets drawn
 
     def gain_trust(pilot, amount):
-        """Change a pilot's Trust. Gains are doubled at Red. Returns the change actually applied."""
-        if amount > 0 and loyalty_of(pilot) == LOYALTY_RED:
-            amount *= 2
+        """Change a pilot's Trust (their affinity with lelouch). Returns the change applied."""
         pilot.trust += amount
         return amount
 

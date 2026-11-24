@@ -108,13 +108,13 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
 
-## Pilot screen (to do later)
+## Pilot screen
 
-The pilot screen (`s_character_info` in `src/PILOT_screen.rpy`) needs tabs:
+The pilot screen (`s_character_info` in `src/PILOT_screen.rpy`) has three tabs:
 
-- Stats: stamina, experience, the Trust stat shown as LOYALTY (for example "LOYALTY: 5 (Good)"), and the icons of the learned skills.
-- Skills: learn new skills and see what each one does (the current "- skills -" and "- learn -" part).
-- Relationships: the pilot's affinity with every other character (see Trust and affinity).
+- STATS (`s_pilot_tab_stats`): stamina, experience, value, LOYALTY (for example "5 (Average)", only the name in roguelite), the loyalty passive, the robot row, and the icons of the other learned skills.
+- SKILLS (`s_pilot_tab_skills`): the learned skills with what each one does, and the skills to learn.
+- RELATIONSHIPS (`s_pilot_relationships` in `src/affinity.rpy`, story mode only): a table with every pilot in TEAM as a row and a column. Each cell is the affinity between the two, colored like the loyalty levels. Lelouch's row and column are Trust. The pilot being viewed has their row and column highlighted.
 
 ## Permadeath
 
@@ -127,8 +127,10 @@ Characters can die if they lose all their stamina. Then, when they should talk, 
 
 Each character has an affinity with every other character. Lelouch's affinity with a character is their Trust: how much the character trusts Lelouch and their faction. Otherwise, affinity is a number that increases:
 
-- +1 with each other for all pilots who take part in the same fight.
+- +1 with each other for all pilots who take part in the same fight (counted when the fight is won).
+- +3 more for two pilots who sat in the same CHESSMAN (a robot with an extra seat).
 - +3 with each other for all pilots in the same room of the ship.
+- Story mode only: roguelite mode has no affinity. Implemented in `src/affinity.rpy` (fights and seats; rooms not yet).
 
 - When 2 characters have high enough affinity, a social discussion is triggered, like in Fire Emblem or Persona.
 - Queen: a pilot with `drive_q` can drive a Queen alone. Otherwise, 2 pilots with high affinity can drive a Queen together: one who can drive the Rook and one who can drive a minor piece. Keep `drive_q` working, since roguelike mode uses it. I may later remove it from story mode only.
@@ -144,7 +146,7 @@ Small hearts show the stamina a pilot won't risk: they can only be deployed with
 
 | Trust | Color | Effect |
 |---|---|---|
-| 20 or more | Red | Trust gains are doubled. +2 stamina per rest instead of +1. |
+| 20 or more | Red | +2 stamina per rest instead of +1. |
 | 10 to 19 | Blue | Normal. |
 | 0 to 9 | Green | Default. Won't fight if they could die: 1 small heart, so they need 2 stamina to be deployed. |
 | -10 to -1 | Yellow | Only fights with full stamina: every heart is small except the last one. |

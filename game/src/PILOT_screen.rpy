@@ -30,8 +30,9 @@ screen s_character_info(pilot):
         ypos 1020
         text pilot.get_desc() style 'style_text_handwritten' outlines [ (4, "#333", 0, 1) ] color "#fff" xalign 0.5 layout "subtitle" line_spacing -30
 
-    frame:
+    default tab = 'stats'
 
+    frame:
         style 'empty'
         add "#fff2"
         # background Frame('gui/bubble_frame.webp', 55, 55, 40, 40)
@@ -42,144 +43,24 @@ screen s_character_info(pilot):
         ypos 20
         vbox:
             xpos 30
-            text _("- stats -") style 'style_purple_text' color COLOR_HIGHLIGHT() xalign 0.5 kerning 25 font "Venus+Plomb.otf"
-            grid 2 3:
-                yspacing -20
-                xspacing 80
-                text _("STAMINA:") style 'style_3d_big_txt' align 1.0,0.5
-                hbox: #HEARTS
-                    xsize 200
-                    for heart in pilot._heart_display():
-                        if heart == '*':
-                            add "heart grey"
-                        else:
-                            $ heart_size, heart_level = heart # 'small' or 'big', see src/loyalty.rpy
-                            add "heart [heart_size]" matrixcolor ColorizeMatrix(LOYALTY_COLORS[heart_level][1],LOYALTY_COLORS[heart_level][0])
-                
-                text _("EXPERIENCE:") style "style_3d_big_txt" align 1.0,0.5
-                text _("[pilot.xp]{size=-20}/[pilot.xp_all]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ] yalign 1.0
-
-                text _("VALUE?") style "style_3d_big_txt" align 1.0,0.5
-                text _("[pilot.price_euristic()]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ]  yalign 1.0
-
-                # text _("LOYALTY:") style "style_3d_big_txt" align 1.0,1.0
-                # hbox:
-                #     spacing 20 align 0.5,1.0
-                #     text LOYALTY_TO_NAME[TRUST_TO_LOYALTY(pilot.trust)] font "fonts/cmu_b.ttf" size 60 color LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][0] outlines [ (4, LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][1], 0, 2) ] yalign 1.0
-                #     text "{{[pilot.trust]}" font "fonts/cmu_b.ttf" size 60 color LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][0] outlines [ (4, LOYALTY_COLORS[TRUST_TO_LOYALTY(pilot.trust)][1], 0, 2) ] yalign 1.0
-            
-            # fixed:
-            #     ysize 30
-            # text _("- c a n   P i l o t -") style 'style_big_white_text' color "#cb6bff" xalign 0.5
-            # fixed:
-            #     ysize 20
+            spacing 10
+            # TABS
             hbox:
                 xalign 0.5
-                spacing 10
-                for robot in ['^', 'L','x','+','#', '*']:
-                    fixed:
-                        xysize(100,100)
-                        add Solid("#696969")
-                        if robot in pilot.can_drive:
-                            button at t_interactive:
-                                xysize(100,100)
-                                action Hide(None, Dissolve(.2)), Function(renpy.call_in_new_context,'l_tutorial_piece', pilot.can_drive[robot])
-                                if pilot.can_drive[robot] == 'p' and 'promote_q' in pilot.skills['once']:
-                                    add 'skill promote_q' xysize(100,100) align 0.5,0.5 nearest True
-                                else:
-                                    add 'skill drive_[pilot.can_drive[robot]]' xysize(100,100) align 0.5,0.5 nearest True
-                        else:
-                            add "skin/pieces/robot/robot type [DEFAULT_ROBOT[robot]].svg" xysize(100,100) alpha 0.5
-                for skill in ['stamina','rest']:
-                    if skill in pilot.skills['once']:
-                        add 'skill [skill]' xysize 100,100 nearest True
+                spacing 40
+                for tab_id, tab_name in [('stats', _("STATS")), ('skills', _("SKILLS")), ('relationships', _("RELATIONSHIPS"))]:
+                    if tab_id != 'relationships' or not rogue: # no affinity in roguelite
+                        button at t_interactive:
+                            style 'empty'
+                            action SetScreenVariable('tab', tab_id)
+                            text tab_name style 'style_purple_text' font "Venus+Plomb.otf" kerning 10 color (COLOR_HIGHLIGHT() if tab == tab_id else "#fff8")
 
-            fixed:
-                ysize 20
-            text _("- skills -") style 'style_purple_text' color COLOR_HIGHLIGHT() xalign 0.5 kerning 25 font "Venus+Plomb.otf"
-
-            vpgrid:
-                cols 2
-                # LOYALTY passive (see src/loyalty.rpy)
-                $ loyalty_desc = loyalty_passive_desc(pilot)
-                if loyalty_desc:
-                    $ loyalty_color = LOYALTY_COLORS[loyalty_of(pilot)]
-                    fixed:
-                        xysize (500,120)
-                        hbox:
-                            xsize 500
-                            spacing 5
-                            fixed:
-                                xysize 112,112
-                                add "heart big" matrixcolor ColorizeMatrix(loyalty_color[1], loyalty_color[0]) xysize (90,90) fit "contain" align (0.5,0.5)
-                            fixed:
-                                xysize 380,112
-                                text loyalty_desc font "FONT_bold" size 35 color "#fff" align 0.3,0.5 layout "subtitle":
-                                    if len(loyalty_desc) > 40:
-                                        size 30
-                for category in ['once', 'setup']:
-                    for skill in pilot.skills[category]:
-                        # Don't display those skills if learned
-                        if category=='once' and skill in {'stamina','rest','promote_q','drive_p', 'drive_k', 'drive_r', 'drive_n', 'drive_b', 'drive_q'}:
-                            continue
-
-                        fixed:
-                            xysize (500,120)
-                            button:
-                                if category == 'can_learn':
-                                    at t_interactive
-                                    action Call('l_try_to_learn', pilot, skill)
-                                else:
-                                    action NullAction()
-
-                                hbox:
-                                    xsize 500
-                                    spacing 5
-                                    fixed:
-                                        xysize 112,112
-                                        if renpy.can_show('skill '+ skill):
-                                            add 'skill [skill]' xysize 112,112 nearest True:
-                                                if category == 'can_learn':
-                                                    alpha 0.8 nearest False
-                                        else:
-                                            add 'skill none' xysize 112,112 nearest True
-                                        if category == 'can_learn':
-                                            text "[SKILLLIST[skill].cost]" style 'style_purple_text' color COLOR_HIGHLIGHT() align 0.5,0.5 text_align 0.5
-                                    fixed:
-                                        xysize 380,112
-                                        text SKILLLIST[skill].desc font "FONT_bold" size 35 color "#fff" align 0.3,0.5 layout "subtitle":
-                                            if category == 'can_learn':
-                                                color "#fff9"
-                                            if len(SKILLLIST[skill].desc)>80:
-                                                size 30
-
-            fixed:
-                ysize 10
-            text _("- learn -") style 'style_purple_text' color COLOR_HIGHLIGHT() xalign 0.5 kerning 25 font "Venus+Plomb.otf"
-            vpgrid:
-                cols 2
-                for category in ['can_learn']:
-                    for skill in pilot.skills[category]:
-                        fixed:
-                            xysize (500,120)
-                            button at t_interactive:
-                                action Call('l_try_to_learn', pilot, skill)
-
-                                hbox:
-                                    xsize 500
-                                    spacing 5
-                                    fixed:
-                                        xysize 112,112
-                                        if renpy.can_show('skill '+ skill):
-                                            add 'skill [skill]' xysize 112,112 alpha 0.8 nearest True
-                                        else:
-                                            add 'skill none' xysize 112,112 nearest True
-                                        text "[SKILLLIST[skill].cost]" style 'style_purple_text' color COLOR_HIGHLIGHT() align 0.5,0.5 text_align 0.5
-                                    fixed:
-                                        xysize 380,112
-                                        text SKILLLIST[skill].desc font "FONT_bold" size 35 color "#fff9" align 0.3,0.5 layout "subtitle":
-                                            if len(SKILLLIST[skill].desc)>80:
-                                                size 30
+            if tab == 'skills':
+                use s_pilot_tab_skills(pilot)
+            elif tab == 'relationships' and not rogue:
+                use s_pilot_relationships(pilot) # see src/affinity.rpy
+            else:
+                use s_pilot_tab_stats(pilot)
 
     vbox:
         xalign 1.0
@@ -199,6 +80,150 @@ screen s_character_info(pilot):
         add pilot.img_side() align (0,1.0)
 
         add pilot.img_side_eyes() align (1.0,1.0) xysize (450, 150)
+
+
+# skills already shown as an icon in the robot row of the STATS tab
+define PILOT_SCREEN_ROW_SKILLS = {'stamina','rest','promote_q','drive_p', 'drive_k', 'drive_r', 'drive_n', 'drive_b', 'drive_q'}
+
+init python:
+    def pilot_screen_learned_skills(pilot):
+        """Learned skills that aren't already in the robot row: icons in STATS, descriptions in SKILLS."""
+        return [skill for category in ('once', 'setup') for skill in pilot.skills[category] if skill not in PILOT_SCREEN_ROW_SKILLS]
+
+screen s_pilot_tab_stats(pilot):
+    $ loyalty_level = loyalty_of(pilot)
+    $ loyalty_color = LOYALTY_COLORS[loyalty_level]
+    if rogue: # loyalty is locked in roguelite, the Trust number means nothing there
+        $ loyalty_text = __(LOYALTY_TO_NAME[loyalty_level])
+    else:
+        $ loyalty_text = "{} ({})".format(pilot.trust, __(LOYALTY_TO_NAME[loyalty_level]))
+    vbox:
+        spacing 10
+        grid 2 4:
+            yspacing -20
+            xspacing 80
+            text _("STAMINA:") style 'style_3d_big_txt' align 1.0,0.5
+            hbox: #HEARTS
+                xsize 200
+                for heart in pilot._heart_display():
+                    if heart == '*':
+                        add "heart grey"
+                    else:
+                        $ heart_size, heart_level = heart # 'small' or 'big', see src/loyalty.rpy
+                        add "heart [heart_size]" matrixcolor ColorizeMatrix(LOYALTY_COLORS[heart_level][1],LOYALTY_COLORS[heart_level][0])
+
+            text _("EXPERIENCE:") style "style_3d_big_txt" align 1.0,0.5
+            text _("[pilot.xp]{size=-20}/[pilot.xp_all]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ] yalign 1.0
+
+            text _("VALUE?") style "style_3d_big_txt" align 1.0,0.5
+            text _("[pilot.price_euristic()]") font "fonts/cmu_b.ttf" size 60 color "#ffffff" outlines [ (4, "#000000", 0, 2) ]  yalign 1.0
+
+            text _("LOYALTY:") style "style_3d_big_txt" align 1.0,0.5
+            text loyalty_text font "fonts/cmu_b.ttf" size 60 color loyalty_color[0] outlines [ (4, loyalty_color[1], 0, 2) ] yalign 1.0
+
+        # LOYALTY passive (see src/loyalty.rpy)
+        $ loyalty_desc = loyalty_passive_desc(pilot)
+        if loyalty_desc:
+            hbox:
+                xalign 0.5
+                spacing 10
+                add "heart big" matrixcolor ColorizeMatrix(loyalty_color[1], loyalty_color[0]) xysize (70,70) fit "contain" yalign 0.5
+                text loyalty_desc font "FONT_bold" size 35 color "#fff" yalign 0.5
+
+        # robots the pilot can drive
+        hbox:
+            xalign 0.5
+            spacing 10
+            for robot in ['^', 'L','x','+','#', '*']:
+                fixed:
+                    xysize(100,100)
+                    add Solid("#696969")
+                    if robot in pilot.can_drive:
+                        button at t_interactive:
+                            xysize(100,100)
+                            action Hide(None, Dissolve(.2)), Function(renpy.call_in_new_context,'l_tutorial_piece', pilot.can_drive[robot])
+                            if pilot.can_drive[robot] == 'p' and 'promote_q' in pilot.skills['once']:
+                                add 'skill promote_q' xysize(100,100) align 0.5,0.5 nearest True
+                            else:
+                                add 'skill drive_[pilot.can_drive[robot]]' xysize(100,100) align 0.5,0.5 nearest True
+                    else:
+                        add "skin/pieces/robot/robot type [DEFAULT_ROBOT[robot]].svg" xysize(100,100) alpha 0.5
+            for skill in ['stamina','rest']:
+                if skill in pilot.skills['once']:
+                    add 'skill [skill]' xysize 100,100 nearest True
+
+        # every other learned skill, as icons (descriptions are in the SKILLS tab)
+        $ learned_icons = pilot_screen_learned_skills(pilot)
+        if learned_icons:
+            hbox:
+                xalign 0.5
+                spacing 10
+                box_wrap True
+                xmaximum 1000
+                for skill in learned_icons:
+                    if renpy.can_show('skill ' + skill):
+                        add 'skill [skill]' xysize 100,100 nearest True
+                    else:
+                        add 'skill none' xysize 100,100 nearest True
+
+screen s_pilot_tab_skills(pilot):
+    viewport:
+        ysize 900
+        xsize 1010
+        mousewheel True
+        draggable True
+        vbox:
+            $ learned = pilot_screen_learned_skills(pilot)
+            if learned:
+                text _("- skills -") style 'style_purple_text' color COLOR_HIGHLIGHT() xalign 0.5 kerning 25 font "Venus+Plomb.otf"
+            hbox:
+                box_wrap True
+                xsize 1010
+                for skill in learned:
+                    fixed:
+                        xysize (500,120)
+                        hbox:
+                            xsize 500
+                            spacing 5
+                            fixed:
+                                xysize 112,112
+                                if renpy.can_show('skill '+ skill):
+                                    add 'skill [skill]' xysize 112,112 nearest True
+                                else:
+                                    add 'skill none' xysize 112,112 nearest True
+                            fixed:
+                                xysize 380,112
+                                text SKILLLIST[skill].desc font "FONT_bold" size 35 color "#fff" align 0.3,0.5 layout "subtitle":
+                                    if len(SKILLLIST[skill].desc)>80:
+                                        size 30
+
+            fixed:
+                ysize 10
+            text _("- learn -") style 'style_purple_text' color COLOR_HIGHLIGHT() xalign 0.5 kerning 25 font "Venus+Plomb.otf"
+            hbox:
+                box_wrap True
+                xsize 1010
+                for skill in pilot.skills['can_learn']:
+                    fixed:
+                        xysize (500,120)
+                        button at t_interactive:
+                            action Call('l_try_to_learn', pilot, skill)
+
+                            hbox:
+                                xsize 500
+                                spacing 5
+                                fixed:
+                                    xysize 112,112
+                                    if renpy.can_show('skill '+ skill):
+                                        add 'skill [skill]' xysize 112,112 alpha 0.8 nearest True
+                                    else:
+                                        add 'skill none' xysize 112,112 nearest True
+                                    text "[SKILLLIST[skill].cost]" style 'style_purple_text' color COLOR_HIGHLIGHT() align 0.5,0.5 text_align 0.5
+                                fixed:
+                                    xysize 380,112
+                                    text SKILLLIST[skill].desc font "FONT_bold" size 35 color "#fff9" align 0.3,0.5 layout "subtitle":
+                                        if len(SKILLLIST[skill].desc)>80:
+                                            size 30
 
 #       :::           ::::::::::: ::::    ::: ::::::::::: ::::::::::: 
 #      :+:                :+:     :+:+:   :+:     :+:         :+:     
