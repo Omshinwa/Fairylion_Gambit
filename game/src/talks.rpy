@@ -10,7 +10,7 @@
 # for example l_talk_kallen_kaworu_1 (first talk) or l_talk_kallen_lelouch_2.
 # A talk that isn't written yet plays a placeholder.
 
-define TALK_RANKS = [10, 20, 30] # affinity for the 1st, 2nd and 3rd talk of a pair
+define TALK_RANKS = [10, 15, 20] # affinity for the 1st, 2nd and 3rd talk of a pair
 
 default TALKS_DONE = {} # (id_a, id_b) sorted -> how many talks the pair had
 

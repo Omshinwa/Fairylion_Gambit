@@ -4,7 +4,7 @@
 # Story mode only: roguelite has no social side.
 #
 #   +1  for every pair of pilots who fought on a won day (with the day's EXP, see src/battle_rewards.rpy)
-#   +3  more if they sat in the same CHESSMAN (two-seat robot) in one of the day's battles
+#   +3  more if they shared a CHESSMAN (two-seat robot) when one of the day's battles was won
 #
 # Talks unlocked by high affinity: src/talks.rpy
 # Not done yet: +3 for sharing a room on the ship, also allows to drive a Queen

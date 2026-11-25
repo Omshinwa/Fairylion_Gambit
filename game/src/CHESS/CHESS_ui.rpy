@@ -284,7 +284,7 @@ init -1 python:
                     if type(target) is Robot_Piece:
                         if target.fen == 'i':
                             return True
-                        if target.type in element.can_drive:
+                        if pilot_fits_robot(element, target.type): # can drive it, or co-drive a Queen (src/queen_co_drive.rpy)
                             return True
                     return False
                 
@@ -311,7 +311,7 @@ init -1 python:
                     return False
                 else:
                     if isinstance(target, Robot_Piece) and target.fen == 'i':
-                        if element.type in target.pilot.can_drive:
+                        if pilot_fits_robot(target.pilot, element.type):
                             return True
                         else:
                             return False

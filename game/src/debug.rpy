@@ -168,23 +168,10 @@ screen s_debug(offset=(0,0)):
                         text "history:" size 25
                         for index, h_move in enumerate(chess.history):
                             if index + 5 > len(chess.history):
-                                text str(index) + ":" + debug_move_text(h_move.move) size 25
+                                text str(index) + ":" + str(h_move.move) size 25
                         spacing -10
 
 init python:
-    def debug_move_text(move):
-        """Like str(move), with the squares of the current board. str(move) uses Move.engine, which every new
-        Chess_control or Engine replaces: it can be another board, where the square doesn't exist (KeyError)."""
-        if hasattr(move.piece, 'fen'):
-            name = c.FEN_TO_PIECE[move.piece.fen]
-            if move.color == 0:
-                name = name.upper()
-        else:
-            name = move.piece.id
-        if move.fr in chess.POS_TO_XY and move.to in chess.POS_TO_XY:
-            return "{} {}{}".format(name, chess.POS_TO_A8(move.fr), chess.POS_TO_A8(move.to))
-        return "{} {}-{}".format(name, move.fr, move.to)
-
     def load_callback():
         global chess, engine
         # so __repr__ of Move can display correctly:

@@ -21,6 +21,8 @@ init -1 python:
             super().__init__(piece, color, pos, movement=movement, pid=pid, engine=self.engine)
             self.type = c.FEN_TO_TYPE[self.fen]
             self._pilot = [None]
+            if self.type == '*' and not globals().get('rogue'): # story mode: room for two co-drivers (src/queen_co_drive.rpy)
+                self._pilot = [None, None]
             self.pilot = pilot # Robot_Piece has a ._pilot property; capacity = len(_pilot), empty slot = None
 
             self.range = Robot_Piece.get_range_of(self.fen, self.engine, self.color)
@@ -105,11 +107,12 @@ init -1 python:
             """
             # change the type based on the main pilot's candrive skills
             if self.fen != 'i' and self.type != '^' and self._pilot[0] is not None:
-                if self.type in self._pilot[0].can_drive:
+                driven_fen = self.driven_fen()
+                if driven_fen:
                     # in the promotion case, we must NOT remove piece:
                     if not is_promotion_or_new_piece:
                         chess._remove_piece(self)
-                    self.fen = self._pilot[0].can_drive[ self.type ]
+                    self.fen = driven_fen
                     self.color = self._pilot[0].color
                     if not is_promotion_or_new_piece:
                         chess._append_piece(self)
@@ -136,16 +139,30 @@ init -1 python:
             else:
                 self.killable = True
 
+        def driven_fen(self):
+            """The piece this robot becomes with its pilots, or None if they can't drive it: the first pilot
+            drives it, or two pilots co-drive a Queen (story mode, see src/queen_co_drive.rpy)."""
+            first = self._pilot[0]
+            if first is None:
+                return None
+            if self.type in first.can_drive:
+                return first.can_drive[self.type]
+            if self.type == '*' and len(self.pilots) >= 2 and queen_co_drivers(self.pilots[0], self.pilots[1]):
+                return 'q'
+            return None
+
         def check_for_pilot(self):
             """
             if theres no pilot, or is dead, turn the piece neutral, doesnt work on opponent
             else turn into a 0 or 1 color
             """
-            if len(self.pilots) == 0 and self.color == chess.player:
+            # a Queen with only half of its co-drivers can't move either
+            no_driver = len(self.pilots) == 0 or (self.type == '*' and not self.driven_fen())
+            if no_driver and self.color == chess.player:
                 chess._remove_piece(self)
                 self.color = 2
                 chess._append_piece(self)
-            elif self.color == 2 and len(self.pilots) and self.type in self._pilot[0].can_drive:
+            elif self.color == 2 and len(self.pilots) and self.driven_fen():
                 chess._remove_piece(self)
                 self.color = chess.player
                 chess._append_piece(self)

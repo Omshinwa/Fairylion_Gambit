@@ -183,14 +183,14 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     ypos 75+20+offset[1] + 100*int(i/PER_ROW) +PREP_X_MARGIN
                     if type(v_select) == Robot_Piece:
                         if not v_select.fen in {'i', 'p'}:
-                            if not v_select.type in element.can_drive:
+                            if not pilot_fits_robot(element, v_select.type):
                                 draggable False
                                 hovered NullAction()
                 else:
                     ypos SPCE_TWEEN_P_R+offset[1] + 100*int(i/PER_ROW)+PREP_X_MARGIN
                     if isinstance(v_select, Pilot):
                         if not element.fen in {'i', 'p'}:
-                            if not element.type in v_select.can_drive:
+                            if not pilot_fits_robot(v_select, element.type):
                                 draggable False
                                 hovered NullAction()
                                 
@@ -202,7 +202,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     if pilot_or_robot == 'pilot':
                         if type(v_select) == Robot_Piece:
                             if not v_select.fen in {'i', 'p'}:
-                                if not v_select.type in element.can_drive:
+                                if not pilot_fits_robot(element, v_select.type):
                                     at transform:
                                         matrixcolor ColorizeMatrix("#000","#999")
 
@@ -234,11 +234,11 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     elif pilot_or_robot == 'robot':
 
                         if isinstance(v_select, Pilot):
-                            if not element.type in v_select.can_drive:
+                            if not pilot_fits_robot(v_select, element.type):
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
                         elif isinstance(v_select, Robot_Piece) and v_select.fen == 'i':
-                            if v_select._pilot[0] is None or not element.type in v_select._pilot[0].can_drive:
+                            if v_select._pilot[0] is None or not pilot_fits_robot(v_select._pilot[0], element.type):
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
                                     
@@ -344,11 +344,17 @@ init python:
                 chess.drop(new_piece, pos)
             else:
                 if type(target) == Robot_Piece:
-                    if target.pilots:
-                        f_unprepare(target, True) # in the case of an infantry, it will remove the infantry
-                        if chess.board[pos] == c.EMPTY:
-                            chess.drop(element, pos, chess.player)
-                    target.pilot = element
+                    if target.type == '*' and target.pilots and target.has_pilot_room() and element not in target.pilots:
+                        # a Queen with a free seat: sit next to the first pilot, to co-drive it (src/queen_co_drive.rpy)
+                        seats = list(target._pilot)
+                        seats[seats.index(None)] = element
+                        target.pilot = seats
+                    else:
+                        if target.pilots:
+                            f_unprepare(target, True) # in the case of an infantry, it will remove the infantry
+                            if chess.board[pos] == c.EMPTY:
+                                chess.drop(element, pos, chess.player)
+                        target.pilot = element
                 else:
                     chess.drop(element, pos, chess.player)
 

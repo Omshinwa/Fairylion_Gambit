@@ -330,10 +330,12 @@ class Move():
                 txt = txt.upper()
         else:
             txt = self.piece.id
-        if self.engine:
+        # Move.engine is the last board or engine created: it can be another board than the move's,
+        # where the squares don't exist (KeyError), so check them first
+        if self.engine and self.fr in self.engine.POS_TO_XY and self.to in self.engine.POS_TO_XY:
             txt += f" {self.engine.POS_TO_A8(self.fr)}{self.engine.POS_TO_A8(self.to)}"
         else:
-            return f" {self.fr}{self.to}"
+            txt += f" {self.fr}-{self.to}"
         return txt
         
     def __eq__(self, other):

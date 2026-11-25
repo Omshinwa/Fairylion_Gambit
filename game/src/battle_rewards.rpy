@@ -25,12 +25,10 @@ init python:
         return chapter.isdigit() and int(chapter) >= 1
 
     def rewards_mark_fighters():
-        """Story mode: every pilot on the player's side fought today (pilot.deployed, reset by the day's rewards),
-        and the pilots sharing a CHESSMAN sat together (rewards_seats)."""
+        """Story mode: every pilot on the player's side fought today (pilot.deployed, reset by the day's rewards)."""
         for piece in chess.get_pieces(chess.player):
             for pilot in piece.pilots:
                 pilot.deployed = True
-        rewards_seats.update(affinity_seat_pairs()) # see src/affinity.rpy
 
     def rewards_battle_start():
         """Called when a battle starts (l_start_battle)."""
@@ -52,6 +50,8 @@ init python:
         rewards_checkmate = rewards_checkmate_pilots()
         if story_rewards_battle():
             rewards_mark_fighters() # pilots who joined during the battle also fought (like lelouch's KING in map 1-0)
+            # pilots sharing a CHESSMAN: story mode has no ROBOTS list yet, its robots are the player's pieces
+            rewards_seats.update(affinity_seat_pairs()) # see src/affinity.rpy
             rewards_pending = True
 
 # Shared by roguelite and story mode. s_result_screen must be showing; each step waits for a click.

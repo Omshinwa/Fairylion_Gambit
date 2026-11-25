@@ -231,7 +231,7 @@ define -1 SKILLLIST = {
     'drive_c':  Skill(_("Cannon"), effect='drive', type='once', args=['x','c'], cost=2,
                 desc=_("Can pilot BISHOPs as CANNONs."), ),
     'drive_q':  Skill(_("Queen"),  effect='drive', type='once', args=['*','q'], cost=4,
-                desc=_("Can pilot QUEENs."), ),
+                desc=_("Can pilot a QUEEN alone."), ), # without it, 2 pilots can co-drive one (src/queen_co_drive.rpy)
 
     'stamina': Skill(_("Stamina Up"), effect ='stamina', type='once', cost=2,
                 desc='Increases Max Stamina by 1.',),
