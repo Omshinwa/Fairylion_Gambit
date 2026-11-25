@@ -150,6 +150,8 @@ screen s_result_screen_mini(battle=True, state=None, original=None):
                         break
                     if pilot.deployed!=battle:
                         continue
+                    if not battle and ship_room_of(pilot) is not None: # spends the day in a ship room (src/ship.rpy)
+                        continue
                     button at t_interactive:
                         sensitive pilot.health
                         if state>=2:

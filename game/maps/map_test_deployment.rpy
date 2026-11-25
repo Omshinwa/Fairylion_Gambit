@@ -3,16 +3,18 @@
 # Start it from the console with:  jump l_test_story_deployment
 #
 # kallen (ROOK) and kaworu (KNIGHT) have an affinity of 10: put them both in the QUEEN to co-drive it
-# (src/queen_co_drive.rpy).
+# (src/queen_co_drive.rpy). The ship is unlocked with 8 TECH: after the win, try the SHIP button.
 
 label l_test_story_deployment:
     scene
     scene onlayer screens
     $ rogue = False # story mode
     $ g.progress = 101 # after map 1-0
-    $ TEAM = [lelouch, kallen, kaworu]
+    $ TEAM = [lelouch, kallen, kaworu, nunnally]
     $ affinity_reset()
     $ AFFINITY[('kallen', 'kaworu')] = QUEEN_CO_DRIVE_AFFINITY
+    $ ship_unlocked = True # the SHIP button of the world map (src/ship.rpy)
+    $ TECH = 8
     python:
         for pilot in TEAM:
             pilot.health = pilot.max_health

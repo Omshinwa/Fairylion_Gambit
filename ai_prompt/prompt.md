@@ -105,6 +105,11 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 - Radar room: the player can preview the enemy composition of the next fight from the world map. It works by itself once built, with no pilot needed.
 - Classroom: must be 2 pilots. One pilot must have learned all their skills: they become the teacher and transfer all their XP to the second pilot, the student for that day.
 
+Done so far (part 1, `src/ship.rpy`): a SHIP button on the world map, shown when `ship_unlocked` is True (only the test map sets it for now, nothing in the story does yet). The ship screen is a placeholder: 6 empty spaces in a grid (`SHIP_HULL_SPACES`), a RESEARCH row and the rest space with every pilot who isn't in a room. Three rooms: training, rest and heavy gravity. Each one is researched (2 TECH), then built (2 TECH), then extended once to 2 seats (2 TECH, `SHIP_ROOM_MAX_SIZE`). An extended room is closed until the next day and its pilots go back to the rest space. Pick a pilot in the rest space, then a free seat; click a seated pilot to send them back. Lelouch never goes in a room. Pilots stay in their room from day to day until moved, and they're left out of the deployment (and of the rewards screen's rest). At each new day (`l_ship_day`, called by `l_new_day` when the ship is unlocked), a report shows:
+- training: +1 EXP and a normal rest; rest room: the pilot's usual rest +1 STAMINA; heavy gravity: +2 EXP, no rest.
+- +3 affinity between pilots of the same room (`AFFINITY_ROOM`).
+- +1 TECH per robot in `ROBOTS` that didn't fight. Story mode has no `ROBOTS` list yet, so this only gives TECH on the test map.
+
 # Pilots
 
 Each character can pilot certain robots.

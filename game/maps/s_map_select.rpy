@@ -59,6 +59,11 @@ screen s_map_select():
                     xalign 1.0
                     action Call('l_pilot_list', 'relationships')
                     text _('TALK') style 'style_3d_big_txt' size 40 at t_talk_pulse
+            if ship_unlocked: # rooms and TECH, see src/ship.rpy
+                button at t_interactive:
+                    xalign 1.0
+                    action Call('l_ship')
+                    text _('SHIP') style 'style_3d_big_txt'
 
 
     button at t_interactive:

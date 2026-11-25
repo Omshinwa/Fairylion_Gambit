@@ -77,7 +77,7 @@ label l_battle_rewards:
                 continue
 
             # if we didnt use a pilot, rest it:
-            if not pilot.deployed:
+            if not pilot.deployed and ship_room_of(pilot) is None: # in a ship room, the room decides (src/ship.rpy)
                 if pilot.rest():
                     renpy.play('sound/misc/xp.wav', channel='sound')
                     if renpy.get_screen_variable('state', screen='s_result_screen') == 1:

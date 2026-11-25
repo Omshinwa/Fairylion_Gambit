@@ -1,6 +1,7 @@
 # QUEEN CO-DRIVING (story mode)
 # A pilot with drive_q drives a QUEEN alone. Otherwise, two pilots with an affinity of 10 or more (Good)
-# can drive it together: one who can drive the ROOK and one who can drive a minor piece (KNIGHT or BISHOP).
+# can drive it together: one who can drive the ROOK and one who can drive an L or X class CHESSMAN
+# (KNIGHT, GHOST, BISHOP or CANNON: drive_g and drive_c use the same classes as drive_n and drive_b).
 # In story mode, Queens have a second seat for this (Robot_Piece.__init__ in src/CHESS/PIECE.rpy).
 # Roguelite has no affinity: there, only drive_q drives a Queen.
 #
@@ -14,6 +15,7 @@ init python:
         return '+' in pilot.can_drive
 
     def can_drive_minor(pilot):
+        """Can drive an L or X class CHESSMAN: knight, ghost, bishop or cannon."""
         return 'L' in pilot.can_drive or 'x' in pilot.can_drive
 
     def queen_co_drivers(a, b):

@@ -141,7 +141,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
 
             hbox:
                 ypos PREP_X_MARGIN*2 - 40
-                $ inventory = TEAM 
+                $ inventory = [pilot for pilot in TEAM if ship_room_of(pilot) is None] # pilots in a ship room don't fight (src/ship.rpy)
                 text _("Reserve") xalign 0.5 size 50
                 text _("sort:\n[Pilot.sort_method]") text_align 0 yoffset -4 size 30
 
