@@ -3,11 +3,11 @@
 # Trust (pilot.trust, see src/loyalty.rpy), so both go through the same functions here.
 # Story mode only: roguelite has no social side.
 #
-#   +1  for every pair of pilots who win a battle together
-#   +3  more if they sat in the same CHESSMAN (two-seat robot)
+#   +1  for every pair of pilots who fought on a won day (with the day's EXP, see src/battle_rewards.rpy)
+#   +3  more if they sat in the same CHESSMAN (two-seat robot) in one of the day's battles
 #
-# Not done yet: +3 for sharing a room on the ship, social discussions are triggered at high affinity,
-# also allows to drive a Queen
+# Talks unlocked by high affinity: src/talks.rpy
+# Not done yet: +3 for sharing a room on the ship, also allows to drive a Queen
 
 
 default AFFINITY = {} # (id_a, id_b) sorted -> int, lelouch pairs are stored as Trust instead
@@ -33,10 +33,11 @@ init python:
         return tuple(sorted((a.id, b.id)))
 
     def affinity_reset():
-        """A new story starts (l_intro): every affinity goes back to AFFINITY_START."""
+        """A new story starts (l_intro): every affinity goes back to AFFINITY_START, and no talk was had."""
         AFFINITY.clear()
         for pair, value in AFFINITY_START.items():
             AFFINITY[tuple(sorted(pair))] = value
+        TALKS_DONE.clear() # see src/talks.rpy
 
     def get_affinity(a, b):
         if a is b:
@@ -58,36 +59,24 @@ init python:
             key = _affinity_key(a, b)
             AFFINITY[key] = AFFINITY.get(key, 0) + amount
 
-    def _affinity_player_crews():
-        """(pilots, seat pairs) for the player's side of the current board."""
-        pilots = []
+    def affinity_seat_pairs():
+        """Pairs of named pilots sitting in the same CHESSMAN, on the player's side of the board."""
         seats = set()
         for piece in chess.get_pieces(chess.player):
             crew = [p for p in piece.pilots if affinity_counts(p)]
-            pilots += crew
             for i in range(len(crew)):
                 for j in range(i + 1, len(crew)):
                     seats.add(_affinity_key(crew[i], crew[j]))
-        return pilots, seats
+        return seats
 
-    def affinity_battle_start():
-        """Called when a battle starts (l_start_battle): remember who fights for the player."""
-        if rogue:
-            return
-        game.affinity_pilots, game.affinity_seats = _affinity_player_crews()
-
-    def affinity_battle_won():
-        """Called when a battle is won (l_after_successful_mission)."""
-        if rogue or not hasattr(game, 'affinity_pilots'):
-            return
-        team = game.affinity_pilots
+    def affinity_day_won(fought, seats):
+        """The day's battles were won (l_story_day_rewards): +1 for every pair who fought, +3 more for seat pairs."""
+        team = [p for p in fought if affinity_counts(p)]
         for i in range(len(team)):
             for j in range(i + 1, len(team)):
                 add_affinity(team[i], team[j], AFFINITY_FIGHT)
-                if _affinity_key(team[i], team[j]) in game.affinity_seats:
+                if _affinity_key(team[i], team[j]) in seats:
                     add_affinity(team[i], team[j], AFFINITY_SEAT)
-        del game.affinity_pilots # a battle only counts once
-        del game.affinity_seats
 
     def affinity_report():
         """Console helper: every affinity and Trust that isn't 0, e.g. affinity_report()"""
@@ -109,45 +98,72 @@ init python:
         members.sort(key=lambda p: p.id != 'lelouch') # stable: Lelouch first, then TEAM order
         return members
 
-# RELATIONSHIPS tab of the pilot screen (s_character_info in src/PILOT_screen.rpy).
-# A table with every pilot as a row and a column: each cell is the affinity between the two,
-# colored like loyalty (TRUST_TO_LOYALTY). Lelouch's row and column are Trust.
-# The row and column of the pilot being viewed are highlighted.
-screen s_pilot_relationships(pilot):
-    $ members = affinity_table_members(pilot)
+# RELATIONSHIPS: each cell is the affinity between two pilots, colored like loyalty (TRUST_TO_LOYALTY).
+# Lelouch's row and column are Trust.
+#   s_relationships_table():       every pilot in TEAM as a row and a column
+#                                  (RELATIONSHIPS tab of the PILOTS list, src/pilot_list.rpy)
+#   s_pilot_relationships(pilot):  only that pilot's row
+#                                  (RELATIONSHIPS tab of their profile, s_character_info in src/PILOT_screen.rpy)
+
+screen s_affinity_face(member, cell, highlight=False):
+    fixed:
+        xysize (cell, cell)
+        if highlight:
+            add Solid(COLOR_HIGHLIGHT())
+        add member.img_side() xysize (cell - 8, cell - 8) fit 'cover' align (0.5, 0.5)
+
+screen s_affinity_value(a, b, cell, talk=False): # talk: show (and play) the talk the pair can have, src/talks.rpy
+    $ value = get_affinity(a, b)
+    $ color = LOYALTY_COLORS[TRUST_TO_LOYALTY(value)]
+    if talk and talk_available(a, b):
+        button at t_interactive:
+            style 'empty'
+            xysize (cell, cell)
+            background Solid(color[0])
+            action Return(('talk', a, b)) # l_pilot_list plays it
+            text str(value) font "fonts/cmu_b.ttf" size max(18, int(cell * 0.35)) xalign 0.5 ypos 0.1 color "#222"
+            text _("TALK") style 'style_3d_big_txt' size max(16, int(cell * 0.28)) xalign 0.5 yalign 0.9 at t_talk_pulse
+    else:
+        fixed:
+            xysize (cell, cell)
+            add Solid(color[0])
+            text str(value) font "fonts/cmu_b.ttf" size max(18, int(cell * 0.45)) align (0.5, 0.5) color "#222"
+
+screen s_relationships_table():
+    $ members = affinity_table_members(None)
     if len(members) < 2:
         text _("No relationships yet.") style 'style_3d_big_txt' xalign 0.5 ypos 100
     else:
-        $ n = len(members)
-        $ side = n + 1 # one extra row and column for the heads
+        $ side = len(members) + 1 # one extra row and column for the faces
         $ cell = max(36, min(100, int(860 / side)))
-        $ value_size = max(18, int(cell * 0.45))
         grid side side:
             spacing 3
             xalign 0.5
-            ypos 10
             null width cell height cell
             for member in members: # column heads
-                fixed:
-                    xysize (cell, cell)
-                    if member is pilot:
-                        add Solid(COLOR_HIGHLIGHT())
-                    add member.img_side() xysize (cell - 8, cell - 8) fit 'cover' align (0.5, 0.5)
+                use s_affinity_face(member, cell)
             for row in members:
-                fixed: # row head
-                    xysize (cell, cell)
-                    if row is pilot:
-                        add Solid(COLOR_HIGHLIGHT())
-                    add row.img_side() xysize (cell - 8, cell - 8) fit 'cover' align (0.5, 0.5)
+                use s_affinity_face(row, cell) # row head
                 for col in members:
                     if row is col:
                         add Solid("#0006") xysize (cell, cell)
                     else:
-                        $ value = get_affinity(row, col)
-                        $ color = LOYALTY_COLORS[TRUST_TO_LOYALTY(value)]
-                        $ highlighted = row is pilot or col is pilot
-                        fixed:
-                            xysize (cell, cell)
-                            add Solid("#000b") # dark base, so dimmed cells look the same on any background
-                            add Solid(color[0]) alpha (1.0 if highlighted else 0.3)
-                            text str(value) font "fonts/cmu_b.ttf" size value_size align (0.5, 0.5) color ("#222" if highlighted else color[0])
+                        use s_affinity_value(row, col, cell, talk=True)
+
+screen s_pilot_relationships(pilot):
+    $ others = [member for member in affinity_table_members(pilot) if member is not pilot]
+    if not others:
+        text _("No relationships yet.") style 'style_3d_big_txt' xalign 0.5 ypos 100
+    else:
+        $ side = len(others) + 1 # one extra column for the pilot's face
+        $ cell = max(36, min(110, int(1000 / side)))
+        grid side 2:
+            spacing 3
+            xalign 0.5
+            ypos 10
+            null width cell height cell
+            for member in others: # column heads
+                use s_affinity_face(member, cell)
+            use s_affinity_face(pilot, cell, highlight=True) # the row
+            for member in others:
+                use s_affinity_value(pilot, member, cell)

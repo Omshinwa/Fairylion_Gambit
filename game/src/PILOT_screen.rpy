@@ -43,20 +43,8 @@ screen s_character_info(pilot):
         ypos 20
         vbox:
             spacing 10
-            # TABS: same width each and filling the panel, so they don't move when the content below changes
             $ tabs = [(tab_id, tab_name) for tab_id, tab_name in [('stats', _("STATS")), ('skills', _("SKILLS")), ('relationships', _("RELATIONSHIPS"))] if tab_id != 'relationships' or not rogue] # no affinity in roguelite
-            grid len(tabs) 1:
-                xfill True
-                spacing 4
-                for tab_id, tab_name in tabs:
-                    button at t_interactive:
-                        style 'empty'
-                        xfill True
-                        ysize 70
-                        background Solid("#0007") # the tabs that aren't open are darker
-                        selected_background None
-                        action SetScreenVariable('tab', tab_id)
-                        text tab_name style 'style_purple_text' font "Venus+Plomb.otf" size 36 kerning 4 align (0.5, 0.5)
+            use s_tab_bar(tabs)
 
             vbox:
                 xpos 30
@@ -87,6 +75,22 @@ screen s_character_info(pilot):
 
         add pilot.img_side_eyes() align (1.0,1.0) xysize (450, 150)
 
+
+# TABS: same width each and filling the parent, so they don't move when the content below changes.
+# Each tab sets the screen variable 'tab' of the screen using this one (s_character_info, s_pilot_list).
+screen s_tab_bar(tabs): # tabs: [(tab_id, name), ...]
+    grid len(tabs) 1:
+        xfill True
+        spacing 4
+        for tab_id, tab_name in tabs:
+            button at t_interactive:
+                style 'empty'
+                xfill True
+                ysize 70
+                background Solid("#0007") # the tabs that aren't open are darker
+                selected_background None
+                action SetScreenVariable('tab', tab_id)
+                text tab_name style 'style_purple_text' font "Venus+Plomb.otf" size 36 kerning 4 align (0.5, 0.5)
 
 # skills already shown as an icon in the robot row of the STATS tab
 define PILOT_SCREEN_ROW_SKILLS = {'stamina','rest','promote_q','drive_p', 'drive_k', 'drive_r', 'drive_n', 'drive_b', 'drive_q'}

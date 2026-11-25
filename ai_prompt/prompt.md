@@ -72,6 +72,8 @@ Each character has a story that can change their gameplay: unique rules that aff
 
 Between fights there is a world map where the player can see the stamina of each character and every CHESSMAN they possess. They click on the next dot for the next scripted fight. Social discussions and the affinity tab are also on the world map (see Trust and affinity). The full world map unlocks after `map_1_1`, my last written map.
 
+Done so far: a PILOTS button on the map opens a list with two tabs. PILOTS: one row per pilot in TEAM (stamina hearts in loyalty colors, EXP, "can learn a skill", loyalty emoji); clicking a row opens their profile, where they can learn skills. RELATIONSHIPS: the affinity table of the whole TEAM (`s_relationships_table` in `src/affinity.rpy`). See `src/pilot_list.rpy`. The CHESSMEN aren't listed yet (story mode doesn't track owned robots).
+
 The world map also has a PREPARATION menu, similar to the pilot and robot stats screen. There, the player builds their tactic card deck (if they have any cards) and their team presets: many slots, each a 2x8 (or 2x6) grid where they place robots and pilots, so they don't have to place every piece by hand before each battle.
 
 ## Deployment
@@ -108,7 +110,7 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
 
-After each won battle, the rewards screen (the roguelite one, `s_in_between_rounds`) gives +1 EXP to every pilot who fought, rests the others, and gives +2 EXP to the pilot(s) of the piece that made the checkmate (the winning move). In story mode it starts at map 1-0 (not during the tutorial maps 0-x), before the map's victory dialogue. See `src/battle_rewards.rpy`.
+After each won battle, the rewards screen (the roguelite one, `s_result_screen`) gives +1 EXP to every pilot who fought, rests the others, and gives +2 EXP to the pilot(s) of the piece that made the checkmate (the winning move). In story mode it starts at map 1-0 (not during the tutorial maps 0-x) and shows once per day, on the world map right before the new day (`l_new_day`): a day can have several battles (map 1-0 has two), everyone who fought in one of them gets the +1 EXP, and the last battle's checkmate gets the +2. See `src/battle_rewards.rpy`.
 
 ## Pilot screen
 
@@ -116,7 +118,7 @@ The pilot screen (`s_character_info` in `src/PILOT_screen.rpy`) has three tabs:
 
 - STATS (`s_pilot_tab_stats`): stamina, experience, value, LOYALTY (for example "5 (Average)", only the name in roguelite), the loyalty passive, the robot row, and the icons of the other learned skills.
 - SKILLS (`s_pilot_tab_skills`): the learned skills with what each one does, and the skills to learn.
-- RELATIONSHIPS (`s_pilot_relationships` in `src/affinity.rpy`, story mode only): a table with every pilot in TEAM as a row and a column. Each cell is the affinity between the two, colored like the loyalty levels. Lelouch's row and column are Trust. The pilot being viewed has their row and column highlighted.
+- RELATIONSHIPS (`s_pilot_relationships` in `src/affinity.rpy`, story mode only): the pilot's row of the affinity table, their affinity with every other pilot in TEAM, colored like the loyalty levels. With Lelouch it's Trust. The whole table is in the PILOTS list of the world map.
 
 ## Permadeath
 
@@ -129,12 +131,12 @@ Characters can die if they lose all their stamina. Then, when they should talk, 
 
 Each character has an affinity with every other character. Lelouch's affinity with a character is their Trust: how much the character trusts Lelouch and their faction. Otherwise, affinity is a number that increases:
 
-- +1 with each other for all pilots who take part in the same fight (counted when the fight is won).
+- +1 with each other for all pilots who fought on a won day (given with the day's EXP, from map 1-0 on).
 - +3 more for two pilots who sat in the same CHESSMAN (a robot with an extra seat).
 - +3 with each other for all pilots in the same room of the ship.
 - Story mode only: roguelite mode has no affinity. Implemented in `src/affinity.rpy` (fights and seats; rooms not yet).
 
-- When 2 characters have high enough affinity, a social discussion is triggered, like in Fire Emblem or Persona.
+- When 2 characters have high enough affinity, a social discussion is triggered, like in Fire Emblem or Persona. Implemented in `src/talks.rpy`: at affinity 10, 20 and 30 (`TALK_RANKS`) a pair gets a talk. A TALK button lights up under PILOTS on the world map, the pair's cell shows TALK in the RELATIONSHIPS table, and clicking it plays the label `l_talk_<id>_<id>_<number>` (ids in alphabetical order, e.g. `l_talk_kallen_kaworu_1`), or a placeholder if it isn't written yet.
 - Queen: a pilot with `drive_q` can drive a Queen alone. Otherwise, 2 pilots with high affinity can drive a Queen together: one who can drive the Rook and one who can drive a minor piece. Keep `drive_q` working, since roguelike mode uses it. I may later remove it from story mode only.
 - A tab displays every character and their current affinity with the others.
 

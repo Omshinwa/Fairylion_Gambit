@@ -176,7 +176,7 @@ screen s_shop_coin():
         if 'preparation' in g.state:
             action Call('l_tutorial', 'preparation')
         elif 'result_screen' in g.state:
-            if renpy.current_screen().name == 's_in_between_rounds' and renpy.get_screen_variable('state', screen='s_in_between_rounds') <= 3:
+            if renpy.current_screen().name == 's_result_screen' and renpy.get_screen_variable('state', screen='s_result_screen') <= 3:
                 action Call('l_tutorial', 'results')
             else:
                 action Call('l_tutorial', 'recruit')
@@ -268,7 +268,7 @@ label l_map_rogue_Win:
 
 label l_result_screen:
     $ g.state = {'result_screen'}
-    show screen s_in_between_rounds
+    show screen s_result_screen
     hide screen s_battlefield
     hide black onlayer screens
     with dissolve
@@ -288,7 +288,7 @@ label l_result_screen:
             jump .loop
 
     hide screen s_recruit
-    hide screen s_in_between_rounds
+    hide screen s_result_screen
 
     python:
         TEAM = [pilot for pilot in TEAM if pilot.health]

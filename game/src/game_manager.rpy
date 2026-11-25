@@ -75,9 +75,7 @@ init python:
             self.__dict__.update(kwargs)
 
 label l_after_successful_mission:
-    $ affinity_battle_won() # see src/affinity.rpy
-    if story_rewards_battle(): # EXP and rest from map 1-0 on, see src/battle_rewards.rpy
-        call l_story_battle_rewards
+    $ rewards_battle_won() # who fought and the checkmate, for the rewards screen (src/battle_rewards.rpy)
     $ g.progress += 1
     if renpy.has_label (game.level + "_Win"):
         call expression game.level + "_Win"

@@ -57,7 +57,6 @@ label l_start_battle():
     with dissolve
     pause
     $ chess.start()
-    $ affinity_battle_start() # see src/affinity.rpy
     $ character_rules_battle_start() # see src/character_rules.rpy
     $ rewards_battle_start() # see src/battle_rewards.rpy
     $ done_flag["onceEveryFight"] = Set()

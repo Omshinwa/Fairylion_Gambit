@@ -91,7 +91,7 @@ label l_buy_robot(piece, price):
 #   +#+     +#+    +#+ +#+            +#+     +#+ +#+#+ +#+ +#+        +#+        +#+  +#+#+# 
 #  #+#      #+#    #+# #+#            #+#      #+#+# #+#+#  #+#        #+#        #+#   #+#+# 
 # ###       #########  ##########     ###       ###   ###   ########## ########## ###    #### 
-screen s_in_between_rounds():
+screen s_result_screen():
     default state = 0
     default original_xp = {pilot:pilot.xp for pilot in TEAM}
     default original_health = {pilot:pilot.health for pilot in TEAM}
@@ -103,7 +103,7 @@ screen s_in_between_rounds():
         else:
             at transform:
                 ease 0.5 xpos 0
-        use s_in_between_rounds_mini(True, state, original_xp)
+        use s_result_screen_mini(True, state, original_xp)
 
     fixed:
         if state >= 4:
@@ -112,12 +112,12 @@ screen s_in_between_rounds():
         else:
             at transform:
                 ease 0.5 xpos 0
-        use s_in_between_rounds_mini(False, state, original_health)
+        use s_result_screen_mini(False, state, original_health)
 
     if rogue: # also shown after story battles (src/battle_rewards.rpy), which have no shop
         use s_shop_coin()
 
-screen s_in_between_rounds_mini(battle=True, state=None, original=None):
+screen s_result_screen_mini(battle=True, state=None, original=None):
     layer 'master'
     default team_length = len(TEAM) # so we dont display any new recruit in this screen
     frame:
@@ -153,7 +153,8 @@ screen s_in_between_rounds_mini(battle=True, state=None, original=None):
                     button at t_interactive:
                         sensitive pilot.health
                         if state>=2:
-                            action Call('l_character_info', pilot)
+                            # in a new context: Call would end the pause of l_battle_rewards and advance it
+                            action Function(renpy.call_in_new_context, 'l_character_info', pilot)
                         else:
                             action IncrementScreenVariable('state', 1), Return()
                         xysize 300,240
@@ -205,7 +206,7 @@ screen s_in_between_rounds_mini(battle=True, state=None, original=None):
 
                                             if state>=1:
                                                 text _("> deployed:  +1") ypos -10 xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
-                                            if state>=3 and pilot in rewards_checkmate_pilots(): # see src/battle_rewards.rpy
+                                            if state>=3 and pilot in rewards_checkmate: # see src/battle_rewards.rpy
                                                 text _("> checkmate: +2") ypos -20  xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
                                 else:
                                     vbox:
@@ -314,7 +315,7 @@ label l_recruit(pilot):
         "[pilot.name] joins your team!"
         $ TEAM.append(pilot)
     hide screen s_recruit
-    hide screen s_in_between_rounds
+    hide screen s_result_screen
     with transition_bars
     return
 

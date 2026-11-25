@@ -15,6 +15,8 @@ label l_map_select:
     scene onlayer screens
     scene
     show screen s_map_select
+    if rewards_pending: # the day's rewards come first: show them with the map, so the map doesn't flash before them
+        show screen s_result_screen
     with dissolve_fast
     call l_new_day # see src/day.rpy
 
@@ -42,7 +44,22 @@ screen s_map_select():
         text 'MISSION [current_chapter]-[current_mission]' style 'style_3d_big_txt' pos 20,20
         if config.developer:
             action Call('l_set_level')
-        
+
+    if TEAM:
+        vbox:
+            align (1.0, 0.0)
+            offset (-20, 20)
+            spacing 10
+            button at t_interactive: # list of the pilots and their stamina, see src/pilot_list.rpy
+                xalign 1.0
+                action Call('l_pilot_list')
+                text _('PILOTS') style 'style_3d_big_txt'
+            if talks_available(): # two pilots can talk, see src/talks.rpy
+                button at t_interactive:
+                    xalign 1.0
+                    action Call('l_pilot_list', 'relationships')
+                    text _('TALK') style 'style_3d_big_txt' size 40 at t_talk_pulse
+
 
     button at t_interactive:
         # pos flag_position[g.progress]
