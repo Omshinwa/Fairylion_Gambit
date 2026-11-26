@@ -93,15 +93,15 @@ init python:
                     x = int(chess.size[0]/2) + ((x%2)*2-1) * int(x/2)
                     pos = chess.XY_TO_POS[x][y]
                     if new_piece.fen == 'k':
-                        # add the WHITE king
-                        chess.drop(Robot_Piece('k',color=2,unmovable=True), chess.XY_TO_POS[x][0])
+                        # add the WHITE king (story mode: the player's own KING robot, see src/story_battles.rpy)
+                        chess.drop(story_king() or Robot_Piece('k',color=2,unmovable=True), chess.XY_TO_POS[x][0])
                     if chess.board[pos] == c.EMPTY:
                         print(f"DROP: {new_piece} {pos}")
                         chess.drop(new_piece, pos)
                         break
 
-            ## give some extra pieces to white?
-            for i in range(int(self.round/4)+1):
+            ## give some extra pieces to white? (roguelite only: in story mode, robots are bought, see src/story_battles.rpy)
+            for i in range(int(self.round/4)+1 if rogue else 0):
                 piece = renpy.random.random()
                 if piece < 0.3:
                     piece = 'n'

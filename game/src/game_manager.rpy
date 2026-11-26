@@ -76,7 +76,8 @@ init python:
 
 label l_after_successful_mission:
     $ rewards_battle_won() # who fought and the checkmate, for the rewards screen (src/battle_rewards.rpy)
-    $ g.progress += 1
+    if not getattr(game, 'random_battle', False): # the story's random battles don't move the story (src/story_battles.rpy)
+        $ g.progress += 1
     if renpy.has_label (game.level + "_Win"):
         call expression game.level + "_Win"
     show black onlayer screens with transition_bars

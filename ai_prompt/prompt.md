@@ -80,6 +80,12 @@ The world map also has a PREPARATION menu, similar to the pilot and robot stats 
 
 Deployment is the step right before a battle starts, where the player makes their last adjustments. Once the world map is unlocked, the player can arrange their army. They prepare the 16 squares available to them, choosing where the robots are placed and who pilots them. They can quick-load a team preset if it has the same width as the board, then adjust it by hand for that board. The king must start in the middle of the back row (e1 for White on an 8x8 board). The Middle Kingdom is always white.
 
+Pawns: the roguelite has unlimited pawns (a pilot dropped on the pawn row makes one, "♙ = ∞" in the reserve). In story mode they're limited to the PAWN robots the player owns: a pilot dropped on the pawn row takes one, and the reserve shows how many are left (`story_pawns()` in `src/story_battles.rpy`).
+
+### Random battles
+
+Done so far (`src/story_battles.rpy`): from `g.progress` `STORY_RANDOM_FROM` (101, right after map 1-0, since `maps/map_1_1.rpy` is still a draft without a battle) the world map shows RANDOM BATTLE and its flag starts a battle made by the roguelite's generator (`Roguelike` in `src/roguelike.rpy`, kept in `story_battles`; each win makes the next one harder). Move `STORY_RANDOM_FROM` when the next maps are written. A random battle is a normal story day: deployment (with the SHIP button), battle, the rewards on the map, the new day. It doesn't change `g.progress`. Losing reloads the checkpoint saved when the flag was clicked, like the story maps. At that point the ship unlocks and the player gets their first robots (see Robots).
+
 ## The ship
 
 Like in XCOM, there are micro and macro plays: the micro plays are the fights, the macro is improving your technology tree, getting passive buffs, etc.
@@ -105,17 +111,18 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 - Radar room: the player can preview the enemy composition of the next fight from the world map. It works by itself once built, with no pilot needed.
 - Classroom: must be 2 pilots. One pilot must have learned all their skills: they become the teacher and transfer all their XP to the second pilot, the student for that day.
 
-Done so far (part 1, `src/ship.rpy`): a SHIP button on the world map, shown when `ship_unlocked` is True (only the test map sets it for now, nothing in the story does yet). The ship screen is a placeholder: 6 empty spaces in a grid (`SHIP_HULL_SPACES`), a RESEARCH row and the rest space with every pilot who isn't in a room. Three rooms: training, rest and heavy gravity. Each one is researched (2 TECH), then built (2 TECH), then extended once to 2 seats (2 TECH, `SHIP_ROOM_MAX_SIZE`). An extended room is closed until the next day and its pilots go back to the rest space. Pick a pilot in the rest space, then a free seat; click a seated pilot to send them back. Lelouch never goes in a room. Pilots stay in their room from day to day until moved, and they're left out of the deployment (and of the rewards screen's rest). At each new day (`l_ship_day`, called by `l_new_day` when the ship is unlocked), a report shows:
-- training: +1 EXP and a normal rest; rest room: the pilot's usual rest +1 STAMINA; heavy gravity: +2 EXP, no rest.
-- +3 affinity between pilots of the same room (`AFFINITY_ROOM`).
-- +1 TECH per robot in `ROBOTS` that didn't fight. Story mode has no `ROBOTS` list yet, so this only gives TECH on the test map.
+Done so far (parts 1 and 2, `src/ship.rpy`): a SHIP button on the world map, and one under START in the story-mode deployment, shown when `ship_unlocked` is True (set when the random battles start, see Random battles). The deployment picks who fights; the ship, opened from there, shows only the pilots who don't fight and lets the player put them in rooms. The ship screen is a placeholder: 6 empty spaces in a grid (`SHIP_HULL_SPACES`), a RESEARCH row and the rest space with every pilot who isn't in a room and doesn't fight today. Five rooms: training, rest, heavy gravity, healing tank and classroom. Each one is researched (2 TECH), then built (2 TECH), then extended once to 2 seats (2 TECH, `SHIP_ROOM_MAX_SIZE`). The healing tank costs more: 4 to research, 6 to build or extend (`SHIP_ROOM_COST`). The classroom is built with its 2 seats (`SHIP_ROOM_START_SIZE`). An extended room is closed until the next day and its pilots go back to the rest space. Pilots are moved like in the deployment: drag one onto a room (or back onto the rest space), or click it, then click the room; the rooms it can go to light up. Anyone can go in a room, Lelouch too (then he doesn't fight that day). The pilots in the ship use the same icon as the deployment's reserve (`s_pilot_icon` in `src/PILOT_screen.rpy`). Pilots stay in their room from day to day until moved, and they're left out of the deployment.
+- The rewards screen (see below) shows the pilots in a room in its RESERVE column, with the room's name: their room's effect replaces their rest (`ship_room_rest`). Training: +1 EXP and a normal rest; rest room: the pilot's usual rest +1 STAMINA; heavy gravity: +2 EXP, no rest; healing tank: all their STAMINA back; classroom: both rest, and if one of them learned every skill (MAX) and the other didn't, the MAX one gives all their EXP to the other (`ship_classroom_teacher`). Nunnally's scripted lesson (a teacher who isn't MAX) isn't done yet.
+- Then at each new day (`l_ship_day`, called by `l_new_day` when the ship is unlocked), a report shows +3 affinity between pilots of the same room (`AFFINITY_ROOM`) and the TECH: 10 every day (`SHIP_TECH_PER_DAY`), +1 per robot in `ROBOTS` that didn't fight. Half the time (`SHIP_COFFEE_CHANCE`), two pilots in the rest room share a coffee: the report says so, then the label `l_coffee_<id>_<id>` plays if it's written (ids in alphabetical order).
+- Not done yet: the radar room (it needs the next battle to be made in advance), the hangar, days without a battle.
+- Test labels in `maps/map_test_deployment.rpy`: `l_test_story_deployment` (a deployment with the ship unlocked) and `l_test_ship_rewards` (the rewards screen with a pilot in every room, then the world map with the random battles).
 
 # Pilots
 
 Each character can pilot certain robots.
 Each has a STAMINA (`health` in the code, `max_health` in `PILOTS.csv`). It decreases by 1 every time they are captured in battle. Every pilot who doesn't fight rests by default and gets +1 stamina, like in roguelike mode (`pilot.rest()` in `src/roguelike.rpy`). Pilots in the heavy gravity room are the exception.
 
-After each won battle, the rewards screen (the roguelite one, `s_result_screen`) gives +1 EXP to every pilot who fought, rests the others, and gives +2 EXP to the pilot(s) of the piece that made the checkmate (the winning move). In story mode it starts at map 1-0 (not during the tutorial maps 0-x) and shows once per day, on the world map right before the new day (`l_new_day`): a day can have several battles (map 1-0 has two), everyone who fought in one of them gets the +1 EXP, and the last battle's checkmate gets the +2. See `src/battle_rewards.rpy`.
+After each won battle, the rewards screen (the roguelite one, `s_result_screen`) gives +1 EXP to every pilot who fought, rests the others (or gives their ship room's effect), and gives +2 EXP to the pilot(s) of the piece that made the checkmate (the winning move). In story mode it starts at map 1-0 (not during the tutorial maps 0-x) and shows once per day, on the world map right before the new day (`l_new_day`): a day can have several battles (map 1-0 has two), everyone who fought in one of them gets the +1 EXP, and the last battle's checkmate gets the +2. See `src/battle_rewards.rpy`.
 
 ## Pilot screen
 
@@ -139,7 +146,7 @@ Each character has an affinity with every other character. Lelouch's affinity wi
 - +1 with each other for all pilots who fought on a won day (given with the day's EXP, from map 1-0 on).
 - +3 more for two pilots who sat in the same CHESSMAN (a robot with an extra seat).
 - +3 with each other for all pilots in the same room of the ship.
-- Story mode only: roguelite mode has no affinity. Implemented in `src/affinity.rpy` (fights and seats; rooms not yet).
+- Story mode only: roguelite mode has no affinity. Implemented in `src/affinity.rpy` (fights and seats) and `src/ship.rpy` (rooms, `AFFINITY_ROOM`).
 
 - When 2 characters have high enough affinity, a social discussion is triggered, like in Fire Emblem or Persona. Implemented in `src/talks.rpy`: at affinity 10, 15 and 20 (`TALK_RANKS`) a pair gets a talk. A TALK button lights up under PILOTS on the world map, the pair's cell shows TALK in the RELATIONSHIPS table, and clicking it plays the label `l_talk_<id>_<id>_<number>` (ids in alphabetical order, e.g. `l_talk_kallen_kaworu_1`), or a placeholder if it isn't written yet.
 - Queen: a pilot with `drive_q` can drive a Queen alone. Otherwise, 2 pilots with high affinity can drive a Queen together: one who can drive the Rook and one who can drive a minor piece. Keep `drive_q` working, since roguelike mode uses it. I may later remove it from story mode only. Implemented in `src/queen_co_drive.rpy`: affinity 10 or more (`QUEEN_CO_DRIVE_AFFINITY`), story mode only. In story mode Queens have a second seat; dropping a second pilot onto a Queen in the preparation seats them next to the first. A Queen with only half of its crew stays neutral. Test it with `jump l_test_story_deployment` (`maps/map_test_deployment.rpy`), a story-mode deployment with kallen (ROOK) and kaworu (KNIGHT) at affinity 10.
@@ -184,6 +191,12 @@ The player has a limited deck: in the PREPARATION menu, they choose which tactic
 A few cards already exist in `src/TAROT.rpy` and `src/PILOT_SKILLS.rpy` (`Tarot_skill`): the Fool, the Magician (`magicien`) and the Empress.
 
 ## Robots
+
+In story mode, the player starts with 1 KING, 1 ROOK and 1 PAWN (`STORY_START_ROBOTS` in `src/story_battles.rpy`, given when the random battles start). `ROBOTS` keeps every robot the player owns; robots destroyed in battle stay in it. The KING is the one placed in the middle of the back row; Lelouch usually drives it, but any pilot who can drive a King can take his place. The generator gives no free robots in story mode (only in the roguelite). To get more, the player buys them from the United Nations (not done yet).
+
+Notes for later:
+- A robot destroyed in battle must be repaired with money before it can fight again.
+- A robot upgrade, "Auto repair": doesn't need to be repaired after being destroyed in battle.
 
 On the world map, the player clicks the UN or the Dynasty country to buy more robots and robot upgrades with money. The upgrades mostly reward keeping robots out of battle when you can.
 

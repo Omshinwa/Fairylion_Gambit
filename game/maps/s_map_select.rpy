@@ -12,6 +12,8 @@ init python:
 label l_map_select:
     $ g.items['undo'] += 3
     $ reset_board()
+    if not ship_unlocked and story_random_part(): # the written maps are over: random battles, the ship and robots
+        $ story_random_start() # see src/story_battles.rpy
     scene onlayer screens
     scene
     show screen s_map_select
@@ -40,8 +42,12 @@ screen s_map_select():
     default current_chapter = str(g.progress//100)
     default current_mission = str(g.progress%100)
 
+    $ next_battle = story_next_battle(current_chapter, current_mission) # a written map, or a random battle (src/story_battles.rpy)
     button at t_interactive:
-        text 'MISSION [current_chapter]-[current_mission]' style 'style_3d_big_txt' pos 20,20
+        if next_battle == STORY_BATTLE_LABEL:
+            text _('RANDOM BATTLE') style 'style_3d_big_txt' pos 20,20
+        else:
+            text 'MISSION [current_chapter]-[current_mission]' style 'style_3d_big_txt' pos 20,20
         if config.developer:
             action Call('l_set_level')
 
@@ -74,7 +80,7 @@ screen s_map_select():
         add 'flag':
             align (0.5,0.5)
         # add "#666"
-        action Function(update_local_checkpoint_and_autosave), Play('audio', 'sound/UI/enter_142.wav'), Jump('l_map_'+current_chapter+'_'+current_mission)
+        action Function(update_local_checkpoint_and_autosave), Play('audio', 'sound/UI/enter_142.wav'), Jump(next_battle)
 
     add 'i_clouds_loop'
 

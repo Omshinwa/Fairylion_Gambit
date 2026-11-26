@@ -92,6 +92,43 @@ screen s_tab_bar(tabs): # tabs: [(tab_id, name), ...]
                 action SetScreenVariable('tab', tab_id)
                 text tab_name style 'style_purple_text' font "Venus+Plomb.otf" size 36 kerning 4 align (0.5, 0.5)
 
+# A PILOT'S ICON, as in the deployment's reserve: their face and their STAMINA (or EXP stars, with Pilot.sort_method).
+# Fills its parent (a 100x100 drag in the deployment, src/CHESS/s_preparation.rpy, and in the ship, src/ship.rpy).
+#   picked: the yellow tint of the pilot the player picked.   greyed: the grey tint of a pilot that can't be picked.
+screen s_pilot_icon(pilot, picked=False, greyed=False):
+    fixed:
+        if picked:
+            at transform:
+                matrixcolor ColorizeMatrix("#7e0000","#ff0")
+        elif greyed:
+            at transform:
+                matrixcolor ColorizeMatrix("#000","#999")
+
+        if pilot.id in {'kallen', 'lelouch'}:
+            add f"head {pilot.id}" xysize (1.0,1.0) offset(-7,-7):
+                if pilot.health == 1:
+                    at t_low_health
+        else:
+            add pilot.img_side() xysize (1.0,1.0):
+                if pilot.health == 1:
+                    at t_low_health
+        if Pilot.sort_method == 'default' or Pilot.sort_method == 'HP' or Pilot.sort_method == 'value':
+            if pilot.health == 1:
+                text "{b}[pilot.health]{size=-10}/[pilot.max_health]" style "big_numbers" color '#d30000' outlines [ (4, "#f00", 0, 0) ]
+            elif pilot.health == pilot.max_health:
+                text "{b}[pilot.health]{size=-10}/[pilot.max_health]" style "big_numbers" color '#87fffd' outlines [ (4, "#1d499a", 0, 0) ]
+            else:
+                text "{b}[pilot.health]{size=-10}/[pilot.max_health]" style "big_numbers"
+        elif Pilot.sort_method == 'EXP':
+            if len(pilot.skills['can_learn']) == 0:
+                text _("{b}{size=-15}MAX") style "big_numbers"
+            elif pilot.xp:
+                grid 3 3:
+                    yspacing -30
+                    for ___ in range(9):
+                        if (pilot.xp > ___):
+                            text '*' style 'style_3d_big_txt'
+
 # skills already shown as an icon in the robot row of the STATS tab
 define PILOT_SCREEN_ROW_SKILLS = {'stamina','rest','promote_q','drive_p', 'drive_k', 'drive_r', 'drive_n', 'drive_b', 'drive_q'}
 

@@ -1,6 +1,6 @@
 # BATTLE REWARDS
 # The rewards screen (s_result_screen in src/roguelike_events.rpy):
-# +1 EXP for every pilot who fought, rest for the others (pilot.rest()), +2 EXP for the checkmate.
+# +1 EXP for every pilot who fought, rest for the others (pilot.rest(), or their ship room's effect), +2 EXP for the checkmate.
 # The EXP and the rest are given in l_battle_rewards below. In story mode, the day's affinity too
 # (affinity_day_won in src/affinity.rpy).
 #
@@ -18,8 +18,12 @@ default rewards_seats = set() # story mode: pairs of pilots who sat in the same 
 
 init python:
     def story_rewards_battle():
-        """True for a story battle that gets the rewards screen: maps 1-0 and later."""
-        if rogue or not game.level.startswith('l_map_'):
+        """True for a story battle that gets the rewards screen: maps 1-0 and later, and the random battles."""
+        if rogue:
+            return False
+        if getattr(game, 'random_battle', False): # see src/story_battles.rpy
+            return True
+        if not game.level.startswith('l_map_'):
             return False
         chapter = game.level[len('l_map_'):].split('_')[0] # 'l_map_1_0_bis' -> '1'
         return chapter.isdigit() and int(chapter) >= 1
@@ -76,9 +80,13 @@ label l_battle_rewards:
             if pilot.health <= 0:
                 continue
 
-            # if we didnt use a pilot, rest it:
-            if not pilot.deployed and ship_room_of(pilot) is None: # in a ship room, the room decides (src/ship.rpy)
-                if pilot.rest():
+            # if we didnt use a pilot, rest it (in a ship room, the room's effect instead, see src/ship.rpy):
+            if not pilot.deployed:
+                if ship_room_of(pilot) is not None:
+                    rested = ship_room_rest(pilot)
+                else:
+                    rested = pilot.rest()
+                if rested:
                     renpy.play('sound/misc/xp.wav', channel='sound')
                     if renpy.get_screen_variable('state', screen='s_result_screen') == 1:
                         renpy.pause(0.3, modal=False)

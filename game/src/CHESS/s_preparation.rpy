@@ -97,6 +97,12 @@ screen s_preparation_overlay():
             style_prefix 'sty_btn'
             text _("START") size 80
             action Call('l_start_battle')
+        if ship_unlocked and not rogue: # who doesn't fight spends the day in a room of the ship (src/ship.rpy)
+            button at t_interactive:
+                style_prefix 'sty_btn'
+                xalign 0.5
+                text _("SHIP") size 60
+                action Function(f_dismiss), Call('l_ship')
 
     if renpy.get_mode() == 'pause' or renpy.get_mode() == 'say':
         button: # DISMISS
@@ -146,7 +152,8 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                 text _("sort:\n[Pilot.sort_method]") text_align 0 yoffset -4 size 30
 
     else:
-        $ inventory = ROBOTS
+        # story mode: the PAWN robots are counted below, a pilot dropped on the pawn row takes one (src/story_battles.rpy)
+        $ inventory = ROBOTS if rogue else [robot for robot in ROBOTS if robot.type != '^']
         fixed:
             xysize size
             pos (offset[0], offset[1] + SPCE_TWEEN_P_R + 340)
@@ -154,7 +161,10 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                 xalign 0.5
                 add "white pawn merida" xysize(80,80) yalign 0.0
                 text "=" size 60 style "style_3d_big_txt" yalign 0.5
-                text "∞" size 100 style "style_3d_big_txt" yalign 0.5
+                if rogue: # unlimited pawns
+                    text "∞" size 100 style "style_3d_big_txt" yalign 0.5
+                else:
+                    text str(len(story_pawns())) size 70 style "style_3d_big_txt" yalign 0.5
     draggroup:
 
         if pilot_or_robot == 'pilot':
@@ -199,37 +209,8 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                         at transform:
                             matrixcolor ColorizeMatrix("#7e0000","#ff0")
 
-                    if pilot_or_robot == 'pilot':
-                        if type(v_select) == Robot_Piece:
-                            if not v_select.fen in {'i', 'p'}:
-                                if not pilot_fits_robot(element, v_select.type):
-                                    at transform:
-                                        matrixcolor ColorizeMatrix("#000","#999")
-
-                        if element.id in {'kallen', 'lelouch'}:
-                            add f"head {element.id}" xysize (1.0,1.0) offset(-7,-7):
-                                if element.health == 1:
-                                    at t_low_health
-                        else:
-                            add element.img_side() xysize (1.0,1.0):
-                                if element.health == 1:
-                                    at t_low_health
-                        if Pilot.sort_method == 'default' or Pilot.sort_method == 'HP' or Pilot.sort_method == 'value':
-                            if element.health == 1:
-                                text "{b}[element.health]{size=-10}/[element.max_health]" style "big_numbers" color '#d30000' outlines [ (4, "#f00", 0, 0) ]
-                            elif element.health == element.max_health:
-                                text "{b}[element.health]{size=-10}/[element.max_health]" style "big_numbers" color '#87fffd' outlines [ (4, "#1d499a", 0, 0) ]
-                            else:
-                                text "{b}[element.health]{size=-10}/[element.max_health]" style "big_numbers"
-                        elif Pilot.sort_method == 'EXP':
-                            if len(element.skills['can_learn']) == 0:
-                                text _("{b}{size=-15}MAX") style "big_numbers"
-                            elif element.xp:
-                                grid 3 3:
-                                    yspacing -30
-                                    for ___ in range(9):
-                                        if (element.xp > ___):
-                                            text '*' style 'style_3d_big_txt'
+                    if pilot_or_robot == 'pilot': # greyed: can't drive the selected robot. see src/PILOT_screen.rpy
+                        use s_pilot_icon(element, greyed=(type(v_select) == Robot_Piece and v_select.fen not in {'i', 'p'} and not pilot_fits_robot(element, v_select.type)))
 
                     elif pilot_or_robot == 'robot':
 
@@ -332,6 +313,10 @@ init python:
         if isinstance(element, Pilot) and not element.deployed and not loyalty_can_deploy(element):
             loyalty_refuse_notify(element)
             return
+        # story mode: no PAWN robot left for the pawn row (src/story_battles.rpy)
+        if isinstance(element, Pilot) and chess.POS_TO_XY[pos][1] == 1 and not story_pawn_free(pos):
+            renpy.notify(_("No PAWN left. More CHESSMEN can be bought from the United Nations."))
+            return
         if not renpy.music.is_playing(channel='sound'):
             renpy.play("sound/board/tank.wav", channel='sound')
         element.deployed = True
@@ -340,7 +325,13 @@ init python:
             # PILOT
             if chess.POS_TO_XY[pos][1] == 1: # pawn line, must be a pawn PILOT
                 f_unprepare(target)
-                new_piece = Robot_Piece('p', pilot=element, color=chess.player, pos=pos)
+                if rogue: # unlimited pawns
+                    new_piece = Robot_Piece('p', pilot=element, color=chess.player, pos=pos)
+                else: # story mode: one of the player's PAWN robots (src/story_battles.rpy)
+                    new_piece = story_pawns()[0]
+                    new_piece.pilot = element
+                    new_piece.color = chess.player
+                    new_piece.deployed = True
                 chess.drop(new_piece, pos)
             else:
                 if type(target) == Robot_Piece:

@@ -112,12 +112,12 @@ screen s_result_screen():
         else:
             at transform:
                 ease 0.5 xpos 0
-        use s_result_screen_mini(False, state, original_health)
+        use s_result_screen_mini(False, state, original_health, original_xp)
 
     if rogue: # also shown after story battles (src/battle_rewards.rpy), which have no shop
         use s_shop_coin()
 
-screen s_result_screen_mini(battle=True, state=None, original=None):
+screen s_result_screen_mini(battle=True, state=None, original=None, original_xp=None):
     layer 'master'
     default team_length = len(TEAM) # so we dont display any new recruit in this screen
     frame:
@@ -149,8 +149,6 @@ screen s_result_screen_mini(battle=True, state=None, original=None):
                     if i >= team_length:
                         break
                     if pilot.deployed!=battle:
-                        continue
-                    if not battle and ship_room_of(pilot) is not None: # spends the day in a ship room (src/ship.rpy)
                         continue
                     button at t_interactive:
                         sensitive pilot.health
@@ -210,6 +208,8 @@ screen s_result_screen_mini(battle=True, state=None, original=None):
                                                 text _("> deployed:  +1") ypos -10 xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
                                             if state>=3 and pilot in rewards_checkmate: # see src/battle_rewards.rpy
                                                 text _("> checkmate: +2") ypos -20  xalign 0.0 font "fonts/Compagnon-Medium.otf" style 'style_big_white_text' size 30 at t_emphazise_text
+                                elif ship_room_of(pilot) is not None: # spent the day in a ship room (src/ship.rpy)
+                                    use s_result_room_gains(pilot, ship_room_of(pilot), state, original, original_xp)
                                 else:
                                     vbox:
                                         if pilot in original and original[pilot] == pilot.health:

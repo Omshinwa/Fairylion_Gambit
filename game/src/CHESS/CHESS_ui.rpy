@@ -276,7 +276,7 @@ init -1 python:
                 if not element.deployed and not loyalty_can_deploy(element):
                     return False
 
-                if chess.POS_TO_XY_POV(pos)[1] == 1 and '^' in element.can_drive: # and also still have pawns in reserve
+                if chess.POS_TO_XY_POV(pos)[1] == 1 and '^' in element.can_drive and story_pawn_free(pos): # and also still have pawns in reserve (story mode, src/story_battles.rpy)
                     return True
                 if chess.POS_TO_XY_POV(pos)[1] == 0:
                     if target is c.EMPTY:
