@@ -72,7 +72,7 @@ Each character has a story that can change their gameplay: unique rules that aff
 
 Between fights there is a world map where the player can see the stamina of each character and every CHESSMAN they possess. They click on the next dot for the next scripted fight. Social discussions and the affinity tab are also on the world map (see Trust and affinity). The full world map unlocks after `map_1_1`, my last written map.
 
-Done so far: a PILOTS button on the map opens a list with two tabs. PILOTS: one row per pilot in TEAM (stamina hearts in loyalty colors, EXP, "can learn a skill", loyalty emoji); clicking a row opens their profile, where they can learn skills. RELATIONSHIPS: the affinity table of the whole TEAM (`s_relationships_table` in `src/affinity.rpy`). See `src/pilot_list.rpy`. The CHESSMEN aren't listed yet (story mode doesn't track owned robots).
+Done so far: a PILOTS button on the map opens a list with two tabs. PILOTS: one row per pilot in TEAM (stamina hearts in loyalty colors, EXP, "can learn a skill", loyalty emoji); clicking a row opens their profile, where they can learn skills. RELATIONSHIPS: the affinity table of the whole TEAM (`s_relationships_table` in `src/affinity.rpy`). CHESSMEN (story mode): one row per robot the player owns (`ROBOTS`), with its class and upgrades. See `src/pilot_list.rpy`. Once the random battles start, the United Nations' country on the map opens their shop (see Robots), with the player's money under it.
 
 The world map also has a PREPARATION menu, similar to the pilot and robot stats screen. There, the player builds their tactic card deck (if they have any cards) and their team presets: many slots, each a 2x8 (or 2x6) grid where they place robots and pilots, so they don't have to place every piece by hand before each battle.
 
@@ -96,7 +96,7 @@ One battle = one day: it's the basic unit of time. Some rare days have no battle
 
 Each day, the player chooses how to develop the ship, such as building new rooms. This works like a technology tree that costs tech points: most rooms must be researched before they can be built. For example: research training rooms (2 tech points), then build a training room (2 tech points), then build another one (2 tech points), which extends the room so it holds 2 pilots. A room can't be used on the day it is extended.
 
-Robots that don't fight generate tech points. Keep the macro play pleasant: planning each day shouldn't be tedious.
+Robots with the RESEARCH LAB upgrade generate tech points on the days they don't fight (see Robots). Keep the macro play pleasant: planning each day shouldn't be tedious.
 
 The ship's UI is a big hollow ship with empty spaces where the player builds and extends rooms. The rest of the ship is the basic rest space, where all 16 pilots can slot in. There's also a hangar that stores the robots, and it must be upgraded to hold more robots.
 
@@ -113,7 +113,7 @@ Rooms are places in the ship where the player puts pilots to spend a day. Pilots
 
 Done so far (parts 1 and 2, `src/ship.rpy`): a SHIP button on the world map, and one under START in the story-mode deployment, shown when `ship_unlocked` is True (set when the random battles start, see Random battles). The deployment picks who fights; the ship, opened from there, shows only the pilots who don't fight and lets the player put them in rooms. The ship screen is a placeholder: 6 empty spaces in a grid (`SHIP_HULL_SPACES`), a RESEARCH row and the rest space with every pilot who isn't in a room and doesn't fight today. Five rooms: training, rest, heavy gravity, healing tank and classroom. Each one is researched (2 TECH), then built (2 TECH), then extended once to 2 seats (2 TECH, `SHIP_ROOM_MAX_SIZE`). The healing tank costs more: 4 to research, 6 to build or extend (`SHIP_ROOM_COST`). The classroom is built with its 2 seats (`SHIP_ROOM_START_SIZE`). An extended room is closed until the next day and its pilots go back to the rest space. Pilots are moved like in the deployment: drag one onto a room (or back onto the rest space), or click it, then click the room; the rooms it can go to light up. Anyone can go in a room, Lelouch too (then he doesn't fight that day). The pilots in the ship use the same icon as the deployment's reserve (`s_pilot_icon` in `src/PILOT_screen.rpy`). Pilots stay in their room from day to day until moved, and they're left out of the deployment.
 - The rewards screen (see below) shows the pilots in a room in its RESERVE column, with the room's name: their room's effect replaces their rest (`ship_room_rest`). Training: +1 EXP and a normal rest; rest room: the pilot's usual rest +1 STAMINA; heavy gravity: +2 EXP, no rest; healing tank: all their STAMINA back; classroom: both rest, and if one of them learned every skill (MAX) and the other didn't, the MAX one gives all their EXP to the other (`ship_classroom_teacher`). Nunnally's scripted lesson (a teacher who isn't MAX) isn't done yet.
-- Then at each new day (`l_ship_day`, called by `l_new_day` when the ship is unlocked), a report shows +3 affinity between pilots of the same room (`AFFINITY_ROOM`) and the TECH: 10 every day (`SHIP_TECH_PER_DAY`), +1 per robot in `ROBOTS` that didn't fight. Half the time (`SHIP_COFFEE_CHANCE`), two pilots in the rest room share a coffee: the report says so, then the label `l_coffee_<id>_<id>` plays if it's written (ids in alphabetical order).
+- Then at each new day (`l_ship_day`, called by `l_new_day` when the ship is unlocked), a report shows +3 affinity between pilots of the same room (`AFFINITY_ROOM`) and the TECH: 10 every day (`SHIP_TECH_PER_DAY`), +2 per robot with a RESEARCH LAB that didn't fight (`ROBOT_UPGRADE_TECH`). Half the time (`SHIP_COFFEE_CHANCE`), two pilots in the rest room share a coffee: the report says so, then the label `l_coffee_<id>_<id>` plays if it's written (ids in alphabetical order).
 - Not done yet: the radar room (it needs the next battle to be made in advance), the hangar, days without a battle.
 - Test labels in `maps/map_test_deployment.rpy`: `l_test_story_deployment` (a deployment with the ship unlocked) and `l_test_ship_rewards` (the rewards screen with a pilot in every room, then the world map with the random battles).
 
@@ -192,7 +192,9 @@ A few cards already exist in `src/TAROT.rpy` and `src/PILOT_SKILLS.rpy` (`Tarot_
 
 ## Robots
 
-In story mode, the player starts with 1 KING, 1 ROOK and 1 PAWN (`STORY_START_ROBOTS` in `src/story_battles.rpy`, given when the random battles start). `ROBOTS` keeps every robot the player owns; robots destroyed in battle stay in it. The KING is the one placed in the middle of the back row; Lelouch usually drives it, but any pilot who can drive a King can take his place. The generator gives no free robots in story mode (only in the roguelite). To get more, the player buys them from the United Nations (not done yet).
+In story mode, the player starts with 1 KING, 1 ROOK and 1 PAWN (`STORY_START_ROBOTS` in `src/story_battles.rpy`, given when the random battles start). `ROBOTS` keeps every robot the player owns; robots destroyed in battle stay in it. The KING is the one placed in the middle of the back row; Lelouch usually drives it, but any pilot who can drive a King can take his place. The generator gives no free robots in story mode (only in the roguelite). To get more, the player buys them from the United Nations.
+
+Done so far (`src/un_shop.rpy`): once the random battles start, the United Nations' country on the world map shows their name and the player's money (`g.money`); clicking it opens their shop, which looks like the roguelite's. CHESSMEN cost their chess value (PAWN 1, KNIGHT and BISHOP 3, ROOK 5, QUEEN 9, `UN_ROBOT_PRICE`) and join `ROBOTS`. Upgrades: the RESEARCH LAB costs 6 (`UN_UPGRADE_PRICE`), given to one of the player's robots (not the KING, which always fights). Money: each won random battle gives 7 (`STORY_MONEY_PER_WIN`, with the roguelite's flying coins). The Millenium Dynasty's shop (Cannons) isn't done.
 
 Notes for later:
 - A robot destroyed in battle must be repaired with money before it can fight again.
@@ -201,7 +203,7 @@ Notes for later:
 On the world map, the player clicks the UN or the Dynasty country to buy more robots and robot upgrades with money. The upgrades mostly reward keeping robots out of battle when you can.
 
 - Bitcoin miner: when this robot doesn't fight, +2 money.
-- Speed up the development of the ship.
+- Research lab: when this robot doesn't fight, +2 TECH at the new day. Done in `src/robot_upgrades.rpy` (upgrade id `'tech'`): a robot's upgrades are `robot.upgrades`, kept when the robots are made again for each battle. The United Nations sell it; the test label `l_test_ship_rewards` gives one to the PAWN. Upgrades show in the CHESSMEN tab of the PILOTS list, not yet in the robot's info panel during battles.
 - Allow repainting the robot.
 - Extra seat: the robot holds 2 pilots. Usually only the first pilot drives it (except for Queens, see Trust and affinity), so the second pilot's main use is gaining affinity with the first. A robot with a free seat can also RESCUE a stray pilot by moving onto them; this is already in the code (move flag `rescue`, see `tests/test_rescue.rpy`).
 

@@ -118,7 +118,7 @@ init -2 python:
         
         def learn(self, name:str):
             if not name in self.skills['can_learn']:
-                renpy.say('', f"NO SKILL {name}, {pilot} can learn")
+                renpy.say('', f"NO SKILL {name}, {self} can learn")
                 return
             renpy.play("sound/board/select.wav")
             skill = SKILLLIST[name]
@@ -126,10 +126,10 @@ init -2 python:
             self.skills[skill.type].append(name)
 
             if skill.type == 'once':  # Activate ONCE skills
-                skill.effect(pilot, *skill.args)
+                skill.effect(self, *skill.args)
 
             for piece in chess.get_pieces():
-                if pilot in piece._pilot:
+                if self in piece._pilot:
                     piece.setup_piece()
                     if type(chess.ui['selected'])==int and chess.board[chess.ui['selected']] == piece:
                         squares = piece.get_range()

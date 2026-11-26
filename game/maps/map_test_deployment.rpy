@@ -67,11 +67,14 @@ label l_test_ship_rewards:
         ship_assign(stanley, SHIP_ROOMS['classroom'])
         ship_assign(abel, SHIP_ROOMS['classroom'])
         TECH = 4
+        g.money = 10 # for the United Nations' shop (src/un_shop.rpy)
         story_battles = Roguelike() # the story's random battles and robots (src/story_battles.rpy)
         story_battles.round = 1
         ROBOTS = [story_new_robot(fen) for fen in STORY_START_ROBOTS]
-        for robot in ROBOTS: # lelouch drove the KING, kallen the ROOK: the PAWN didn't fight, +1 TECH
+        for robot in ROBOTS: # lelouch drove the KING, kallen the ROOK: the PAWN didn't fight
             robot.deployed = robot.type != '^'
+            if robot.type == '^': # its RESEARCH LAB gives +2 TECH (src/robot_upgrades.rpy)
+                robot_add_upgrade(robot, 'tech')
     $ game = Game('l_map_1_test')
     "TEST: a won day. Next, the rewards screen: the RESERVE column shows who rested, and in which room of the ship."
     jump l_map_select

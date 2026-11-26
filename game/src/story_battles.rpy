@@ -7,7 +7,8 @@
 #     It doesn't move g.progress.
 #   - Losing reloads the checkpoint saved when the flag was clicked, like the story maps (l_after_failed_mission).
 #   - Robots: ROBOTS is the player's robots and keeps them all, destroyed ones too (repairing them comes later).
-#     The generator gives no free robots in story mode: more robots will be bought from the United Nations.
+#     The generator gives no free robots in story mode: more robots are bought from the United Nations (src/un_shop.rpy),
+#     with the money of the won days (STORY_MONEY_PER_WIN).
 #     The KING is the one the generator puts in the middle of the back row. PAWNS are limited to the PAWN robots
 #     of ROBOTS (the roguelite has unlimited pawns): a pilot dropped on the pawn row takes one.
 
@@ -15,6 +16,7 @@ default story_battles = None # the generator of the random battles, a Roguelike 
 define STORY_START_ROBOTS = ['k', 'r', 'p'] # the robots the player gets when the random battles start
 define STORY_BATTLE_LABEL = 'l_story_battle'
 define STORY_RANDOM_FROM = 101 # g.progress of the first random battle: the written maps end there
+define STORY_MONEY_PER_WIN = 7 # money of a won random battle, like the roguelite on normal (l_map_rogue_Win)
 
 init python:
     def story_map_label(chapter=None, mission=None):
@@ -51,7 +53,12 @@ init python:
         """The same robots, made again for the new board: a robot computes its moves on the board it was made for,
         and the world map makes a new board after every battle (reset_board in maps/s_map_select.rpy)."""
         global ROBOTS
-        ROBOTS = [story_new_robot(DEFAULT_ROBOT[robot.type]) for robot in ROBOTS]
+        robots = []
+        for robot in ROBOTS:
+            new_robot = story_new_robot(DEFAULT_ROBOT[robot.type])
+            new_robot.upgrades = set(robot_upgrades(robot)) # see src/robot_upgrades.rpy
+            robots.append(new_robot)
+        ROBOTS = robots
 
     def story_king():
         """Story mode: the player's KING robot, for the generator to put on the board (None: the generator makes one)."""
@@ -99,4 +106,5 @@ label l_story_battle_start:
 
 label l_story_battle_Win:
     $ story_battles.won() # the next one is harder
+    call l_increase_coin(STORY_MONEY_PER_WIN) # the coins fly in, see src/roguelike.rpy
     return

@@ -4,6 +4,8 @@
 # profile (s_character_info in src/PILOT_screen.rpy); closing the profile brings the list back.
 # RELATIONSHIPS tab: the affinity table of the whole TEAM (s_relationships_table in src/affinity.rpy).
 # The pairs who can talk show TALK in the table: click it to play the talk (src/talks.rpy).
+# CHESSMEN tab (story mode): one row per robot the player owns (ROBOTS, src/story_battles.rpy) with its upgrades
+# (src/robot_upgrades.rpy). More are bought from the United Nations (src/un_shop.rpy).
 
 label l_pilot_list(start_tab='pilots'):
     play sound 'sound/misc/plop.wav'
@@ -46,10 +48,21 @@ screen s_pilot_list(start_tab='pilots'):
         vbox:
             xfill True
             spacing 15
-            $ tabs = [('pilots', _("PILOTS"))] + ([] if rogue else [('relationships', _("RELATIONSHIPS"))]) # no affinity in roguelite
+            $ tabs = [('pilots', _("PILOTS"))] + ([] if rogue else [('relationships', _("RELATIONSHIPS")), ('chessmen', _("CHESSMEN"))]) # no affinity in roguelite
             use s_tab_bar(tabs) # see src/PILOT_screen.rpy
             if tab == 'relationships' and not rogue:
                 use s_relationships_table() # every pilot's affinities, see src/affinity.rpy
+            elif tab == 'chessmen' and not rogue:
+                viewport:
+                    mousewheel True
+                    draggable True
+                    vbox:
+                        spacing 10
+                        xalign 0.5
+                        for robot in ROBOTS:
+                            use s_chessmen_row(robot)
+                        if not ROBOTS:
+                            text _("No CHESSMEN yet.") style 'style_big_white_text' xalign 0.5
             else:
                 viewport:
                     mousewheel True
@@ -102,3 +115,29 @@ screen s_pilot_list_row(pilot):
             if show_loyalty:
                 $ loyalty_level = loyalty_of(pilot)
                 text LOYALTY_EMOJI[loyalty_level] size 60 yalign 0.5
+
+# a robot the player owns: its model, class and upgrades
+screen s_chessmen_row(robot):
+    $ fen = DEFAULT_ROBOT[robot.type]
+    frame:
+        style 'empty'
+        xsize 1240
+        ysize 120
+        background Solid("#fff1")
+        hbox:
+            yalign 0.5
+            spacing 25
+            add f"white {c.FEN_TO_PIECE[fen]} merida" xysize (100, 100) yalign 0.5
+            fixed: # same width on every row, so the columns line up
+                xysize (280, 100)
+                yalign 0.5
+                text c.FEN_TO_PIECE[fen].upper() style 'style_big_white_text' yalign 0.5
+            add f"battle_ui/icon type {robot.type} outline.webp".replace("*", "star").replace("#", "hash") xysize (60, 60) yalign 0.5
+            vbox:
+                yalign 0.5
+                if robot_upgrades(robot):
+                    for upgrade in robot_upgrades(robot):
+                        $ upgrade_name, upgrade_desc = ROBOT_UPGRADES[upgrade]
+                        text "{}: {}".format(__(upgrade_name), __(upgrade_desc)) style 'style_big_white_text' size 30 textalign 0.0
+                else:
+                    text _("No upgrade.") style 'style_big_white_text' size 30 color "#fff8"

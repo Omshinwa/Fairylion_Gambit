@@ -8,8 +8,8 @@
 #   - Pilots put in a room don't fight: they're left out of the deployment (s_preparation in
 #     src/CHESS/s_preparation.rpy). They stay in their room from day to day until the player moves them.
 #   - Each room's effect replaces the pilot's rest on the rewards screen (its RESERVE column, see ship_room_rest).
-#     Then at the new day (l_new_day in src/day.rpy), roommates get +3 affinity,
-#     the ship gives 10 TECH, and every robot that didn't fight gives 1 more.
+#     Then at the new day (l_new_day in src/day.rpy), roommates get +3 affinity, the ship gives 10 TECH,
+#     and every robot with a RESEARCH LAB that didn't fight gives 2 more (src/robot_upgrades.rpy).
 #   - Rooms: training, rest (two pilots there may share a coffee), heavy gravity, healing tank (costs more)
 #     and classroom (2 seats: a pilot who learned every skill gives all their EXP to the other).
 # Not done yet: the hangar, the radar room, days without a battle.
@@ -265,10 +265,11 @@ init python:
                     add_affinity(room.pilots[i], room.pilots[j], AFFINITY_ROOM) # see src/affinity.rpy
                     report.append(__("{} and {} shared a room: +{} affinity").format(room.pilots[i].name, room.pilots[j].name, AFFINITY_ROOM))
             room.extended_today = False
-        idle_robots = len([robot for robot in ROBOTS if not robot.deployed])
-        TECH += SHIP_TECH_PER_DAY + idle_robots
-        if idle_robots:
-            report.append(__("+{} TECH: {} a day, {} from robots that didn't fight. TECH: {}").format(SHIP_TECH_PER_DAY + idle_robots, SHIP_TECH_PER_DAY, idle_robots, TECH))
+        # robots with a RESEARCH LAB that didn't fight (src/robot_upgrades.rpy)
+        lab_tech = ROBOT_UPGRADE_TECH * len([robot for robot in ROBOTS if not robot.deployed and robot_has_upgrade(robot, 'tech')])
+        TECH += SHIP_TECH_PER_DAY + lab_tech
+        if lab_tech:
+            report.append(__("+{} TECH: {} a day, {} from the RESEARCH LABS of robots that didn't fight. TECH: {}").format(SHIP_TECH_PER_DAY + lab_tech, SHIP_TECH_PER_DAY, lab_tech, TECH))
         else:
             report.append(__("+{} TECH. TECH: {}").format(SHIP_TECH_PER_DAY, TECH))
         for robot in ROBOTS:

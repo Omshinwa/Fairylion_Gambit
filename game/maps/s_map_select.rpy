@@ -82,6 +82,18 @@ screen s_map_select():
         # add "#666"
         action Function(update_local_checkpoint_and_autosave), Play('audio', 'sound/UI/enter_142.wav'), Jump(next_battle)
 
+    if un_shop_open(): # the United Nations sell CHESSMEN and upgrades, see src/un_shop.rpy
+        button at t_interactive:
+            pos (490, 600) # on their country, the big blue one
+            anchor (0.5, 0.5)
+            action Call('l_un_shop')
+            vbox:
+                text name('The united nations').upper() style 'style_3d_big_txt' size 40 xalign 0.5
+                fixed:
+                    xalign 0.5
+                    fit_first True
+                    use s_money(30)
+
     add 'i_clouds_loop'
 
 
