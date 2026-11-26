@@ -95,7 +95,7 @@ label l_pilot_death(pilot):
         if chess.state == 'start' or 'preparation' in g.state:
             for piece in chess.get_pieces():
                 if pilot in piece._pilot:
-                    piece.pilot[piece.pilot.index(pilot)] = None
+                    piece._pilot[piece._pilot.index(pilot)] = None
                     piece.check_for_pilot()
                     break
         # reset_pilot(self.id) only in roguelike

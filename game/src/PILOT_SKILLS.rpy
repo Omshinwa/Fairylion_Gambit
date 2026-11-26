@@ -41,14 +41,13 @@ init -2 python:
 
         @staticmethod
         def drive(pilot, *args):
-            global rogue
             pilot.can_drive[args[0]] = args[1]
             if args == ('^','p'): # when learning to pilot pawns, add two optional skills
                 if '2-step' not in pilot.skills['setup']:
                     pilot.skills['can_learn'].append('2-step')
                 if 'promote_q' not in pilot.skills['once'] and 'promote_q' not in pilot.skills['can_learn']:
-                    # if rogue:
-                    pilot.skills['once'].append('promote_q')
+                    if globals().get('rogue'): # not defined yet when init_pilots() runs at init
+                        pilot.skills['once'].append('promote_q')
                     # else:
                         # pilot.skills['can_learn'].append('promote_q')
 

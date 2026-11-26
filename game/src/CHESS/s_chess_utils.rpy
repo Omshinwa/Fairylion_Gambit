@@ -259,9 +259,13 @@ init python:
                     if piece.pos == dest:
                         f_chessboard_dragged(drags, DotDict(drag_name=None))
                         return
-                    f_prep_click_sq_swap(piece.pos, dest)
-                    renpy.restart_interaction()
-                    return
+                    # a lone pilot (INFANTRY) gets into a robot with a free seat, or into the KING (it can't move):
+                    # the code below drops its pilot there. Otherwise the two pieces swap places.
+                    target = chess.board[dest]
+                    if not (piece.fen == 'i' and (target.has_pilot_room() or target.unmovable)):
+                        f_prep_click_sq_swap(piece.pos, dest)
+                        renpy.restart_interaction()
+                        return
 
                 if piece.deployed: # didnt select inventory
                     x, y = chess.POS_TO_SXY(drop.drag_name)

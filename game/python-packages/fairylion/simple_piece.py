@@ -54,7 +54,7 @@ class Simple_Piece():
     
     @property
     def pilot(self):
-        if len(self._pilot) == 0:
+        if all(p is None for p in self._pilot): # no seats, or every seat empty
             return None
         elif len(self._pilot) == 1:
             return self._pilot[0]

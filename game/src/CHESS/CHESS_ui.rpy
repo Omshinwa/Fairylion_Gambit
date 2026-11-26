@@ -287,7 +287,12 @@ init -1 python:
                         if pilot_fits_robot(element, target.type): # can drive it, or co-drive a Queen (src/queen_co_drive.rpy)
                             return True
                     return False
-                
+
+            # a lone pilot on the board (an INFANTRY) can get into an unmovable robot (the story KING), if they can drive it:
+            # the check below would ask if the KING can move to the infantry's square (see f_chessboard_dragged in src/CHESS/s_chess_utils.rpy)
+            if isinstance(element, Robot_Piece) and element.fen == 'i' and isinstance(target, Robot_Piece) and target.unmovable:
+                return pilot_fits_robot(element.pilot, target.type)
+
             # select unmovable piece, only possible if Pilot can drive it
             if (isinstance(element, Robot_Piece) and element.unmovable) or (isinstance(target, Robot_Piece) and target.unmovable):
                 return False
