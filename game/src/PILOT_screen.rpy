@@ -75,6 +75,16 @@ screen s_character_info(pilot):
 
         add pilot.img_side_eyes() align (1.0,1.0) xysize (450, 150)
 
+        # how the face looks in the say screen when the pilot talks from inside a robot (screens.rpy)
+        $ preview_robot = get(pilot) if chess else None
+        if preview_robot and preview_robot.fen == 'i': # on foot: no cockpit
+            $ preview_robot = None
+        fixed:
+            xysize (400, 400)
+            xpos 520
+            yalign 1.0
+            use s_pilot_side_img_in_cockpit(None, pilot, preview_robot)
+
 
 # TABS: same width each and filling the parent, so they don't move when the content below changes.
 # Each tab sets the screen variable 'tab' of the screen using this one (s_character_info, s_pilot_list).

@@ -186,7 +186,7 @@ init python:
 
         # we only add it in the case where 'promote_q' is in the skills
         def should_add_queen_to_promotions(self, piece):
-            if piece.pilots and 'promote_q' in piece._pilot[0].skills['once']:
+            if piece.pilot and 'promote_q' in piece.pilot.skills['once']: # the driver's skill only
                 return True
             return False
 

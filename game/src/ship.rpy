@@ -22,8 +22,8 @@ default SHIP_ROOMS = {} # kind -> ShipRoom
 define SHIP_ROOM_KINDS = ['training', 'rest', 'gravity', 'healing', 'classroom'] # research order
 define SHIP_ROOM_NAME = {
     'training': _("TRAINING ROOM"),
-    'rest': _("REST ROOM"),
-    'gravity': _("HEAVY GRAVITY ROOM"),
+    'rest': _("RESTING ROOM"),
+    'gravity': _("GRAVITY ROOM"),
     'healing': _("HEALING TANK"),
     'classroom': _("CLASSROOM"),
 }

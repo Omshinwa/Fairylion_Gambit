@@ -184,7 +184,10 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
             #  #+#      #+#           #+#     #+#       #+#    #+# #+#        
             # ###       ###       ########### ########## ########  ########## 
 
-            for piece in chess.get_drag_list():
+            # index piece: each drag keeps its own piece's state (its dragged position) when the screen updates.
+            # By loop position, after a swap the piece now on the dragged one's square inherited the drop position
+            # and was drawn on top of the other piece (src/CHESS/s_chess_utils.rpy, f_prep_click_sq_swap)
+            for piece index piece in chess.get_drag_list():
                 if chess.ui['animation_move'] and piece == chess.ui['animation_move'].piece:
                     continue
                 $ color = piece.color
@@ -227,11 +230,17 @@ screen s_chess_main(chess, demo=False, *args, **kwargs):
                             # is it also in danger of dying?
                             if piece.pilots and any(pilot.health == 1 for pilot in piece.pilots) and 'battle' in g.state:
                                 at t_low_health
-                            if len(chess.history) == 0 and chess.move_first and piece.pilot and any('initiative' in pilot.skills['setup'] for pilot in piece.pilots):
+                            if len(chess.history) == 0 and chess.move_first and any('initiative' in pilot.skills['setup'] for pilot in piece.drivers):
                                 at t_highlight
 
                         # display the pilot in prep
-                        if 'preparation' in g.state and piece.pilots:
+                        if 'preparation' in g.state and len(piece.pilots) >= 2:
+                            # two pilots (queen co-drive): the triangle is cut in two halves, the first pilot on the right half,
+                            # the second on the bottom half (same order as the PILOT INSPECT in s_battle_.rpy).
+                            # Each face is moved by the offset between the centroid of the half and the one of the whole triangle.
+                            add AlphaMask(Transform(piece.pilots[0].img_side(), xysize=(360,360), crop=(-243, -116,1.0,1.0)), "triangle_mask_right") xysize (1.0,1.0) align (1.0,1.0)
+                            add AlphaMask(Transform(piece.pilots[1].img_side(), xysize=(360,360), crop=(-157, -184,1.0,1.0)), "triangle_mask_bottom") xysize (1.0,1.0) align (1.0,1.0)
+                        elif 'preparation' in g.state and piece.pilots:
                             $ pilot = piece.pilots[0]
                             add AlphaMask(Transform(pilot.img_side(), xysize=(360,360), crop=(-200, -150,1.0,1.0)), "triangle_mask") xysize (1.0,1.0) align (1.0,1.0)
 

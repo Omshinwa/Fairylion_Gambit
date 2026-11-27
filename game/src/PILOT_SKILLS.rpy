@@ -152,7 +152,8 @@ init -2 python:
 
         @staticmethod
         def pacifist(pilot, piece):
-            if sum(1 for p in piece._pilot if p is not None) > 1:
+            # a co-driver who isn't pacifist can capture for them (a passenger can't). Two pacifist drivers: still pacifist
+            if any('pacifist' not in p.skills['setup'] for p in piece.drivers):
                 return False
             new_range = {}
             for index, instruction in enumerate(piece.range):

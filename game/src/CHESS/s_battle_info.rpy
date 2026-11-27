@@ -1,3 +1,7 @@
+"""
+This is specifically to handle the small infobox with the stats
+"""
+
 define INFOBOX_WIDTH = 450
 define INFOBOX_HEIGHT = 210
 
@@ -43,15 +47,9 @@ screen s_infobox():
                                         if pilot is not None:
                                             vbox:
                                                 use s_battlefield_pilot(pilot, index, robot=piece)
-                                # elif piece.color == 1-chess.player and type(piece) == Robot_Piece:
-                                #     use s_battlefield_nopilot("")
-                                # else:
-                                #     use s_battlefield_nopilot(_("e m p t y"))
-
                             
                                 if piece.fen == 'i':
                                     pass
-                                    # use s_battlefield_nopilot("-")
                                 else:
                                     vbox:
                                         ypos 720
@@ -77,29 +75,30 @@ screen s_battlefield_nopilot(text_var, scale=1):
 screen s_battlefield_pilot(pilot, index, scale=1, robot=None):
     button:
         xsize INFOBOX_WIDTH
-        ypos 200
+        ypos 200 + index*130
         xpos -15
         vbox: # NAME ETC
             xfill True
             spacing 0
-            hbox: # SKILLS
-                ysize 64
-                xalign 1.0
-                spacing 5
-                $ i = 0
-                
-                if 'preparation' in g.state:
-                    for skill in pilot.can_drive:
-                        if pilot.can_drive[skill] == 'p' and 'promote_q' in pilot.skills['once']:
+            if index == 0:
+                hbox: # SKILLS
+                    ysize 64
+                    xalign 1.0
+                    spacing 5
+                    $ i = 0
+                    
+                    if 'preparation' in g.state:
+                        for skill in pilot.can_drive:
+                            if pilot.can_drive[skill] == 'p' and 'promote_q' in pilot.skills['once']:
+                                add 'skill promote_q' xysize(64,64) nearest True
+                            else:
+                                add 'skill drive_[pilot.can_drive[skill]]' xysize(64,64) nearest True
+
+                    if 'battle' in g.state and robot and robot.fen == 'p':
+                        if 'promote_q' in pilot.skills['once']:
                             add 'skill promote_q' xysize(64,64) nearest True
                         else:
-                            add 'skill drive_[pilot.can_drive[skill]]' xysize(64,64) nearest True
-
-                if 'battle' in g.state and robot and robot.fen == 'p':
-                    if 'promote_q' in pilot.skills['once']:
-                        add 'skill promote_q' xysize(64,64) nearest True
-                    else:
-                        add 'skill drive_p' xysize(64,64) nearest True
+                            add 'skill drive_p' xysize(64,64) nearest True
 
 
                 if pilot.skills['setup']:
@@ -181,16 +180,6 @@ screen s_battlefield_robot(piece, scale=1):
             if chess.state == 'selecting':
                 action Function(renpy.call_in_new_context,'l_tutorial_piece', piece)
                 at t_interactive
-                
-            if show_debug_menu: # display _pilot
-                hbox:
-                    yoffset -40
-                    xalign 1.0
-                    text "_pilot: ("
-                    for i in range(2):
-                        if i < len(piece._pilot):
-                            text f"{piece._pilot[i]}"
-                    text ")"
             vbox:
                 hbox: # NAME
                     xpos INFOBOX_WIDTH//10

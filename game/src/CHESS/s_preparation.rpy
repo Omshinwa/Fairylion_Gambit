@@ -36,9 +36,6 @@ label l_start_battle():
         if not chess.PIECELIST[chess.player]['K']:
             "You need a King to lead your army."
             return
-        if any(piece.fen == 'i' for piece in chess.PIECELIST[chess.player]['m']):
-            "You cannot deploy a Pilot outside a CHESSMAN."
-            return
         if chess.get_pieces(2):
             "The [c.FEN_TO_PIECE[chess.get_pieces(2)[0].fen].capitalize()] on [chess.POS_TO_A8(chess.get_pieces(2)[0].pos).upper()] doesn't have any pilot. You won't be able to move it. Double click to store it."
             menu:
@@ -90,6 +87,18 @@ screen s_start_battle():
 screen s_preparation_overlay(): 
     use s_inventories()
 
+    if ship_unlocked and not rogue: # who doesn't fight spends the day in a room of the ship (src/ship.rpy)
+        # under the pilot reserve: with 16 pilots (4 rows) the grid ends at y=505, the pilot panel at y=575.
+        # Drawn here, after s_inventories, so the robot panel (starts at y=555) doesn't cover it.
+        button at t_interactive:
+            style_prefix 'sty_btn'
+            xcenter 190 + 200 # middle of the pilot grid (s_inventory xpos + 4*100/2)
+            ypos 505 + 5
+            ysize 65
+            padding (40, 0)
+            text _("SHIP") size 40
+            action Function(f_dismiss), Call('l_ship')
+
     # RIGHT SIDE BUTTONS
     vbox:
         align 0.99,0.05
@@ -97,12 +106,6 @@ screen s_preparation_overlay():
             style_prefix 'sty_btn'
             text _("START") size 80
             action Call('l_start_battle')
-        if ship_unlocked and not rogue: # who doesn't fight spends the day in a room of the ship (src/ship.rpy)
-            button at t_interactive:
-                style_prefix 'sty_btn'
-                xalign 0.5
-                text _("SHIP") size 60
-                action Function(f_dismiss), Call('l_ship')
 
     if renpy.get_mode() == 'pause' or renpy.get_mode() == 'say':
         button: # DISMISS
@@ -192,14 +195,14 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                     id getattr(element, 'id', element)
                     ypos 75+20+offset[1] + 100*int(i/PER_ROW) +PREP_X_MARGIN
                     if type(v_select) == Robot_Piece:
-                        if not v_select.fen in {'i', 'p'}:
+                        if v_select.fen != 'p':
                             if not pilot_fits_robot(element, v_select.type):
                                 draggable False
                                 hovered NullAction()
                 else:
                     ypos SPCE_TWEEN_P_R+offset[1] + 100*int(i/PER_ROW)+PREP_X_MARGIN
                     if isinstance(v_select, Pilot):
-                        if not element.fen in {'i', 'p'}:
+                        if element.fen != 'p':
                             if not pilot_fits_robot(v_select, element.type):
                                 draggable False
                                 hovered NullAction()
@@ -210,7 +213,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                             matrixcolor ColorizeMatrix("#7e0000","#ff0")
 
                     if pilot_or_robot == 'pilot': # greyed: can't drive the selected robot. see src/PILOT_screen.rpy
-                        use s_pilot_icon(element, greyed=(type(v_select) == Robot_Piece and v_select.fen not in {'i', 'p'} and not pilot_fits_robot(element, v_select.type)))
+                        use s_pilot_icon(element, greyed=(type(v_select) == Robot_Piece and v_select.fen != 'p' and not pilot_fits_robot(element, v_select.type)))
 
                     elif pilot_or_robot == 'robot':
 
@@ -218,11 +221,7 @@ screen s_inventory(pilot_or_robot, size=(1.0, 1.0), offset=(0,0)):
                             if not pilot_fits_robot(v_select, element.type):
                                 at transform:
                                     matrixcolor ColorizeMatrix("#000","#999")
-                        elif isinstance(v_select, Robot_Piece) and v_select.fen == 'i':
-                            if v_select._pilot[0] is None or not pilot_fits_robot(v_select._pilot[0], element.type):
-                                at transform:
-                                    matrixcolor ColorizeMatrix("#000","#999")
-                                    
+
                         add f"white {c.FEN_TO_PIECE[element.fen]} merida" xysize (1.0, 1.0)
 
                 activated f_chessboard_activated 
@@ -317,6 +316,9 @@ init python:
         if isinstance(element, Pilot) and chess.POS_TO_XY[pos][1] == 1 and not story_pawn_free(pos):
             renpy.notify(_("No PAWN left. More CHESSMEN can be bought from the United Nations."))
             return
+        # no lone pilot (INFANTRY) in the deployment phase: on the back row, a pilot needs a robot
+        if isinstance(element, Pilot) and chess.POS_TO_XY[pos][1] == 0 and type(chess.board[pos]) != Robot_Piece:
+            return
         if not renpy.music.is_playing(channel='sound'):
             renpy.play("sound/board/tank.wav", channel='sound')
         element.deployed = True
@@ -333,35 +335,20 @@ init python:
                     new_piece.color = chess.player
                     new_piece.deployed = True
                 chess.drop(new_piece, pos)
+            elif target.type == '*' and target.pilots and target.has_pilot_room() and element not in target.pilots:
+                # a Queen with a free seat: sit next to the first pilot, to co-drive it (src/queen_co_drive.rpy)
+                seats = list(target._pilot)
+                seats[seats.index(None)] = element
+                target.pilot = seats
             else:
-                if type(target) == Robot_Piece:
-                    if target.type == '*' and target.pilots and target.has_pilot_room() and element not in target.pilots:
-                        # a Queen with a free seat: sit next to the first pilot, to co-drive it (src/queen_co_drive.rpy)
-                        seats = list(target._pilot)
-                        seats[seats.index(None)] = element
-                        target.pilot = seats
-                    else:
-                        if target.pilots:
-                            f_unprepare(target, True) # in the case of an infantry, it will remove the infantry
-                            if chess.board[pos] == c.EMPTY:
-                                chess.drop(element, pos, chess.player)
-                        target.pilot = element
-                else:
-                    chess.drop(element, pos, chess.player)
+                if target.pilots:
+                    f_unprepare(target, True)
+                target.pilot = element
 
         elif type(element) == Robot_Piece:
-            # ROBOT
-            if element.is_pawn_or_foot():
-                f_prep_drop_piece(element.pilot, pos)
-                return
-
-            elif type(target) == Robot_Piece: # is there already a robot here?
-                if target.fen == 'i':
-                    chess.board[pos] = c.EMPTY
-                    chess._remove_piece(target)
-                    element.pilot = target.pilot
-                else:
-                    f_unprepare(target)
+            # ROBOT. A pawn moved along the pawn row keeps its own robot, so no PAWN is used up
+            if type(target) == Robot_Piece: # is there already a robot here?
+                f_unprepare(target)
 
             chess.drop(element, pos)
 
@@ -417,15 +404,10 @@ init python:
     def f_prep_clicked(drag):
         print(f"f_prep_clicked is draggable? {drag.drag_name} {drag.draggable}")
         ## if we have selected a piece on board, then we click on a pilot in reserve, put the pilot in
-        ## if we have selected a infantry, then we click on a robot in reserve it can drive, put robot there
         selected = chess.ui['selected']
         piece = drag.drag_name
         if selected and selected.deployed:
             if isinstance(piece, Pilot) and not selected.pilots and chess.prep_can_drop_here(piece, selected.pos):
-                IF_ACTIVATED = True
-                f_prep_drop_piece(piece, selected.pos)
-                renpy.restart_interaction()
-            elif isinstance(piece, Robot_Piece) and selected.fen == 'i' and chess.prep_can_drop_here(piece, selected.pos):
                 IF_ACTIVATED = True
                 f_prep_drop_piece(piece, selected.pos)
                 renpy.restart_interaction()

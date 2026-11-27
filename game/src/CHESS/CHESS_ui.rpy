@@ -276,52 +276,26 @@ init -1 python:
                 if not element.deployed and not loyalty_can_deploy(element):
                     return False
 
-                if chess.POS_TO_XY_POV(pos)[1] == 1 and '^' in element.can_drive and story_pawn_free(pos): # and also still have pawns in reserve (story mode, src/story_battles.rpy)
-                    return True
-                if chess.POS_TO_XY_POV(pos)[1] == 0:
-                    if target is c.EMPTY:
-                        return True
-                    if type(target) is Robot_Piece:
-                        if target.fen == 'i':
-                            return True
-                        if pilot_fits_robot(element, target.type): # can drive it, or co-drive a Queen (src/queen_co_drive.rpy)
-                            return True
-                    return False
-
-            # a lone pilot on the board (an INFANTRY) can get into an unmovable robot (the story KING), if they can drive it:
-            # the check below would ask if the KING can move to the infantry's square (see f_chessboard_dragged in src/CHESS/s_chess_utils.rpy)
-            if isinstance(element, Robot_Piece) and element.fen == 'i' and isinstance(target, Robot_Piece) and target.unmovable:
-                return pilot_fits_robot(element.pilot, target.type)
+                if chess.POS_TO_XY_POV(pos)[1] == 1: # pawn row: still need a pawn in reserve (story mode, src/story_battles.rpy)
+                    return '^' in element.can_drive and story_pawn_free(pos)
+                # back row: only into a robot they can drive, or co-drive a Queen (src/queen_co_drive.rpy).
+                # no lone pilot (INFANTRY) in the deployment phase
+                return type(target) is Robot_Piece and pilot_fits_robot(element, target.type)
 
             # select unmovable piece, only possible if Pilot can drive it
             if (isinstance(element, Robot_Piece) and element.unmovable) or (isinstance(target, Robot_Piece) and target.unmovable):
                 return False
 
             if isinstance(element, Robot_Piece):
-                # if it's an infantry, can go anywhere
-                if element.fen == 'i':
-                    # only if it cannot drive a pawn, cannot go to rank 1
-                    if '^' not in element._pilot[0].can_drive and self.POS_TO_XY_POV(pos)[1] == 1:
-                        return False
-                    if req_true:
-                        return True
-                    return self.prep_can_drop_here(target, element.pos, True)
-                # if it's a pawn, cannot go if there's already a normal robot):
+                # a pawn stays on the pawn row, it can only swap with another pawn
                 if element.type == '^':
                     if req_true:
                         return True
+                    if self.POS_TO_XY_POV(pos)[1] != 1:
+                        return False
                     return self.prep_can_drop_here(target, element.pos, True)
                 # if its a normal robot, cant be above the bottom row
-                if self.POS_TO_XY_POV(pos)[1] == 1:
-                    return False
-                else:
-                    if isinstance(target, Robot_Piece) and target.fen == 'i':
-                        if pilot_fits_robot(target.pilot, element.type):
-                            return True
-                        else:
-                            return False
-                    else:
-                        return True
+                return self.POS_TO_XY_POV(pos)[1] != 1
 
         def get_drag_list(self):
             # return get_pieces() sorted by IDs

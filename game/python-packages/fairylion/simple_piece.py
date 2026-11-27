@@ -53,13 +53,8 @@ class Simple_Piece():
     #         return False
     
     @property
-    def pilot(self):
-        if all(p is None for p in self._pilot): # no seats, or every seat empty
-            return None
-        elif len(self._pilot) == 1:
-            return self._pilot[0]
-        else:
-            return self._pilot
+    def pilot(self): # the driver: seat 0 (for a Queen, its first co-driver). Everyone inside: .pilots
+        return self._pilot[0] if self._pilot else None
 
     @property
     def pilots(self): # _pilot without the None

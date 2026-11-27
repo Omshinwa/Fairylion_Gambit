@@ -43,3 +43,20 @@ testsuite battle_maps:
         click id "piece_e5"
         pause until id "move_d5"
         click id "move_d5"
+
+    testcase map_1_0_drag:
+        description "Drag g3 to f4 instead of clicking: same move, and the piece is drawn on f4"
+
+        run Jump("l_map_1_0")
+        skip until screen "s_start_battle"
+        click until eval ('battle' in g.state)
+        $ mover = chess.board[chess.TO_POS('f3')]
+        click until id "piece_f3"
+        click id "piece_f3"
+        pause until id "move_f4"
+        drag id "piece_f3" to id "move_f4"
+        # the moving piece has no drag while its move is animated
+        pause until eval (not chess.wait_for_enemy and not chess.ui['animation_move']) timeout 10.0
+
+        assert eval (chess.board[chess.TO_POS('f4')] is mover) timeout 1.0
+        assert eval (drag_xy(mover) == square_xy('f4')) timeout 1.0

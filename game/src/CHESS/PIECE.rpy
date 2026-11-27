@@ -66,13 +66,8 @@ init -1 python:
             return self.type == 'i' or self.type == '^'
 
         @property
-        def pilot(self):
-            if all(p is None for p in self._pilot): # no seats, or every seat empty
-                return None
-            elif len(self._pilot) == 1:
-                return self._pilot[0]
-            else:
-                return self._pilot
+        def pilot(self): # the driver: seat 0 (for a Queen, its first co-driver). Everyone inside: .pilots
+            return self._pilot[0] if self._pilot else None
 
         @pilot.setter
         def pilot(self, pilot):
@@ -87,6 +82,12 @@ init -1 python:
                     self._pilot[i] = pilot[i]
                     if pilot[i] and pilot[i].id in character.__dict__:
                         character.__dict__[pilot[i].id].char_on_battlefield = self
+
+        @property
+        def drivers(self): # the pilots whose skills count for the robot: seat 0, or every pilot of a Queen (src/queen_co_drive.rpy)
+            if self.type == '*':
+                return self.pilots
+            return [self.pilot] if self.pilot else [] # passengers don't affect the robot
 
         # idk if it's useful
         # would replaces len(self._pilot), check_for_pilot would also turn the piece neutral
@@ -118,14 +119,13 @@ init -1 python:
                         chess._append_piece(self)
 
             self.range = Robot_Piece.get_range_of(self.fen, self.engine, self.color)
-            for pilot in self._pilot:
-                if pilot is not None:
-                    for skill in pilot.skills['setup']:
-                        SKILLLIST[skill].effect(pilot, self)
+            for pilot in self.drivers: # passengers' skills don't count
+                for skill in pilot.skills['setup']:
+                    SKILLLIST[skill].effect(pilot, self)
 
             # remove 2-step by default for player
             if self.fen == 'p' and self.color == chess.player:
-                if 'double move' in self.range and self.pilots and not any('2-step' in p.skills['setup'] for p in self.pilots):
+                if 'double move' in self.range and self.drivers and not any('2-step' in p.skills['setup'] for p in self.drivers):
                     del self.range['double move']
             
             if Robot_Piece.get_range_of(self.fen, self.engine, self.color) == self.range: # if its a default piece
@@ -156,8 +156,9 @@ init -1 python:
             if theres no pilot, or is dead, turn the piece neutral, doesnt work on opponent
             else turn into a 0 or 1 color
             """
+            # only seat 0 drives: a passenger alone stays inside, but the robot can't move.
             # a Queen with only half of its co-drivers can't move either
-            no_driver = len(self.pilots) == 0 or (self.type == '*' and not self.driven_fen())
+            no_driver = self.pilot is None or (self.type == '*' and not self.driven_fen())
             if no_driver and self.color == chess.player:
                 chess._remove_piece(self)
                 self.color = 2

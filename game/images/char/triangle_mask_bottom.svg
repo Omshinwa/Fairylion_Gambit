@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Bottom half of triangle_mask.svg, cut from the right angle corner to the middle of the long side.
+     Used for the SECOND pilot when a piece has two (src/CHESS/s_chess_viewport.rpy). -->
+<svg version="1.1" viewBox="0 0 360 360" width="360" height="360" xmlns="http://www.w3.org/2000/svg">
+	<path d="M 101.73183,363.31656 231.10159,261.94583 359.93036,362.88093 Z" />
+</svg>

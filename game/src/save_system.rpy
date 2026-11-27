@@ -16,7 +16,26 @@ define config.autosave_on_input = False
 define config.autosave_frequency = 9999999
 define config.autosave_on_quit = False
 
+# dev-only: filenames of save slots protected against overwrite/delete
+default persistent.dev_locked_saves = set()
+
 init python:
+    def is_save_locked(filename:str):
+        """A slot is locked only in developer mode, and only if it still holds a save."""
+        return (config.developer
+            and filename in (persistent.dev_locked_saves or ())
+            and renpy.can_load(filename))
+
+    def toggle_save_lock(filename:str):
+        locked = set(persistent.dev_locked_saves or ())
+        if filename in locked:
+            locked.discard(filename)
+        else:
+            locked.add(filename)
+        persistent.dev_locked_saves = locked
+        renpy.save_persistent()
+        renpy.restart_interaction()
+
     def format_progress(progress:int):
         return "Chapter " + str(progress//100) + "-" + str(progress%100)
 
@@ -45,8 +64,14 @@ init python:
                 break
 
     def save_slot_with_checkpoint(filename:str):
+        if is_save_locked(filename):
+            renpy.notify(_("This save is locked."))
+            return
         print(f"saving checkpoing {filename}")
-        renpy.save(filename, extra_info=save_name)
+        notes = save_name
+        if not notes and renpy.can_load(filename): # overwriting a slot: keep its notes when this save has none
+            notes = (renpy.slot_json(filename) or {}).get('_save_name', '')
+        renpy.save(filename, extra_info=notes)
         renpy.copy_save(LOCAL_CHECKPOINT_SLOT, filename + CHECKPOINT_SUFFIX)
 
     def load_slot_with_checkpoint(filename:str):
@@ -59,6 +84,9 @@ init python:
         renpy.load(filename)
 
     def delete_slot_with_checkpoint(filename:str):
+        if is_save_locked(filename):
+            renpy.notify(_("This save is locked."))
+            return
         print(f"deleting {filename}")
         renpy.unlink_save(filename)
         renpy.unlink_save(filename + CHECKPOINT_SUFFIX)

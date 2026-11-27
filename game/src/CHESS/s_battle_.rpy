@@ -99,39 +99,46 @@ screen s_chessboard_bg(chess, xinit=None,yinit=None):
             if isinstance(v_inspect, Pilot):
                 $ pilots = [v_inspect]
             elif isinstance(v_inspect, Robot_Piece) and v_inspect._pilot:
-                $ pilots = v_inspect._pilot
+                $ pilots = v_inspect.pilots
 
-        for index, pilot in enumerate(reversed(pilots)):
-            if pilot:
-                button:
-                    at transform:
-                        alpha 0.91
-                    # add "#0f0"
-                    xysize (1920 - 1250, 1.0)
-                    style 'empty'
-                    if chess.state == 'selecting':
-                        action Call('l_character_info', pilot)
-                        at t_interactive
-                    if len(pilots) == 2:
-                        xpos 1250 + index * 50
-                        ypos index * -30
-                    else:
-                        xpos 1250
-                    focus_mask True
-                    fixed: #profil
-                        if get_board_color():
-                            $ light_color = get_board_color().replace_lightness(0.7) 
+        fixed:
+            # mesh True renders both pilots into ONE texture before alpha is applied,
+            # so the overlap is not see-through (alpha alone is applied per child texture)
+            at transform:
+                mesh True
+                alpha 0.91
+            for index, pilot in enumerate(reversed(pilots)):
+                # reversed: index 0 is the SECOND pilot, drawn behind the first one, a bit darker and smaller
+                $ is_second_pilot = len(pilots) == 2 and index == 0
+                if pilot:
+                    button:
+                        xysize (1920 - 1250, 1.0)
+                        style 'empty'
+                        if chess.state == 'selecting':
+                            action Call('l_character_info', pilot)
+                            at t_interactive
+                        if len(pilots) == 2:
+                            xpos 1250 + c.COLOR_TO_SIGN[index] * -100
+                            ypos (1-index) * 70
                         else:
-                            $ light_color = (persistent.style_colors[1])
-                        ypos 200
-                        add pilot.id:
+                            xpos 1250
+                        focus_mask True
+                        fixed: #profil
+                            if get_board_color():
+                                $ light_color = get_board_color().replace_lightness(0.7) 
+                            else:
+                                $ light_color = (persistent.style_colors[1])
+                            ypos 200
                             at transform:
-                                ypos -pilot.img_side_xy[1]
-                                matrixcolor ColorizeMatrix("#0e2a42", light_color) * SaturationMatrix(0.5) * BrightnessMatrix(0.4) * ContrastMatrix(0.6)
-                            if pilot.health == 1:
-                                at t_low_health
-                        add AlphaMask(Transform('bg gradient2 ', xysize=(1.0, 1.1), ypos=-200), pilot.id):
-                            blend 'multiply' additive 0.4 alpha 0.7 ypos -pilot.img_side_xy[1]
+                                zoom (0.9 if is_second_pilot else 1.0)
+                            add pilot.id:
+                                at transform:
+                                    ypos -pilot.img_side_xy[1]
+                                    matrixcolor (TintMatrix("#c8c8c8") if is_second_pilot else IdentityMatrix()) * ColorizeMatrix("#0e2a42", light_color) * SaturationMatrix(0.5) * BrightnessMatrix(0.4) * ContrastMatrix(0.6)
+                                if pilot.health == 1:
+                                    at t_low_health
+                            add AlphaMask(Transform('bg gradient2 ', xysize=(1.0, 1.1), ypos=-200), pilot.id):
+                                blend 'multiply' additive 0.4 alpha 0.7 ypos -pilot.img_side_xy[1]
 
 #     ███████    █████   █████ ██████████ ███████████   █████         █████████   █████ █████
 #   ███░░░░░███ ░░███   ░░███ ░░███░░░░░█░░███░░░░░███ ░░███         ███░░░░░███ ░░███ ░░███ 

@@ -181,7 +181,12 @@ transform t_static:
         pause random.random() * 6
         repeat
 
+transform t_blend_add:
+    blend 'add'
+
+# robot can be None (debug preview in the pilot screen, src/PILOT_screen.rpy): drawn as a white robot with no label
 screen s_pilot_side_img_in_cockpit(who, pilot, robot):
+    $ robot_color = robot.color if robot else 0
     # timer 0.3 action SetVariable('SPEAKING_CHAR', pilot.id)
     fixed:
         xalign 0.0 yalign 1.0
@@ -193,7 +198,7 @@ screen s_pilot_side_img_in_cockpit(who, pilot, robot):
             background '#fff5'
             frame:
                 at transform:
-                    matrixcolor TintMatrix(COLOR_HIGHLIGHT().replace_lightness(0.85)) * ContrastMatrix(1.3) * BrightnessMatrix(0.3)
+                    matrixcolor TintMatrix(COLOR_HIGHLIGHT().replace_lightness(0.85)) * ContrastMatrix(1.3) * BrightnessMatrix(0.1)
                 # if SPEAKING_CHAR != pilot.id:
                     # at transform:
                     on show:
@@ -203,18 +208,21 @@ screen s_pilot_side_img_in_cockpit(who, pilot, robot):
                 align .5,.5
                 style 'empty'
                 add 'inside_cockpit' xysize (380,380)
-                $ img_pilot = Crop((pilot.img_side_xy[0]+60, pilot.img_side_xy[1]+110, 250, 250), pilot.id, xysize=(1.0, 1.0), xzoom=c.COLOR_TO_SIGN[robot.color]*-1, align=(.5,.5))
+                $ img_pilot = Crop((pilot.img_side_xy[0]+60, pilot.img_side_xy[1]+110, 250, 250), pilot.id, xysize=(1.0, 1.0), xzoom=c.COLOR_TO_SIGN[robot_color]*-1, align=(.5,.5))
                 add img_pilot:
                     matrixcolor BrightnessMatrix(-1) blur 10
                 add img_pilot blend 'add':
                     matrixcolor Matrix([1,0,0,0,0,.5,0,0,0,0,0,0,0,0,0,1])
-                add img_pilot blend 'add':
+                # the blend must wrap t_static: a blend 'add' inside its blur came out black, so only the
+                # red layer above was left and every face looked orange
+                add img_pilot:
                     matrixcolor Matrix([0,0,0,0,0,.5,0,0,0,0,1,0,0,0,0,1])
-                    at t_static
+                    at t_static, t_blend_add
                 # add '#0005' xysize (380,55)
-            text robot.fen.upper() + str(robot.pid) size 100 align (.95, 1.0) font 'fonts/Compagnon-Medium.otf' color '#fff':
-                if robot.color:
-                    color '#000'
+            if robot:
+                text robot.fen.upper() + str(robot.pid) size 100 align (.95, 1.0) font 'fonts/Compagnon-Medium.otf' color '#fff':
+                    if robot.color:
+                        color '#000'
             # if robot.color == 0:
             #     text '<WHITE>' size 50 align (.5, 0) font 'fonts/Compagnon-Medium.otf' color '#fff'
             # else:
@@ -356,7 +364,7 @@ screen quick_menu():
 
             xalign 0.5
             yalign 1.0
-            if show_debug_menu or not 'battle' in g.state:
+            if config.developer or not 'battle' in g.state:
                 textbutton _("Back") action Rollback()
             textbutton _("History") action ShowMenu('history')
             textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
@@ -748,13 +756,17 @@ screen file_slots(title):
 
                     $ slot = i + 1
                     $ filename = str(persistent._file_page) + '-' + str(slot)
+                    $ slot_locked = is_save_locked(filename)
 
                     button:
                         # action FileAction(slot)
                         if CurrentScreenName() == "save" and persistent._file_page != 'auto':
-                            if renpy.can_load(filename):
+                            if slot_locked:
+                                action Notify(_("This save is locked."))
+                            elif renpy.can_load(filename):
                                 action Confirm(_("Overwriting the save?"), Function(save_slot_with_checkpoint, filename))
-                            action Function(save_slot_with_checkpoint, filename)
+                            else:
+                                action Function(save_slot_with_checkpoint, filename)
                         elif CurrentScreenName() == "load":
                             if renpy.can_load(filename):
                                 action Confirm(_("Load file?"), Function(load_slot_with_checkpoint, filename))
@@ -771,7 +783,23 @@ screen file_slots(title):
 
                             text get_save_runtime(filename) style "slot_name_text"
 
-                        textbutton "X" xysize(50, 50) background None action Confirm(_("Delete save file?"), Function(delete_slot_with_checkpoint, filename)) text_font "fonts/Venus+Cormier.otf" text_size 50 align(1.0,0.05) text_align(1.0,0.0) 
+                        ## Top-right column: delete X, with the dev-only lock toggle below it
+                        vbox:
+                            align (1.0, 0.05)
+                            spacing 2
+
+                            if slot_locked:
+                                textbutton "X" xysize(50, 50) xalign 1.0 background None action Notify(_("This save is locked.")) text_font "fonts/Venus+Cormier.otf" text_size 50 text_align(1.0,0.0) text_color "#70707060"
+                            else:
+                                textbutton "X" xysize(50, 50) xalign 1.0 background None action Confirm(_("Delete save file?"), Function(delete_slot_with_checkpoint, filename)) text_font "fonts/Venus+Cormier.otf" text_size 50 text_align(1.0,0.0)
+
+                            ## numbered pages only: auto/quick saves rotate on their own
+                            if config.developer and renpy.can_load(filename) and persistent._file_page not in ("auto", "quick"):
+                                imagebutton:
+                                    idle Transform("images/misc/lock_closed.svg" if slot_locked else "images/misc/lock_open.svg", alpha=1.0 if slot_locked else 0.8)
+                                    hover Transform("images/misc/lock_closed.svg" if slot_locked else "images/misc/lock_open.svg", alpha=1.0)
+                                    xalign 1.0
+                                    action Function(toggle_save_lock, filename)
                         # textbutton "X" xysize(50, 50) background None action FileDelete(slot) text_font "fonts/Venus+Cormier.otf" text_size 50 align(1.0,0.05) text_align(1.0,0.0) 
 
 

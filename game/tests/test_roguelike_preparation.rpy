@@ -32,6 +32,7 @@ testsuite roguelite:
     setup:
         $ done_flag["oncePerRun"].add('tuto_basic')
         $ done_flag["oncePerRun"].add('tuto_preparation')
+        $ done_flag["oncePerRun"].add('tuto_loyalty') # its tutorial card would eat the clicks (src/loyalty.rpy)
         $ g.money = 10
         $ g.items['undo'] = 3
         $ rogue = Roguelike()
@@ -89,8 +90,8 @@ testsuite roguelite:
         assert eval (chess.ui['moves'].get(chess.TO_POS('a1')) is not None) timeout 10.0
         assert eval (chess.ui['moves'].get(chess.TO_POS('b1')) is not None) timeout 1.0
 
-        # Empty squares on rank 1 (c1-f1) must not be None — penny can be dropped as infantry
-        assert eval (chess.ui['moves'].get(chess.TO_POS('c1'))) timeout 1.0
+        # Empty squares on rank 1 (c1-f1) must be None — no lone pilot (infantry) in the deployment phase
+        assert eval (chess.ui['moves'].get(chess.TO_POS('c1')) is None) timeout 1.0
 
         $ f_dismiss()
 
